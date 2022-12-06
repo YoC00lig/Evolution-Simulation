@@ -4,10 +4,12 @@ import java.util.Objects;
 public class Vector2d {
     public final int x;
     public final int y;
+    public int death;
 
     public Vector2d(int x, int y){
         this.x = x;
         this.y = y;
+        this.death = 0;
     }
 
     public boolean precedes(Vector2d other){
@@ -23,6 +25,13 @@ public class Vector2d {
     }
     public Vector2d subtract(Vector2d other){
         return new Vector2d(this.x - other.x, this.y - other.y);
+    }
+
+    public String toString(){
+        return "("+this.x+","+this.y+")";
+    }
+    public void incrementDeathStatus() {
+        this.death = this.death + 1;
     }
 
     @Override

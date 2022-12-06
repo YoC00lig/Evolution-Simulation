@@ -5,7 +5,6 @@ public class AbstractWorldMapElement {
     protected int moveEnergy;
     protected int initialEnergy;
 
-
     public Vector2d getPosition() {
         return this.position;
     }

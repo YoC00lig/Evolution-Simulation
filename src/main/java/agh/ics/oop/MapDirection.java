@@ -23,16 +23,16 @@ public enum MapDirection {
         };
     }
 
-    public MapDirection previous() {
+    public MapDirection reverse() {
         return switch (this) {
-            case SOUTH -> MapDirection.SOUTH_EAST;
-            case SOUTH_EAST -> MapDirection.EAST;
-            case EAST -> MapDirection.NORTH_EAST;
-            case NORTH_EAST -> MapDirection.NORTH;
-            case NORTH -> MapDirection.NORTH_WEST;
-            case NORTH_WEST -> MapDirection.WEST;
-            case WEST -> MapDirection.SOUTH_WEST;
-            case SOUTH_WEST -> MapDirection.SOUTH;
+            case SOUTH -> MapDirection.NORTH;
+            case NORTH -> MapDirection.SOUTH;
+            case WEST -> MapDirection.EAST;
+            case EAST -> MapDirection.WEST;
+            case SOUTH_WEST -> MapDirection.NORTH_EAST;
+            case SOUTH_EAST -> MapDirection.NORTH_WEST;
+            case NORTH_EAST -> MapDirection.SOUTH_WEST;
+            case NORTH_WEST -> MapDirection.SOUTH_EAST;
         };
     }
 
@@ -46,6 +46,18 @@ public enum MapDirection {
             case NORTH_WEST -> new Vector2d(-1, 1);
             case SOUTH_EAST -> new Vector2d(1,-1);
             case SOUTH_WEST -> new Vector2d(-1,-1);
+        };
+    }
+    public String toString() {
+        return switch (this) {
+            case NORTH -> "N";
+            case SOUTH -> "S";
+            case WEST -> "W";
+            case EAST -> "E";
+            case NORTH_EAST -> "NE";
+            case NORTH_WEST -> "NW";
+            case SOUTH_EAST -> "SE";
+            case SOUTH_WEST -> "SW";
         };
     }
 
