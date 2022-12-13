@@ -18,7 +18,7 @@ public class SimulationEngine implements IEngine{
             Random random = new Random();
             int x = random.nextInt(map.high.x + 1 - map.low.x) + map.low.x;
             int y = random.nextInt(map.high.y + 1 - map.low.y) + map.low.y;
-            System.out.println("Simulation engine here, generated animal start position: " + x + "," + y);
+            System.out.println("Hello, Simulation engine here, generated animal start position: " + x + "," + y);
             Vector2d position = new Vector2d(x,y);
             Animal animal = new Animal(this.map, position);
             map.place(animal);

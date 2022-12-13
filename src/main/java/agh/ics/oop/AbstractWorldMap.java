@@ -23,7 +23,7 @@ public class AbstractWorldMap implements IPositionChangeObserver{
         this.height = height;
         this.low = new Vector2d(0,0);
         this.high = new Vector2d(this.width-1,this.height-1);
-        this.epoch = 0;
+        this.epoch = 1;
         this.freeFields = this.width * this.height;
         this.predistinationMode = predistination;
         this.toxicDeadMode = toxicMode;
@@ -108,7 +108,7 @@ public class AbstractWorldMap implements IPositionChangeObserver{
         this.addAnimal(animal, newPosition);
     }
 
-    public Vector2d HellsPortal(){ // piekielny portal - przerzucamy zwierzątko w losowe miejsce
+    public Vector2d HellsPortal(){
         int x = (int) (Math.random() * (high.x - low.x));
         int y = (int) (Math.random() * (high.y - low.y));
         return new Vector2d(x, y);
@@ -122,20 +122,20 @@ public class AbstractWorldMap implements IPositionChangeObserver{
         }
     }
 
-    public AbstractWorldMapElement objectAt(Vector2d position) {
-        if (animals.get(position) == null) {
-            return grasses.get(position);
-        }
-        return animals.get(position).get(0);
-    }
+//    public AbstractWorldMapElement objectAt(Vector2d position) {
+//        if (animals.get(position) == null) {
+//            return grasses.get(position);
+//        }
+//        return animals.get(position).get(0);
+//    }
 
     public AbstractWorldMapElement grassAt(Vector2d position) {
         return grasses.get(position);
     }
 
-    public boolean isOccupied(Vector2d position) {
-        return objectAt(position) != null;
-    }
+//    public boolean isOccupied(Vector2d position) {
+//        return objectAt(position) != null;
+//    }
 
     // animal general functions
     public void moveAllAnimals() {
@@ -166,15 +166,15 @@ public class AbstractWorldMap implements IPositionChangeObserver{
         }
     }
 
-
+    // przetestowac
     public void removeDead() {
         for (Vector2d position: animals.keySet()){
             for (Animal animal: animals.get(position)){
                 if (animal.isDead()) {
-                    animal.getPosition().incrementDeathStatus(); // umarło zwierzątko, czyli na tej pozycji zwiększa sie liczba smierci
+                    // umarło zwierzątko, czyli na tej pozycji zwiększa sie liczba smierci
                     int index = fields.indexOf(animal.getPosition());
                     if (index != -1) {
-                        fields.get(index).death = animal.getPosition().death; // aktualizujemy liczbę śmierci na danym polu
+                        fields.get(index).death += 1; // aktualizujemy liczbę śmierci na danym polu
                         fields.get(index).elements -= 1; // jeden element mniej w danym polu
                     }
                     animal.isDead = animal.daysOfLife; // umarło, oznaczamy ile dni żyło
@@ -205,16 +205,14 @@ public class AbstractWorldMap implements IPositionChangeObserver{
             }
         }
 
-        else { // wariant "zalesione równiki"
-            int middle = this.width / 2;
-            System.out.println("the middle is: " + middle);
+        else { // wariant "zalesione równiki" // todo
+            int middle = this.width / 2; // todo
             boolean planted = false;
 
             for (int col = this.low.y; col <= this.high.y; col++) { // sadzimy na równiku
                 Vector2d v = new Vector2d(middle, col);
                 if (!(grassAt(v) instanceof Grass)) {
                     Grass element = new Grass(v, this);
-                    System.out.println("planted grass at " + v.toString());
                     grasses.put(v, element);
                     planted = true;
                     plantsNumber += 1;
@@ -228,7 +226,6 @@ public class AbstractWorldMap implements IPositionChangeObserver{
                             Vector2d v = new Vector2d(row, col);
                             if (!(grassAt(v) instanceof Grass)) {
                                 Grass element = new Grass(v, this);
-                                System.out.println("planted grass at " + v.toString());
                                 grasses.put(v, element);
                                 plantsNumber += 1;
                                 break;
@@ -253,6 +250,7 @@ public class AbstractWorldMap implements IPositionChangeObserver{
         return new Animal(this, parent1, parent2);
     }
 
+    // todo - getParents - new comparator
     public void reproduction() {
         for (Vector2d position : animals.keySet()){
             if (animals.get(position).size() >= 2) {
@@ -284,6 +282,7 @@ public class AbstractWorldMap implements IPositionChangeObserver{
             addAnimal(animal, animal.getPosition());
         }
     }
+    // todo
     public void feed(List<Animal> Animals){
         List<Animal> toUpdate = new ArrayList<>();
         int gained = (int) Math.floor((float) plantEnergy / Animals.size());
@@ -296,6 +295,7 @@ public class AbstractWorldMap implements IPositionChangeObserver{
         rewrite(toUpdate);
     }
 
+    // todo - new comparator
     public List<Animal> findStrongestAtPos(Vector2d position) {
         this.animals.get(position).sort(new ComparatorForEnergy());
         List<Animal> list = this.animals.get(position);
@@ -304,7 +304,7 @@ public class AbstractWorldMap implements IPositionChangeObserver{
         int idx = 1;
         while (idx < list.size()){
             Animal current = list.get(idx);
-            if (strongest.getCurrentEnergy() == current.getCurrentEnergy()) idx++;
+            if (strongest.getCurrentEnergy() == current.getCurrentEnergy()) idx++; // todo
         }
         return list.subList(0, idx);
     }

@@ -19,7 +19,7 @@ public class Animal extends AbstractWorldMapElement{
         this.genotype = Genotype.createDNA();
         this.initialEnergy = map.initialEnergy;
         this.energy = initialEnergy;
-        this.orient = MapDirection.NORTH;
+        this.orient = MapDirection.NORTH; //!
         this.index = (int) (Math.random() * 32); // indeks w tablicy genotypów, który będzie wskazywać na następny ruch - gdy tworzymy zwierzatko to jest ustawiany randomowo
         this.daysOfLife = 1;
         this.numberOfChildren = 0;
@@ -35,7 +35,7 @@ public class Animal extends AbstractWorldMapElement{
         this.map = map;
         this.genotype = Genotype.getChildGenotype(parent1, parent2, map.isCrazyMode);
         this.energy = findChildEnergy(parent1, parent2);
-        this.orient = MapDirection.NORTH;
+        this.orient = MapDirection.NORTH; // !
         this.index = (int) (Math.random() * 32);
         this.daysOfLife = 1;
         this.moveEnergy = map.moveEnergy;
@@ -65,7 +65,7 @@ public class Animal extends AbstractWorldMapElement{
         Animal[] parents = Genotype.getStrongerWeaker(parent1, parent2);
         return (int) (parents[0].getCurrentEnergy() * 0.75 + parents[1].getCurrentEnergy() * 0.25);
     }
-
+/// poruszanie
     public Vector2d teleport() {
         Vector2d pos = this.getPosition();
         if (pos.x < 0) return new Vector2d(map.width + pos.x, pos.y);
@@ -82,7 +82,7 @@ public class Animal extends AbstractWorldMapElement{
         this.index = (int) (Math.random() * 32);
     }
 
-    public void move2() {
+    public void move2() { /// ?
         if (this.energy < moveEnergy) return;
 
         int index = this.index;
@@ -95,7 +95,6 @@ public class Animal extends AbstractWorldMapElement{
         if (hellExists && !can) {
             this.setEnergy(this.energy-map.minReproductionEnergy);
             newPos = map.HellsPortal();
-            System.out.println(newPos.toString());
         }
 
         else if (!hellExists && !can){
@@ -106,7 +105,7 @@ public class Animal extends AbstractWorldMapElement{
         if (can) {
             int i = map.fields.indexOf(this.position);
             if (i != -1) {
-                map.fields.get(i).elements -= 1; // jeden element mniej w danym polu
+                map.fields.get(i).elements -= 1; // jeden element mniej w danym polu - zwierzatko sobie stad idzie
             }
             positionChanged(this, this.position, newPos);
             this.setPosition(newPos);
@@ -126,7 +125,7 @@ public class Animal extends AbstractWorldMapElement{
         else this.setNextIndex(); // wariant "pełna predystynacja"
     }
 
-
+// poruszanie
     public void reproduce(Animal partner) {
         partner.energy *= 0.75;
         this.energy *= 0.25;
@@ -143,7 +142,7 @@ public class Animal extends AbstractWorldMapElement{
         this.energy -= moveEnergy;
     }
 
-    public void aliveNextDay() {
+    public void aliveNextDay() { // to change
         this.daysOfLife += 1;
     }
     public void setEnergy(int value) {

@@ -11,7 +11,7 @@ public class Genotype {
         for (int i = 0; i < numberOfGenes; i++){
             genes[i] = (int) (Math.random() * typesOfGenes);
         }
-        Arrays.sort(genes);
+        //Arrays.sort(genes);
         return genes;
     }
 
@@ -49,7 +49,7 @@ public class Genotype {
             }
         }
 
-        Arrays.sort(genes);
+        //Arrays.sort(genes);
         return genes;
     }
 
