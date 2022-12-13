@@ -70,7 +70,7 @@ public class Genotype {
 
     public static int changeGene(int gen) {
         switch (gen){
-            case 0 -> {
+            case 0 -> { // w przypadku 0 i 7 mozemy tylko zmienic w jeden sposob
                 return 1;
             }
             case 7 -> {
@@ -78,7 +78,7 @@ public class Genotype {
             }
             default -> {
                 int ans = ifIncrement();
-                if (ans == 0) return gen - 1;
+                if (ans == 0) return gen - 1; // jesli wylosujemy 0 to zmniejszamy wartosc, jesli 1 to zwiekszamy
                 else return  gen + 1;
             }
         }
@@ -86,5 +86,9 @@ public class Genotype {
 
     public static int ifIncrement() {
         return (int) (Math.random() * 2);
+    }
+
+    public static int getNumberOfGenes() {
+        return numberOfGenes;
     }
 }

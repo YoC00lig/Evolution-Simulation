@@ -5,11 +5,13 @@ public class Vector2d {
     public final int x;
     public final int y;
     public int death;
+    public int elements;
 
     public Vector2d(int x, int y){
         this.x = x;
         this.y = y;
-        this.death = 0;
+        this.death = 0; // liczba zwierzątek, które umarły na tym polu.
+        this.elements = 0; // liczba elementów na danym polu
     }
 
     public boolean precedes(Vector2d other){

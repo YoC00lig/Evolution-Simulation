@@ -8,19 +8,26 @@ public class Animal extends AbstractWorldMapElement{
     private final int[] genotype;
     private Vector2d position;
     private final AbstractWorldMap map;
-    private int index;
+    protected int index, daysOfLife, numberOfChildren, isDead, eatenPlants;
     protected List<IPositionChangeObserver> observers = new ArrayList<>();
-    protected int daysOfLife;
+
 
     // normal animal
     public Animal(AbstractWorldMap map, Vector2d position) {
         this.position = position;
         this.map = map;
         this.genotype = Genotype.createDNA();
+        this.initialEnergy = map.initialEnergy;
         this.energy = initialEnergy;
         this.orient = MapDirection.NORTH;
-        this.index = (int) (Math.random() * 32); // indeks w tablicy genotypów, który będzie wskazywać na następny ruch
+        this.index = (int) (Math.random() * 32); // indeks w tablicy genotypów, który będzie wskazywać na następny ruch - gdy tworzymy zwierzatko to jest ustawiany randomowo
         this.daysOfLife = 1;
+        this.numberOfChildren = 0;
+        this.isDead = 0; // 0 oznacza, że jeszcze żyje. Każda inna liczba oznacza którego dnia zmarło
+        this.eatenPlants = 0; // tyle roslinek zjadlo
+        this.moveEnergy = map.moveEnergy;
+        map.livingAnimals += 1;
+        map.addAnimal(this, position);
     }
     // baby animal
     public Animal(AbstractWorldMap map, Animal parent1, Animal parent2){
@@ -31,6 +38,27 @@ public class Animal extends AbstractWorldMapElement{
         this.orient = MapDirection.NORTH;
         this.index = (int) (Math.random() * 32);
         this.daysOfLife = 1;
+        this.moveEnergy = map.moveEnergy;
+        this.isDead = 0;
+        this.numberOfChildren = 0;
+        this.eatenPlants = 0;
+        map.livingAnimals += 1;
+    }
+
+    public int findDominantGenotype() {
+        int[] cnt = new int[8];
+        for (int gen: this.genotype) {
+            cnt[gen] += 1;
+        }
+        int maxi = 0;
+        int gen = 0;
+        for (int i = 0; i < 8; i++) {
+            if (cnt[i] > maxi) {
+                gen = i;
+                maxi = cnt[i];
+            }
+        }
+        return gen;
     }
 
     public static int findChildEnergy(Animal parent1, Animal parent2) {
@@ -55,24 +83,38 @@ public class Animal extends AbstractWorldMapElement{
     }
 
     public void move2() {
+        if (this.energy < moveEnergy) return;
+
         int index = this.index;
         int direction = this.genotype[index];
         boolean hellExists = map.hellExistsMode;
         MapDirection dir = convertIdToDirection(direction);
         Vector2d newPos = this.position.add(dir.toUnitVector());
+        boolean can = map.canMoveTo(newPos);
 
-        if (hellExists && !map.canMoveTo(newPos)) {
-            this.setEnergy(-map.minReproductionEnergy);
+        if (hellExists && !can) {
+            this.setEnergy(this.energy-map.minReproductionEnergy);
             newPos = map.HellsPortal();
+            System.out.println(newPos.toString());
         }
-        if (!hellExists && !map.canMoveTo(newPos)){
+
+        else if (!hellExists && !can){
             newPos = this.teleport();
             if (newPos.y > map.high.y || newPos.y < 0) this.orient = this.orient.reverse();
         }
-        if (map.canMoveTo(newPos)) {
+
+        if (can) {
+            int i = map.fields.indexOf(this.position);
+            if (i != -1) {
+                map.fields.get(i).elements -= 1; // jeden element mniej w danym polu
+            }
             positionChanged(this, this.position, newPos);
             this.setPosition(newPos);
+
+            i = map.fields.indexOf(this.position); // jeden element więcej na tym polu, bo zwierzątko się tu przemieszcza
+            if (i != -1) {map.fields.get(i).elements += 1;}
         }
+
 
         if (!map.predistinationMode){ // wariant "nieco szaleństwa
             int ans = (int) (Math.random() * 10);
@@ -144,5 +186,17 @@ public class Animal extends AbstractWorldMapElement{
             default -> throw new IllegalStateException("Unexpected value: " + directionId);
         };
 
+    }
+
+    public void addNewChild() {
+        this.numberOfChildren += 1;
+    }
+
+    public void atePlant() {
+        this.eatenPlants += 1;
+    }
+
+    public String toString() {
+        return "A " + this.position;
     }
 }

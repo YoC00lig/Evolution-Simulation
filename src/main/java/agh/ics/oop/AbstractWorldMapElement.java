@@ -8,4 +8,5 @@ public class AbstractWorldMapElement {
     public Vector2d getPosition() {
         return this.position;
     }
+
 }

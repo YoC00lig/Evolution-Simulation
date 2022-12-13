@@ -13,4 +13,8 @@ public class Grass extends AbstractWorldMapElement {
     public Vector2d getPosition() {
         return this.position;
     }
+
+    public String toString() {
+        return "G " + this.position;
+    }
 }
