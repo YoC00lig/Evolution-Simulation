@@ -1,5 +1,4 @@
 package agh.ics.oop;
-import java.util.Arrays;
 
 public class Genotype {
     private static final int numberOfGenes = 32;
@@ -88,7 +87,4 @@ public class Genotype {
         return (int) (Math.random() * 2);
     }
 
-    public static int getNumberOfGenes() {
-        return numberOfGenes;
-    }
 }

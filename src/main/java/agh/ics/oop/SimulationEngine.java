@@ -26,6 +26,7 @@ public class SimulationEngine implements IEngine{
 
         for (int i = 0; i < grassNumber; i++){
             map.plantGrass();
+            System.out.println("Hello, Simulation engine here, generated grass number: " + (i + 1));
         }
     }
 

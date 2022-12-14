@@ -8,6 +8,8 @@ public class Grass extends AbstractWorldMapElement {
     public Grass(Vector2d position, AbstractWorldMap map) {
         this.position = position;
         this.map = map;
+        map.fields1.get(this.position).incrementElementsStatus();
+        map.plantsNumber += 1;
     }
 
     public Vector2d getPosition() {

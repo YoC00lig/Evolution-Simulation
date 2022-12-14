@@ -1,5 +1,6 @@
 package agh.ics.oop;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class AbstractWorldMap implements IPositionChangeObserver{
     public Vector2d low, high;
@@ -7,7 +8,7 @@ public class AbstractWorldMap implements IPositionChangeObserver{
     protected LinkedHashMap<Vector2d, LinkedList<Animal>> animals = new LinkedHashMap<>();
     public ArrayList<Animal> listOfAnimals = new ArrayList<>();
     public LinkedHashMap<Vector2d, Grass> grasses = new LinkedHashMap<>();
-    protected LinkedList<Vector2d> fields;
+    protected LinkedHashMap<Vector2d,InfoField> fields1;
     protected boolean predistinationMode, toxicDeadMode, isCrazyMode, hellExistsMode;
     //for statistics
     int deadAnimals = 0;
@@ -29,11 +30,22 @@ public class AbstractWorldMap implements IPositionChangeObserver{
         this.toxicDeadMode = toxicMode;
         this.isCrazyMode = isCrazyMode;
         this.hellExistsMode = hellExistsMode;
-        this.fields = getFields(); // ułatwi wybór pola o najmniejszej liczbie śmierci
+        this.fields1 = generateFields1();
         this.plantEnergy = plantE;
         this.minReproductionEnergy = reproductionE;
         this.initialEnergy = initialE;
         this.moveEnergy = moveE;
+    }
+
+    public LinkedHashMap<Vector2d, InfoField> generateFields1() {
+        LinkedHashMap<Vector2d, InfoField> Field = new LinkedHashMap<>();
+        for (int i = low.x ; i <= high.x; i++){
+            for (int j = low.y ; j <= high.y; j++) {
+                InfoField info = new InfoField();
+                Field.put(new Vector2d(i, j), info);
+            }
+        }
+        return Field;
     }
 
     // for statistics
@@ -51,13 +63,12 @@ public class AbstractWorldMap implements IPositionChangeObserver{
 
     public void averageLifeLength() {
         if (deadAnimals >= 1) this.averageLifeLength = daysOfLifeDeadsSum / deadAnimals;
-        else this.averageLifeLength = 1;
     }
 
     public void freeFields() {
         int result = 0;
-        for (Vector2d field : fields){
-            if (field.elements == 0) result += 1;
+        for (InfoField info: fields1.values()){
+            if (info.elements == 0) result += 1;
         }
         this.freeFields = result;
     }
@@ -80,23 +91,6 @@ public class AbstractWorldMap implements IPositionChangeObserver{
         this.dominantGenotype = Gen;
     }
 
-    public ArrayList<Animal> animalsWithDominantGenotype() {
-        ArrayList<Animal> resultAnimals = new ArrayList<>();
-        for (Animal animal: listOfAnimals) {
-            if (animal.findDominantGenotype() == this.dominantGenotype) resultAnimals.add(animal);
-        }
-        return resultAnimals;
-    }
-
-    // get all fields
-    public LinkedList<Vector2d> getFields() {
-        LinkedList<Vector2d> fields = new LinkedList<>();
-        for (int i = low.x ; i <= high.x; i++){
-            for (int j = low.y ; j <= high.y; j++) fields.add(new Vector2d(i, j));
-        }
-        return fields;
-    }
-
     // positions checking etc
     public boolean canMoveTo(Vector2d position) {
         return position.follows(this.low) && position.precedes(this.high);
@@ -116,26 +110,16 @@ public class AbstractWorldMap implements IPositionChangeObserver{
 
     public void place(Animal animal) {
         Vector2d pos = animal.getPosition();
+
         if (!(pos.x >= this.width || pos.x < 0 || pos.y >= this.height || pos.y < 0)){
             this.addAnimal(animal, pos);
             animal.addObserver(this);
         }
     }
 
-//    public AbstractWorldMapElement objectAt(Vector2d position) {
-//        if (animals.get(position) == null) {
-//            return grasses.get(position);
-//        }
-//        return animals.get(position).get(0);
-//    }
-
     public AbstractWorldMapElement grassAt(Vector2d position) {
         return grasses.get(position);
     }
-
-//    public boolean isOccupied(Vector2d position) {
-//        return objectAt(position) != null;
-//    }
 
     // animal general functions
     public void moveAllAnimals() {
@@ -148,6 +132,7 @@ public class AbstractWorldMap implements IPositionChangeObserver{
     }
 
     public void addAnimal(Animal animal, Vector2d newPosition){
+        fields1.get(newPosition).incrementElementsStatus();
         if (animals.get(newPosition) == null) {
             LinkedList<Animal> list = new LinkedList<>();
             list.add(animal);
@@ -158,32 +143,37 @@ public class AbstractWorldMap implements IPositionChangeObserver{
     }
 
     public void removeAnimal(Animal animal, Vector2d oldPosition) {
+        fields1.get(oldPosition).decrementElementsStatus();
         LinkedList<Animal> list =  animals.get(oldPosition);
+
         if (animals.get(oldPosition) != null) {
             list.remove(animal);
             listOfAnimals.remove(animal);
+            animal.removeObserver(this);
             if (list.size() == 0) animals.remove(oldPosition);
         }
     }
 
     // przetestowac
     public void removeDead() {
+        CopyOnWriteArrayList<Animal> bodiesToRemove = new CopyOnWriteArrayList<>();
         for (Vector2d position: animals.keySet()){
             for (Animal animal: animals.get(position)){
-                if (animal.isDead()) {
-                    // umarło zwierzątko, czyli na tej pozycji zwiększa sie liczba smierci
-                    int index = fields.indexOf(animal.getPosition());
-                    if (index != -1) {
-                        fields.get(index).death += 1; // aktualizujemy liczbę śmierci na danym polu
-                        fields.get(index).elements -= 1; // jeden element mniej w danym polu
-                    }
-                    animal.isDead = animal.daysOfLife; // umarło, oznaczamy ile dni żyło
-                    deadAnimals += 1;
-                    daysOfLifeDeadsSum += animal.daysOfLife;
-                    removeAnimal(animal, position);
+                if (animal != null) {
+                   if (animal.isDead()) {
+                       InfoField info = fields1.get(animal.getPosition());
+                       info.incrementDeathStatus();
+                       animal.isDead = animal.daysOfLife;
+                       deadAnimals += 1;
+                       livingAnimals -= 1;
+                       daysOfLifeDeadsSum += animal.daysOfLife;
+                       bodiesToRemove.add(animal);
+                   }
                 }
             }
         }
+
+        for (Animal dead : bodiesToRemove) removeAnimal(dead, dead.getPosition());
     }
 
     // grass operations
@@ -192,14 +182,15 @@ public class AbstractWorldMap implements IPositionChangeObserver{
     }
 
     public void plantGrass() { // funkcja zasadza jedną roślinkę
-
+        Vector2d plantPosition;
         if (toxicDeadMode) { // wariant "toksyczne trupy"
-            fields.sort(new ComparatorForFieldDeath());
-            for (Vector2d v : fields) {
+//            fields.sort(new ComparatorForFieldDeath());
+            for (Vector2d v : fields1.keySet()) {
                 if (!(grassAt(v) instanceof Grass)) {
                     Grass element = new Grass(v, this);
+                    plantPosition = v;
+                    fields1.get(plantPosition).incrementElementsStatus();
                     grasses.put(v, element);
-                    plantsNumber += 1;
                     break;
                 }
             }
@@ -212,10 +203,11 @@ public class AbstractWorldMap implements IPositionChangeObserver{
             for (int col = this.low.y; col <= this.high.y; col++) { // sadzimy na równiku
                 Vector2d v = new Vector2d(middle, col);
                 if (!(grassAt(v) instanceof Grass)) {
+                    plantPosition = v;
+                    fields1.get(plantPosition).incrementElementsStatus();
                     Grass element = new Grass(v, this);
                     grasses.put(v, element);
                     planted = true;
-                    plantsNumber += 1;
                     break;
                 }
             }
@@ -225,9 +217,10 @@ public class AbstractWorldMap implements IPositionChangeObserver{
                         if (row != middle){
                             Vector2d v = new Vector2d(row, col);
                             if (!(grassAt(v) instanceof Grass)) {
+                                plantPosition = v;
+                                fields1.get(plantPosition).incrementElementsStatus();
                                 Grass element = new Grass(v, this);
                                 grasses.put(v, element);
-                                plantsNumber += 1;
                                 break;
                             }
                         }
@@ -235,6 +228,7 @@ public class AbstractWorldMap implements IPositionChangeObserver{
                 }
             }
         }
+
     }
 
     // reproduction
@@ -265,10 +259,8 @@ public class AbstractWorldMap implements IPositionChangeObserver{
                 if (weaker.getCurrentEnergy() >= minReproductionEnergy) {
                     Animal baby = getBaby(parents);
                     stronger.reproduce(weaker);
-                    int index = fields.indexOf(baby.getPosition());
-                    if (index != -1) {
-                        fields.get(index).elements += 1;
-                    }
+                    InfoField info = fields1.get(baby.getPosition());
+                    info.incrementElementsStatus();
                     this.place(baby);
                 }
             }
@@ -319,6 +311,7 @@ public class AbstractWorldMap implements IPositionChangeObserver{
             }
         }
         for (Grass element : toUpdate) {
+            fields1.get(element.getPosition()).decrementElementsStatus();
             removeGrass(element);
             plantsNumber -= 1;
         }
@@ -330,38 +323,6 @@ public class AbstractWorldMap implements IPositionChangeObserver{
         for (LinkedList<Animal> listOfAnimals: this.animals.values()) {
             for (Animal animal : listOfAnimals) animal.aliveNextDay();
         }
-    }
-
-    // getters and setters
-    public int getWidth() {
-        return this.width;
-    }
-    public int getHeight() {
-        return this.height;
-    }
-    public Vector2d getLow() {
-        return this.low;
-    }
-    public Vector2d getHigh() {
-        return this.high;
-    }
-
-
-    // change mode
-    public void changePredistinationMode(boolean isPredistinationMode){
-        this.predistinationMode = isPredistinationMode;
-    }
-
-    public void changeIsCrazyMode(boolean isCrazyMode){
-        this.isCrazyMode = isCrazyMode;
-    }
-
-    public void changeHellExistsMode(boolean isHellExistsMode){
-        this.hellExistsMode = isHellExistsMode;
-    }
-
-    public void changeToxicDeadMode(boolean isToxicDeadMode){
-        this.toxicDeadMode = isToxicDeadMode;
     }
 
 }

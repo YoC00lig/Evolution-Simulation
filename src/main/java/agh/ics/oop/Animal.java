@@ -1,5 +1,6 @@
 package agh.ics.oop;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Animal extends AbstractWorldMapElement{
@@ -27,7 +28,7 @@ public class Animal extends AbstractWorldMapElement{
         this.eatenPlants = 0; // tyle roslinek zjadlo
         this.moveEnergy = map.moveEnergy;
         map.livingAnimals += 1;
-        map.addAnimal(this, position);
+        map.place(this);
     }
     // baby animal
     public Animal(AbstractWorldMap map, Animal parent1, Animal parent2){
@@ -103,15 +104,14 @@ public class Animal extends AbstractWorldMapElement{
         }
 
         if (can) {
-            int i = map.fields.indexOf(this.position);
-            if (i != -1) {
-                map.fields.get(i).elements -= 1; // jeden element mniej w danym polu - zwierzatko sobie stad idzie
-            }
+            InfoField info = map.fields1.get(this.position);
+            info.decrementElementsStatus();
+
             positionChanged(this, this.position, newPos);
             this.setPosition(newPos);
 
-            i = map.fields.indexOf(this.position); // jeden element więcej na tym polu, bo zwierzątko się tu przemieszcza
-            if (i != -1) {map.fields.get(i).elements += 1;}
+            info = map.fields1.get(this.position);
+            info.incrementElementsStatus();
         }
 
 
@@ -146,7 +146,16 @@ public class Animal extends AbstractWorldMapElement{
         this.daysOfLife += 1;
     }
     public void setEnergy(int value) {
-        this.energy = value;
+        LinkedList<Animal> list = map.animals.get(this.position);
+        LinkedList<Animal> toUpdate = new LinkedList<>();
+        for (Animal animal: list){
+            if (animal != this) toUpdate.add(animal);
+            else {
+                this.energy = value;
+                toUpdate.add(this);
+            }
+        }
+        map.rewrite(toUpdate);
     }
     public void setPosition(Vector2d pos) {this.position = pos;}
     public Vector2d getPosition() {
