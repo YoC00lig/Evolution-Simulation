@@ -3,13 +3,15 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Animal extends AbstractWorldMapElement{
+public class Animal extends AbstractWorldMapElement implements IMapElement{
     private int energy;
-    private MapDirection orient;
+    private MapDirection orientation;
     private final int[] genotype;
+    private final int genotypeLength;
+    private MoveDirection[] directions;
     private Vector2d position;
     private final AbstractWorldMap map;
-    protected int index, daysOfLife, numberOfChildren, isDead, eatenPlants;
+    protected int gene, daysOfLife, numberOfChildren, isDead, eatenPlants;
     protected List<IPositionChangeObserver> observers = new ArrayList<>();
 
 
@@ -18,15 +20,16 @@ public class Animal extends AbstractWorldMapElement{
         this.position = position;
         this.map = map;
         this.genotype = Genotype.createDNA();
+        this.genotypeLength = genotype.length;
+        this.directions = OptionsParser.parse(genotype);
         this.initialEnergy = map.initialEnergy;
         this.energy = initialEnergy;
-        this.orient = MapDirection.NORTH; //!
-        this.index = (int) (Math.random() * 32); // indeks w tablicy genotypów, który będzie wskazywać na następny ruch - gdy tworzymy zwierzatko to jest ustawiany randomowo
+        this.orientation = MapDirection.randomDirection();
+        this.gene = (int) (Math.random() * genotypeLength); // indeks w tablicy genotypów, który będzie wskazywać na następny ruch - gdy tworzymy zwierzatko to jest ustawiany randomowo
         this.daysOfLife = 1;
         this.numberOfChildren = 0;
         this.isDead = 0; // 0 oznacza, że jeszcze żyje. Każda inna liczba oznacza którego dnia zmarło
         this.eatenPlants = 0; // tyle roslinek zjadlo
-        this.moveEnergy = map.moveEnergy;
         map.livingAnimals += 1;
         map.place(this);
     }
@@ -35,11 +38,13 @@ public class Animal extends AbstractWorldMapElement{
         this.position = parent1.getPosition();
         this.map = map;
         this.genotype = Genotype.getChildGenotype(parent1, parent2, map.isCrazyMode);
+        this.genotypeLength = genotype.length;
+        this.directions = OptionsParser.parse(genotype);
         this.energy = findChildEnergy(parent1, parent2);
-        this.orient = MapDirection.NORTH; // !
-        this.index = (int) (Math.random() * 32);
+        this.orientation = MapDirection.randomDirection();
+        this.gene = (int) (Math.random() * genotypeLength);
         this.daysOfLife = 1;
-        this.moveEnergy = map.moveEnergy;
+
         this.isDead = 0;
         this.numberOfChildren = 0;
         this.eatenPlants = 0;
@@ -67,54 +72,85 @@ public class Animal extends AbstractWorldMapElement{
         return (int) (parents[0].getCurrentEnergy() * 0.75 + parents[1].getCurrentEnergy() * 0.25);
     }
 /// poruszanie
-    public Vector2d teleport() {
-        Vector2d pos = this.getPosition();
-        if (pos.x < 0) return new Vector2d(map.width + pos.x, pos.y);
-        else if (pos.x > map.high.x) return new Vector2d(pos.x - map.width, pos.y);
-        return pos;
+    public Vector2d teleportTurn(Vector2d newPosition, MapDirection newOrientation) {
+
+        MapDirection newOrient = newOrientation;
+        Vector2d newPos = newPosition;
+
+        if (newPos.x == -1) newPos = new Vector2d(map.width - 1, newPos.y);
+        else newPos = new Vector2d(0, newPos.y);
+        if (newPos.y == -1) newOrient.reverse();
+        else if (newPos.y == map.height - 1) newOrientation.reverse();
+        orientation = newOrientation;
+
+        return newPos;
     }
 
     public void setNextIndex() {
-        this.index = this.index + 1;
-        if (this.index == 32) this.index = 0;
+        this.gene = this.gene + 1;
+        if (this.gene == genotypeLength) this.gene = 0;
     }
 
     public void setRandomIndex() {
-        this.index = (int) (Math.random() * 32);
+        this.gene = (int) (Math.random() * genotypeLength);
     }
 
-    public void move2() { /// ?
-        if (this.energy < moveEnergy) return;
 
-        int index = this.index;
-        int direction = this.genotype[index];
+    public void move() {
+        chooseGene();
+        MoveDirection direction = directions[gene];
         boolean hellExists = map.hellExistsMode;
-        MapDirection dir = convertIdToDirection(direction);
-        Vector2d newPos = this.position.add(dir.toUnitVector());
-        boolean can = map.canMoveTo(newPos);
-
-        if (hellExists && !can) {
-            this.setEnergy(this.energy-map.minReproductionEnergy);
-            newPos = map.HellsPortal();
-        }
-
-        else if (!hellExists && !can){
-            newPos = this.teleport();
-            if (newPos.y > map.high.y || newPos.y < 0) this.orient = this.orient.reverse();
-        }
-
-        if (can) {
+        if (direction != null) {
+            MapDirection newOrientation = orientation;
+            switch (direction) {
+                case RIGHT:
+                    newOrientation = orientation.next().next();
+                    break;
+                case LEFT:
+                    newOrientation = orientation.previous().previous();
+                    break;
+                case UP:
+                    newOrientation = orientation;
+                    break;
+                case DOWN:
+                    newOrientation = orientation.reverse();
+                    break;
+                case UP_LEFT:
+                    newOrientation = orientation.previous();
+                    break;
+                case UP_RIGHT:
+                    newOrientation = orientation.next();
+                    break;
+                case LEFT_DOWN:
+                    newOrientation = orientation.reverse().next();
+                    break;
+                case RIGHT_DOWN:
+                    newOrientation = orientation.reverse().previous();
+                    break;
+            }
+            Vector2d newPosition = position.add(newOrientation.toUnitVector());
+            if (map.canMoveTo(newPosition)) {
+                orientation = newOrientation;
+            }
+            else if(hellExists) {
+                this.setEnergy(this.energy-map.minReproductionEnergy);
+                newPosition = map.HellsPortal();
+                orientation = newOrientation;
+            }
+            else {
+                newPosition = this.teleportTurn(newPosition, newOrientation);
+            }
             InfoField info = map.fields1.get(this.position);
             info.decrementElementsStatus();
-
-            positionChanged(this, this.position, newPos);
-            this.setPosition(newPos);
-
+            positionChanged(this, this.position, newPosition);
+            position = newPosition;
             info = map.fields1.get(this.position);
             info.incrementElementsStatus();
         }
+    }
 
 
+    public void chooseGene() {
         if (!map.predistinationMode){ // wariant "nieco szaleństwa
             int ans = (int) (Math.random() * 10);
             switch (ans) {
@@ -138,24 +174,11 @@ public class Animal extends AbstractWorldMapElement{
         return this.genotype;
     }
 
-    public void reduceEnergy() {
-        this.energy -= moveEnergy;
-    }
-
-    public void aliveNextDay() { // to change
+    public void aliveNextDay() {
         this.daysOfLife += 1;
     }
     public void setEnergy(int value) {
-        LinkedList<Animal> list = map.animals.get(this.position);
-        LinkedList<Animal> toUpdate = new LinkedList<>();
-        for (Animal animal: list){
-            if (animal != this) toUpdate.add(animal);
-            else {
-                this.energy = value;
-                toUpdate.add(this);
-            }
-        }
-        map.rewrite(toUpdate);
+        this.energy = value;
     }
     public void setPosition(Vector2d pos) {this.position = pos;}
     public Vector2d getPosition() {
@@ -206,5 +229,9 @@ public class Animal extends AbstractWorldMapElement{
 
     public String toString() {
         return "A " + this.position;
+    }
+
+    public String getPath(IMapElement object) {
+        return "src/main/resources/snail.png";
     }
 }
