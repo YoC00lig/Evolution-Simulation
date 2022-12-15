@@ -19,7 +19,7 @@ public class AbstractWorldMap implements IPositionChangeObserver{
     int averageEnergy, averageLifeLength, freeFields;
 
 
-    public AbstractWorldMap(int width, int height,boolean predistination, boolean toxicMode, boolean isCrazyMode, boolean hellExistsMode, int reproductionE, int plantE, int initialE, int moveE) {
+    public AbstractWorldMap(int width, int height,boolean predistination, boolean toxicMode, boolean isCrazyMode, boolean hellExistsMode, int reproductionE, int plantE, int initialE) {
         this.width = width;
         this.height = height;
         this.low = new Vector2d(0,0);
@@ -34,7 +34,6 @@ public class AbstractWorldMap implements IPositionChangeObserver{
         this.plantEnergy = plantE;
         this.minReproductionEnergy = reproductionE;
         this.initialEnergy = initialE;
-        this.moveEnergy = moveE;
     }
 
     public LinkedHashMap<Vector2d, InfoField> generateFields1() {
