@@ -4,7 +4,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class AbstractWorldMap implements IPositionChangeObserver{
     public Vector2d low, high;
-    public int width, height, minReproductionEnergy, plantEnergy, epoch, initialEnergy, moveEnergy;
+    public int width, height, minReproductionEnergy, plantEnergy, epoch, initialEnergy;
     protected LinkedHashMap<Vector2d, LinkedList<Animal>> animals = new LinkedHashMap<>();
     public ArrayList<Animal> listOfAnimals = new ArrayList<>();
     public LinkedHashMap<Vector2d, Grass> grasses = new LinkedHashMap<>();
@@ -151,8 +151,8 @@ public class AbstractWorldMap implements IPositionChangeObserver{
     public void moveAllAnimals() {
         for (Animal animal: listOfAnimals){
             if (animal != null) {
-                animal.move2();
-                animal.setEnergy(animal.getCurrentEnergy() - moveEnergy);
+                animal.move();
+                animal.setEnergy(animal.getCurrentEnergy());
             }
         }
     }

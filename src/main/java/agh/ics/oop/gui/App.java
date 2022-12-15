@@ -50,7 +50,6 @@ public class App extends Application {
         TextField reproductionEnergy = new TextField("5");
         TextField plantEnergy = new TextField("3");
         TextField initialEnergy = new TextField("5");
-        TextField moveEnergy = new TextField("1");
         TextField startAnimalsNumber = new TextField("1");
         TextField startPlantsNumber = new TextField("1");
         TextField dailyGrownGrassNumber = new TextField("1");
@@ -64,13 +63,12 @@ public class App extends Application {
         reproductionEnergy.setStyle("-fx-background-color: #f7cac9"); reproductionEnergy.setPrefColumnCount(14);
         plantEnergy.setStyle("-fx-background-color: #f7cac9"); plantEnergy.setPrefColumnCount(14);
         initialEnergy.setStyle("-fx-background-color: #f7cac9"); initialEnergy.setPrefColumnCount(14);
-        moveEnergy.setStyle("-fx-background-color: #f7cac9"); moveEnergy.setPrefColumnCount(14);
         startAnimalsNumber.setStyle("-fx-background-color: #f7cac9"); startAnimalsNumber.setPrefColumnCount(14);
         startPlantsNumber.setStyle("-fx-background-color: #f7cac9"); startPlantsNumber.setPrefColumnCount(14);
         dailyGrownGrassNumber.setStyle("-fx-background-color: #f7cac9"); dailyGrownGrassNumber.setPrefColumnCount(14);
 
         listOfTextField.getChildren().addAll(widthField, heightField, predistinationMode, toxicDeadMode, isCrazyMode,
-                hellExistsMode, reproductionEnergy, plantEnergy, initialEnergy, moveEnergy, startAnimalsNumber,
+                hellExistsMode, reproductionEnergy, plantEnergy, initialEnergy, startAnimalsNumber,
                 startPlantsNumber, dailyGrownGrassNumber);
 
         listOfTextField.setSpacing(13);
@@ -85,7 +83,6 @@ public class App extends Application {
         Label reproductionEnergyLabel = new Label("reproduction energy: ");
         Label plantEnergyLabel = new Label("plant energy: ");
         Label initialEnergyLabel = new Label("initial energy for animal: ");
-        Label moveEnergyLabel = new Label("move energy for animal: ");
         Label startAnimalsNumberLabel = new Label("start number of animals: ");
         Label startPlantsNumberLabel = new Label("start number of plants: ");
         Label dailyGrownGrassNumberLabel = new Label("number of plants per-day:       ");
@@ -99,7 +96,6 @@ public class App extends Application {
         reproductionEnergyLabel.setFont(new Font("Verdana", 14));
         plantEnergyLabel.setFont(new Font("Verdana", 14));
         initialEnergyLabel.setFont(new Font("Verdana", 14));
-        moveEnergyLabel.setFont(new Font("Verdana", 14));
         startAnimalsNumberLabel.setFont(new Font("Verdana", 14));
         startPlantsNumberLabel.setFont(new Font("Verdana", 14));
         dailyGrownGrassNumberLabel.setFont(new Font("Verdana", 14));
@@ -108,7 +104,7 @@ public class App extends Application {
         confirmButton.setStyle("-fx-background-color: #ff6666");
 
         listOfLabel.getChildren().addAll(widthFieldLabel, heightFieldLabel, predistinationModeLabel, toxicDeadModeLabel, isCrazyModeLabel,
-                hellExistsModeLabel, reproductionEnergyLabel, plantEnergyLabel, initialEnergyLabel, moveEnergyLabel, startAnimalsNumberLabel,
+                hellExistsModeLabel, reproductionEnergyLabel, plantEnergyLabel, initialEnergyLabel,  startAnimalsNumberLabel,
                 startPlantsNumberLabel, dailyGrownGrassNumberLabel, confirmButton);
         listOfLabel.setSpacing(20);
 
@@ -133,13 +129,12 @@ public class App extends Application {
             int reproductionE = Integer.parseInt(reproductionEnergy.getText());
             int plantE = Integer.parseInt(plantEnergy.getText());
             int initialE = Integer.parseInt(initialEnergy.getText());
-            int moveE = Integer.parseInt(moveEnergy.getText());
             int startAnimalsNum = Integer.parseInt(startAnimalsNumber.getText());
             int startPlantsNum = Integer.parseInt(startPlantsNumber.getText());
             int dailyGrown = Integer.parseInt(dailyGrownGrassNumber.getText());
 
             map = new AbstractWorldMap(width,height, predisitination,toxicDead,
-                    isCrazy,hellExists,reproductionE,plantE, initialE, moveE);
+                    isCrazy,hellExists,reproductionE,plantE, initialE);
             engine = new SimulationEngine(map, startAnimalsNum, startPlantsNum, dailyGrown);
 
             drawGame(primaryStage);

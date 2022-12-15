@@ -44,7 +44,7 @@ public class Animal extends AbstractWorldMapElement implements IMapElement{
         this.orientation = MapDirection.randomDirection();
         this.gene = (int) (Math.random() * genotypeLength);
         this.daysOfLife = 1;
-        this.moveEnergy = map.moveEnergy;
+
         this.isDead = 0;
         this.numberOfChildren = 0;
         this.eatenPlants = 0;
