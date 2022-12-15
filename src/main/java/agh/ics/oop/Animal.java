@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Animal extends AbstractWorldMapElement implements IMapElement{
+    // trial commit
     private int energy;
     private MapDirection orientation;
     private final int[] genotype;
