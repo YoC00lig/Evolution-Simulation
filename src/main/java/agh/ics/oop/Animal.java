@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Animal extends AbstractWorldMapElement{
+public class Animal extends AbstractWorldMapElement implements IMapElement{
     private int energy;
     private MapDirection orient;
     private final int[] genotype;
@@ -138,24 +138,11 @@ public class Animal extends AbstractWorldMapElement{
         return this.genotype;
     }
 
-    public void reduceEnergy() {
-        this.energy -= moveEnergy;
-    }
-
-    public void aliveNextDay() { // to change
+    public void aliveNextDay() {
         this.daysOfLife += 1;
     }
     public void setEnergy(int value) {
-        LinkedList<Animal> list = map.animals.get(this.position);
-        LinkedList<Animal> toUpdate = new LinkedList<>();
-        for (Animal animal: list){
-            if (animal != this) toUpdate.add(animal);
-            else {
-                this.energy = value;
-                toUpdate.add(this);
-            }
-        }
-        map.rewrite(toUpdate);
+        this.energy = value;
     }
     public void setPosition(Vector2d pos) {this.position = pos;}
     public Vector2d getPosition() {
@@ -206,5 +193,9 @@ public class Animal extends AbstractWorldMapElement{
 
     public String toString() {
         return "A " + this.position;
+    }
+
+    public String getPath(IMapElement object) {
+        return "src/main/resources/snail.png";
     }
 }

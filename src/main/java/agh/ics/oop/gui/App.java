@@ -24,6 +24,7 @@ public class App extends Application {
     SimulationEngine engine;
     private final GridPane gridPane = new GridPane();
     private final BorderPane border = new BorderPane();
+    Scene scene;
     final int size = 50; // rozmiar mapy
 
 
@@ -71,6 +72,7 @@ public class App extends Application {
         listOfTextField.getChildren().addAll(widthField, heightField, predistinationMode, toxicDeadMode, isCrazyMode,
                 hellExistsMode, reproductionEnergy, plantEnergy, initialEnergy, moveEnergy, startAnimalsNumber,
                 startPlantsNumber, dailyGrownGrassNumber);
+
         listOfTextField.setSpacing(13);
 
         VBox listOfLabel = new VBox();
@@ -138,16 +140,25 @@ public class App extends Application {
 
             map = new AbstractWorldMap(width,height, predisitination,toxicDead,
                     isCrazy,hellExists,reproductionE,plantE, initialE, moveE);
+
             engine = new SimulationEngine(map, startAnimalsNum, startPlantsNum, dailyGrown);
+
+            drawGame(primaryStage);
         });
 
-//        SimulationEngine engine = new SimulationEngine(map, 1,4,1);
-//        engine.run();
-//        drawMap();
-//        Scene scene = new Scene(gridPane, 400, 400);
-//        primaryStage.setScene(scene);
-//        primaryStage.show();
-        primaryStage.setScene(new Scene(border, 1200,1000));
+        scene = new Scene(border, 1200,1000);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    public void drawGame(Stage primaryStage) {
+        border.setCenter(null);
+        border.setTop(null);
+        border.setBottom(null);
+        engine.run();
+        drawMap();
+        scene.setRoot(gridPane);
+        primaryStage.setScene(scene);
         primaryStage.show();
     }
 
@@ -175,17 +186,19 @@ public class App extends Application {
         }
 
         for (Animal element: map.listOfAnimals){
-            Label elem = new Label(element.toString());
+            VBox elem = new GuiElementBox(element).getvBox();
             Vector2d pos = element.getPosition();
             gridPane.add(elem,  pos.x - map.low.x + 1, map.high.y - pos.y + 1);
             GridPane.setHalignment(elem, HPos.CENTER);
         }
 
         for (Grass element : map.grasses.values()){
-            Label elem = new Label(element.toString());
+            VBox elem = new GuiElementBox(element).getvBox();
             Vector2d pos = element.getPosition();
             gridPane.add(elem,  pos.x - map.low.x + 1, map.high.y - pos.y + 1);
             GridPane.setHalignment(elem, HPos.CENTER);
         }
+        gridPane.setStyle("-fx-background-color: #eea29a;");
+        gridPane.setAlignment(Pos.CENTER);
     }
 }

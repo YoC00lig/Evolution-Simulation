@@ -1,6 +1,6 @@
 package agh.ics.oop;
 
-public class Grass extends AbstractWorldMapElement {
+public class Grass extends AbstractWorldMapElement implements IMapElement{
     private final Vector2d position;
     AbstractWorldMap map;
 
@@ -18,5 +18,9 @@ public class Grass extends AbstractWorldMapElement {
 
     public String toString() {
         return "G " + this.position;
+    }
+
+    public String getPath(IMapElement object) {
+        return "src/main/resources/grass.png";
     }
 }
