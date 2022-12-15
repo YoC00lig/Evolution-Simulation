@@ -140,7 +140,6 @@ public class App extends Application {
 
             map = new AbstractWorldMap(width,height, predisitination,toxicDead,
                     isCrazy,hellExists,reproductionE,plantE, initialE, moveE);
-
             engine = new SimulationEngine(map, startAnimalsNum, startPlantsNum, dailyGrown);
 
             drawGame(primaryStage);
