@@ -72,14 +72,17 @@ public class Animal extends AbstractWorldMapElement{
         return (int) (parents[0].getCurrentEnergy() * 0.75 + parents[1].getCurrentEnergy() * 0.25);
     }
 /// poruszanie
-    public Vector2d teleportTurn(Vector2d newPosition) {
-        Vector2d pos = newPosition;
-        Vector2d newPos = pos;
-        MapDirection newOrientation = this.orientation;
-        if (pos.x == -1) newPos = new Vector2d(map.width - 1, pos.y);
-        else newPos = new Vector2d(0, pos.y);
-        if (pos.y == -1) newOrientation.reverse().next();
-        else if (pos.y == map.height - 1) newOrientation.reverse().previous();
+    public Vector2d teleportTurn(Vector2d newPosition, MapDirection newOrientation) {
+
+        MapDirection newOrient = newOrientation;
+        Vector2d newPos = newPosition;
+
+        if (newPos.x == -1) newPos = new Vector2d(map.width - 1, newPos.y);
+        else newPos = new Vector2d(0, newPos.y);
+        if (newPos.y == -1) newOrient.reverse();
+        else if (newPos.y == map.height - 1) newOrientation.reverse();
+        orientation = newOrientation;
+
         return newPos;
     }
 
@@ -98,123 +101,54 @@ public class Animal extends AbstractWorldMapElement{
         MoveDirection direction = directions[gene];
         boolean hellExists = map.hellExistsMode;
         if (direction != null) {
+            MapDirection newOrientation = orientation;
             switch (direction) {
                 case RIGHT:
-                    orientation = orientation.next().next();
-                    Vector2d newPosition = position.add(orientation.toUnitVector());
-                    if (map.canMoveTo(newPosition)) {
-                        this.positionChanged(this, position, newPosition);
-                        position = newPosition;
-                    }
-                    else if(hellExists) {
-                        this.setEnergy(this.energy-map.minReproductionEnergy);
-                        position = map.HellsPortal();
-                    }
-                    else {
-                        position = this.teleportTurn(newPosition);
-                    }
+                    newOrientation = orientation.next().next();
                     break;
                 case LEFT:
-                    orientation = orientation.previous().previous();
-                    newPosition = position.add(orientation.toUnitVector());
-                    if (map.canMoveTo(newPosition)) {
-                        this.positionChanged(this, position, newPosition);
-                        position = newPosition;
-                    }
+                    newOrientation = orientation.previous().previous();
                     break;
                 case UP:
-                    newPosition = position.add(orientation.toUnitVector());
-                    if (map.canMoveTo(newPosition)) {
-                        this.positionChanged(this, position, newPosition);
-                        position = newPosition;
-                    }
+                    newOrientation = orientation;
                     break;
                 case DOWN:
-                    orientation = orientation.reverse();
-                    newPosition = position.add(orientation.toUnitVector());
-                    if (map.canMoveTo(newPosition)) {
-                        this.positionChanged(this, position, newPosition);
-                        position = newPosition;
-                    }
+                    newOrientation = orientation.reverse();
                     break;
                 case UP_LEFT:
-                    orientation = orientation.previous();
-                    newPosition = position.add(orientation.toUnitVector());
-                    if (map.canMoveTo(newPosition)) {
-                        this.positionChanged(this, position, newPosition);
-                        position = newPosition;
-                    }
+                    newOrientation = orientation.previous();
                     break;
                 case UP_RIGHT:
-                    orientation = orientation.next();
-                    newPosition = position.add(orientation.toUnitVector());
-                    if (map.canMoveTo(position.add(orientation.toUnitVector()))) {
-                        this.positionChanged(this, position, newPosition);
-                        position = newPosition;
-                    }
+                    newOrientation = orientation.next();
                     break;
                 case LEFT_DOWN:
-                    orientation = orientation.reverse().next();
-                    newPosition = position.add(orientation.toUnitVector());
-                    if (map.canMoveTo(newPosition)) {
-                        this.positionChanged(this, position, newPosition);
-                        position = newPosition;
-                    }
+                    newOrientation = orientation.reverse().next();
                     break;
                 case RIGHT_DOWN:
-                    orientation = orientation.reverse().previous();
-                    newPosition = position.add(orientation.toUnitVector());
-                    if (map.canMoveTo(newPosition)) {
-                        this.positionChanged(this, position, newPosition);
-                        position = newPosition;
-                    }
+                    newOrientation = orientation.reverse().previous();
                     break;
             }
-        }
-    }
-
-
-    public void move2() { /// ?
-        if (this.energy < moveEnergy) return;
-
-        int index = this.gene;
-        int direction = this.genotype[index];
-        boolean hellExists = map.hellExistsMode;
-        MapDirection dir = convertIdToDirection(direction);
-        Vector2d newPos = this.position.add(dir.toUnitVector());
-        boolean can = map.canMoveTo(newPos);
-
-        if (hellExists && !can) {
-            this.setEnergy(this.energy-map.minReproductionEnergy);
-            newPos = map.HellsPortal();
-        }
-
-        else if (!hellExists && !can){
-            newPos = this.teleport();
-            if (newPos.y > map.high.y || newPos.y < 0) this.orientation = this.orientation.reverse();
-        }
-
-        if (can) {
+            Vector2d newPosition = position.add(newOrientation.toUnitVector());
+            if (map.canMoveTo(newPosition)) {
+                orientation = newOrientation;
+            }
+            else if(hellExists) {
+                this.setEnergy(this.energy-map.minReproductionEnergy);
+                newPosition = map.HellsPortal();
+                orientation = newOrientation;
+            }
+            else {
+                newPosition = this.teleportTurn(newPosition, newOrientation);
+            }
             InfoField info = map.fields1.get(this.position);
             info.decrementElementsStatus();
-
-            positionChanged(this, this.position, newPos);
-            this.setPosition(newPos);
-
+            positionChanged(this, this.position, newPosition);
+            position = newPosition;
             info = map.fields1.get(this.position);
             info.incrementElementsStatus();
         }
-
-
-        if (!map.predistinationMode){ // wariant "nieco szaleństwa
-            int ans = (int) (Math.random() * 10);
-            switch (ans) {
-                case 0, 1 -> this.setRandomIndex(); // prawdopodobieństwo 20% - losowy gen
-                default -> this.setNextIndex(); // prawdopodobieństo 80% - wykonuje jeden po drugim
-            }
-        }
-        else this.setNextIndex(); // wariant "pełna predystynacja"
     }
+
 
     public void chooseGene() {
         if (!map.predistinationMode){ // wariant "nieco szaleństwa
