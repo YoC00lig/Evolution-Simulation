@@ -1,5 +1,7 @@
 package agh.ics.oop;
 
+import java.util.Random;
+
 public enum MapDirection {
     SOUTH,
     SOUTH_EAST,
@@ -10,29 +12,48 @@ public enum MapDirection {
     EAST,
     WEST;
 
+    private static final Random PRNG = new Random();
+    private static final MapDirection[] directions = values();
+    public static MapDirection randomDirection() {
+        return directions[PRNG.nextInt(directions.length)];
+    }
+
     public MapDirection next() {
         return switch (this) {
-            case SOUTH -> MapDirection.SOUTH_WEST;
-            case SOUTH_WEST -> MapDirection.WEST;
-            case WEST -> MapDirection.NORTH_WEST;
-            case NORTH_WEST -> MapDirection.NORTH;
-            case NORTH -> MapDirection.NORTH_EAST;
-            case NORTH_EAST -> MapDirection.EAST;
-            case EAST -> MapDirection.SOUTH_EAST;
-            case SOUTH_EAST -> MapDirection.SOUTH;
+            case SOUTH -> SOUTH_WEST;
+            case SOUTH_WEST -> WEST;
+            case WEST -> NORTH_WEST;
+            case NORTH_WEST -> NORTH;
+            case NORTH -> NORTH_EAST;
+            case NORTH_EAST -> EAST;
+            case EAST -> SOUTH_EAST;
+            case SOUTH_EAST -> SOUTH;
+        };
+    }
+
+    public MapDirection previous() {
+        return switch (this) {
+            case SOUTH_WEST -> SOUTH;
+            case WEST -> SOUTH_WEST;
+            case NORTH_WEST -> WEST;
+            case NORTH -> NORTH_WEST;
+            case NORTH_EAST -> NORTH;
+            case EAST -> NORTH_EAST;
+            case SOUTH_EAST -> EAST;
+            case SOUTH -> SOUTH_EAST;
         };
     }
 
     public MapDirection reverse() {
         return switch (this) {
-            case SOUTH -> MapDirection.NORTH;
-            case NORTH -> MapDirection.SOUTH;
-            case WEST -> MapDirection.EAST;
-            case EAST -> MapDirection.WEST;
-            case SOUTH_WEST -> MapDirection.NORTH_EAST;
-            case SOUTH_EAST -> MapDirection.NORTH_WEST;
-            case NORTH_EAST -> MapDirection.SOUTH_WEST;
-            case NORTH_WEST -> MapDirection.SOUTH_EAST;
+            case SOUTH -> NORTH;
+            case NORTH -> SOUTH;
+            case WEST -> EAST;
+            case EAST -> WEST;
+            case SOUTH_WEST -> NORTH_EAST;
+            case SOUTH_EAST -> NORTH_WEST;
+            case NORTH_EAST -> SOUTH_WEST;
+            case NORTH_WEST -> SOUTH_EAST;
         };
     }
 
