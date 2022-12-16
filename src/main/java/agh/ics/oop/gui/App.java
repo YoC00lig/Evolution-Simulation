@@ -41,8 +41,8 @@ public class App extends Application {
 
         VBox listOfTextField = new VBox();
 
-        TextField widthField = new TextField("5");
-        TextField heightField = new TextField("5");
+        TextField widthField = new TextField("25");
+        TextField heightField = new TextField("25");
         TextField predistinationMode = new TextField("true");
         TextField toxicDeadMode = new TextField("false");
         TextField isCrazyMode = new TextField("true");
@@ -51,7 +51,7 @@ public class App extends Application {
         TextField plantEnergy = new TextField("3");
         TextField initialEnergy = new TextField("5");
         TextField startAnimalsNumber = new TextField("1");
-        TextField startPlantsNumber = new TextField("1");
+        TextField startPlantsNumber = new TextField("15");
         TextField dailyGrownGrassNumber = new TextField("1");
 
         widthField.setStyle("-fx-background-color: #f7cac9"); widthField.setPrefColumnCount(14);

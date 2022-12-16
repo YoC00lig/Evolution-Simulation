@@ -47,6 +47,6 @@ public class StatisticsFunctionsTest {
 
         Statistics stats = new Statistics(map);
         stats.averageEnergy();
-//        assertEquals(map.averageEnergy, 4);
+        assertEquals(map.averageEnergy, 4);
     }
 }
