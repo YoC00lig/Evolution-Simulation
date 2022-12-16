@@ -1,5 +1,8 @@
 package agh.ics.oop;
 import org.junit.jupiter.api.Test;
+
+import java.util.Objects;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class DeathStatusTest {
@@ -39,10 +42,26 @@ public class DeathStatusTest {
         assertEquals(map.fields1.get(pos1).death, 1);
         assertEquals(map.fields1.get(pos2).death, 1);
 
+        for (InfoField i: map.informations) {
+            if (Objects.equals(i.position, pos1)) {
+                assertEquals(i.elements, 0);
+                assertEquals(i.death, 1);
+            }
+
+            if (Objects.equals(i.position, pos2)) {
+                assertEquals(i.elements, 0);
+                assertEquals(i.death, 1);
+            }
+        }
+
         Grass grass = new Grass(pos1, map);
         assertEquals(map.fields1.get(pos1).elements, 1);
         assertEquals(map.livingAnimals, 0);
         assertEquals(map.plantsNumber, 1);
+
+        for (InfoField i: map.informations) {
+            if (Objects.equals(i.position, pos1)) assertEquals(i.elements, 1);
+        }
 
         map.plantGrass();
         assertEquals(map.plantsNumber, 2);

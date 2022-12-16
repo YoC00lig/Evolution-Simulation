@@ -25,7 +25,7 @@ public class App extends Application {
     private final GridPane gridPane = new GridPane();
     private final BorderPane border = new BorderPane();
     Scene scene;
-    final int size = 50; // rozmiar mapy
+    final int size = 25; // rozmiar mapy
 
 
     public static void main(String[] args) {
@@ -44,7 +44,7 @@ public class App extends Application {
         TextField widthField = new TextField("5");
         TextField heightField = new TextField("5");
         TextField predistinationMode = new TextField("true");
-        TextField toxicDeadMode = new TextField("true");
+        TextField toxicDeadMode = new TextField("false");
         TextField isCrazyMode = new TextField("true");
         TextField hellExistsMode = new TextField("true");
         TextField reproductionEnergy = new TextField("5");
@@ -140,7 +140,7 @@ public class App extends Application {
             drawGame(primaryStage);
         });
 
-        scene = new Scene(border, 1200,1000);
+        scene = new Scene(border, 2000,1000);
         primaryStage.setScene(scene);
         primaryStage.show();
     }

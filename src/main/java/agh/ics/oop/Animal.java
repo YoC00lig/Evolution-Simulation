@@ -1,6 +1,5 @@
 package agh.ics.oop;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class Animal extends AbstractWorldMapElement implements IMapElement{
@@ -95,6 +94,10 @@ public class Animal extends AbstractWorldMapElement implements IMapElement{
         this.gene = (int) (Math.random() * genotypeLength);
     }
 
+    public void positionChanged(Animal animal, Vector2d oldPosition, Vector2d newPosition){
+        for (IPositionChangeObserver observer : this.observers)
+            observer.positionChanged(animal, oldPosition, newPosition);
+    }
 
     public void move() {
         chooseGene();
@@ -142,10 +145,11 @@ public class Animal extends AbstractWorldMapElement implements IMapElement{
             }
             InfoField info = map.fields1.get(this.position);
             info.decrementElementsStatus();
-            positionChanged(this, this.position, newPosition);
+//            this.positionChanged(this, this.position, newPosition); //concurrent modification error
             position = newPosition;
             info = map.fields1.get(this.position);
             info.incrementElementsStatus();
+            this.energy -= 1;
         }
     }
 
@@ -161,7 +165,6 @@ public class Animal extends AbstractWorldMapElement implements IMapElement{
         else this.setNextIndex(); // wariant "pełna predystynacja"
     }
 
-// poruszanie
     public void reproduce(Animal partner) {
         partner.energy *= 0.75;
         this.energy *= 0.25;
@@ -180,7 +183,6 @@ public class Animal extends AbstractWorldMapElement implements IMapElement{
     public void setEnergy(int value) {
         this.energy = value;
     }
-    public void setPosition(Vector2d pos) {this.position = pos;}
     public Vector2d getPosition() {
         return this.position;
     }
@@ -196,27 +198,6 @@ public class Animal extends AbstractWorldMapElement implements IMapElement{
 
     public void removeObserver(IPositionChangeObserver observer){
         observers.remove(observer);
-    }
-
-    private void positionChanged(Animal animal, Vector2d oldPosition, Vector2d newPosition) {
-        for (IPositionChangeObserver observer : this.observers) {
-            observer.positionChanged(animal, oldPosition, newPosition);
-        }
-    }
-
-    public MapDirection convertIdToDirection(int directionId) {
-        return switch (directionId) {
-            case 0 -> MapDirection.NORTH;
-            case 1 -> MapDirection.NORTH_EAST;
-            case 2 -> MapDirection.EAST;
-            case 3 -> MapDirection.SOUTH_EAST;
-            case 4 -> MapDirection.SOUTH;
-            case 5 -> MapDirection.SOUTH_WEST;
-            case 6 -> MapDirection.WEST;
-            case 7 -> MapDirection.NORTH_WEST;
-            default -> throw new IllegalStateException("Unexpected value: " + directionId);
-        };
-
     }
 
     public void addNewChild() {

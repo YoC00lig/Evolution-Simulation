@@ -7,9 +7,11 @@ public class SimulationEngine implements IEngine{
     private final int startAnimalsNumber;
     private final int startGrassnumber;
     private final int dailyGrowersNumber;
+    private Statistics stats;
 
     public SimulationEngine(AbstractWorldMap map, int animalsNumber, int grassNumber, int dailyGrassNumber){
         this.map = map;
+        this.stats = new Statistics(map);
         this.startAnimalsNumber = animalsNumber;
         this.startGrassnumber = grassNumber;
         this.dailyGrowersNumber = dailyGrassNumber;
@@ -23,27 +25,21 @@ public class SimulationEngine implements IEngine{
             Animal animal = new Animal(this.map, position);
             map.place(animal);
         }
-
-        for (int i = 0; i < grassNumber; i++){
-            map.plantGrass();
-            System.out.println("Hello, Simulation engine here, generated grass number: " + (i + 1));
-        }
+        for (int i = 0; i < grassNumber; i++) map.plantGrass();
     }
 
     @Override
     public void run() {
         map.removeDead();
-        map.moveAllAnimals();
+        map.moveAll();
         map.eat();
         map.reproduction();
-        for (int i = 0; i < dailyGrowersNumber; i++) {
-            map.plantGrass();
-        }
+        for (int i = 0; i < dailyGrowersNumber; i++) map.plantGrass();
         // statistics
         map.freeFields();
-        map.averageEnergy();
-        map.averageLifeLength();
-        map.findDominantGenotype();
+        stats.averageLifeLength();
+        stats.averageEnergy();
+        stats.findDominantGenotype();
         map.nextDay();
     }
 }

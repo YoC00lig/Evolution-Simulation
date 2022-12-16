@@ -1,5 +1,8 @@
 package agh.ics.oop;
 import org.junit.jupiter.api.Test;
+
+import java.util.Objects;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class FreeFieldsTest {
@@ -44,6 +47,10 @@ public class FreeFieldsTest {
         assertEquals(info.elements, 3);
         assertEquals(map.livingAnimals, 2);
         assertEquals(free, 24);
+
+        for (InfoField i: map.informations){
+            if (Objects.equals(i.position, new Vector2d(2, 3)))  assertEquals(i.elements, 3);
+        }
     }
 
     @Test
@@ -61,5 +68,9 @@ public class FreeFieldsTest {
         assertEquals(info.elements, 1);
         assertEquals(map.livingAnimals, 3);
         assertEquals(map.freeFields, 22);
+
+        for (InfoField i: map.informations){
+            if (Objects.equals(i.position, new Vector2d(2, 3)))  assertEquals(i.elements, 1);
+        }
     }
 }
