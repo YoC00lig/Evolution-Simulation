@@ -41,5 +41,8 @@ public class SimulationEngine implements IEngine{
         stats.averageEnergy();
         stats.findDominantGenotype();
         map.nextDay();
+        System.out.println("Current number of animals: " + map.livingAnimals);
+        System.out.println("Current number of grass: " + map.grasses.size());
+
     }
 }

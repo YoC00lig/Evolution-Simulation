@@ -50,7 +50,7 @@ public class App extends Application {
         TextField reproductionEnergy = new TextField("5");
         TextField plantEnergy = new TextField("3");
         TextField initialEnergy = new TextField("5");
-        TextField startAnimalsNumber = new TextField("1");
+        TextField startAnimalsNumber = new TextField("20");
         TextField startPlantsNumber = new TextField("15");
         TextField dailyGrownGrassNumber = new TextField("1");
 

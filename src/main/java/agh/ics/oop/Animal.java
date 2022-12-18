@@ -215,4 +215,10 @@ public class Animal extends AbstractWorldMapElement implements IMapElement{
     public String getPath(IMapElement object) {
         return "src/main/resources/snail.png";
     }
+
+    public int getDaysOfLife() {return this.daysOfLife;}
+    public int getNumberOfChildren(){return this.numberOfChildren;}
+
+    public void setDaysOfLife(int value){this.daysOfLife = value;}
+    public void setNumberOfChildren(int value){ this.numberOfChildren = value;}
 }

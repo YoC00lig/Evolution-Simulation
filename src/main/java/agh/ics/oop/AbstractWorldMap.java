@@ -1,6 +1,7 @@
 package agh.ics.oop;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.Comparator;
 
 public class AbstractWorldMap implements IPositionChangeObserver{
     public Vector2d low, high;
@@ -152,6 +153,7 @@ public class AbstractWorldMap implements IPositionChangeObserver{
                     livingAnimals -= 1;
                     daysOfLifeDeadsSum += animal.daysOfLife;
                     bodiesToRemove.add(animal);
+                    System.out.println("Animal is dead");
                 }
             }
         }
@@ -166,7 +168,7 @@ public class AbstractWorldMap implements IPositionChangeObserver{
 
     public void plantGrass() { // funkcja zasadza jedną roślinkę
         int ans = (int) (Math.random() * 10);
-        System.out.println("Answer is: " + ans);
+//        System.out.println("Answer is: " + ans);
         if (toxicDeadMode) { // wariant toksyczne trupy
             this.informations.sort(new ComparatorForDeaths());
             int breakIndex = (this.informations.size()*2)/10;
@@ -260,7 +262,10 @@ public class AbstractWorldMap implements IPositionChangeObserver{
     // reproduction
     public List<Animal> getParents(Vector2d position){
         List<Animal> parents = animals.get(position);
-        parents.sort(new ComparatorForEnergy());
+        parents.sort(Comparator.comparing(Animal::getCurrentEnergy)
+                .thenComparing(Animal::getDaysOfLife)
+                .thenComparing(Animal::getNumberOfChildren));
+        Collections.reverse(parents);
         return parents.subList(0, 2);
     }
 
@@ -270,8 +275,9 @@ public class AbstractWorldMap implements IPositionChangeObserver{
         return new Animal(this, parent1, parent2);
     }
 
-    // todo - getParents - new comparator
+    // todo -check
     public void reproduction() {
+        ArrayList<Animal> toUpdate = new ArrayList<>();
         for (Vector2d position : animals.keySet()){
             if (animals.get(position).size() >= 2) {
 
@@ -281,55 +287,44 @@ public class AbstractWorldMap implements IPositionChangeObserver{
 
                 stronger.addNewChild();
                 weaker.addNewChild();
-                System.out.println("Animals reproduction");
                 if (weaker.getCurrentEnergy() >= minReproductionEnergy) {
                     Animal baby = getBaby(parents);
+                    System.out.println("Animals reproduction");
                     stronger.reproduce(weaker);
                     InfoField info = fields1.get(baby.getPosition());
                     info.incrementElementsStatus();
-                    this.place(baby);
+                    toUpdate.add(baby);
+//                    this.place(baby);
                 }
             }
         }
+        for (Animal baby: toUpdate) this.place(baby);
     }
 
     // eating
-    // todo
-    public void feed(List<Animal> Animals){
-        List<Animal> toUpdate = new ArrayList<>();
-        int gained = (int) Math.floor((float) plantEnergy / Animals.size());
-
-        for (Animal animal:Animals){
-            animal.setEnergy(animal.getCurrentEnergy() + gained);
-            animal.atePlant();
-            toUpdate.add(animal);
-        }
-        for (Animal animal: toUpdate) {
-            removeAnimal(animal, animal.getPosition());
-            addAnimal(animal, animal.getPosition());
-        }
+    // todo - check
+    public void feed(Animal animal){
+        animal.setEnergy(animal.getCurrentEnergy() + plantEnergy);
+        animal.atePlant();
     }
 
-    // todo - new comparator
-    public List<Animal> findStrongestAtPos(Vector2d position) {
-        this.animals.get(position).sort(new ComparatorForEnergy());
+    // todo - check
+    public Animal findStrongestAtPos(Vector2d position) {
+        this.animals.get(position).sort(Comparator.comparing(Animal::getCurrentEnergy)
+                .thenComparing(Animal::getDaysOfLife)
+                .thenComparing(Animal::getNumberOfChildren));
         List<Animal> list = this.animals.get(position);
-        Animal strongest = list.get(0);
-
-        int idx = 1;
-        while (idx < list.size()){
-            Animal current = list.get(idx);
-            if (strongest.getCurrentEnergy() == current.getCurrentEnergy()) idx++; // todo
-        }
-        return list.subList(0, idx);
+        Collections.reverse(list);
+        return list.get(0);
     }
 
     public void eat() {
         List<Grass> toUpdate = new ArrayList<>();
         for (Vector2d position : grasses.keySet()){
             if (this.animals.get(position) != null && this.animals.get(position).size() > 0) {
-                List<Animal> strongestAnimals = findStrongestAtPos(position);
-                feed(strongestAnimals);
+                Animal strongestAnimal = findStrongestAtPos(position);
+                System.out.println("Animal is eating grass. Its energy: " + strongestAnimal.getCurrentEnergy() );
+                feed(strongestAnimal);
                 toUpdate.add(grasses.get(position));
             }
         }
