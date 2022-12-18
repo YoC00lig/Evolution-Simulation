@@ -51,6 +51,16 @@ public class FreeFieldsTest {
         for (InfoField i: map.informations){
             if (Objects.equals(i.position, new Vector2d(2, 3)))  assertEquals(i.elements, 3);
         }
+        map.freeFields();
+        map.removeGrass(grass);
+        assertEquals(info.elements, 2);
+        assertEquals(map.livingAnimals, 2);
+        assertEquals(free, 24);
+
+        for (InfoField i: map.informations){
+            if (Objects.equals(i.position, new Vector2d(2, 3)))  assertEquals(i.elements, 2);
+        }
+
     }
 
     @Test

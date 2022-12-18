@@ -1,5 +1,5 @@
 package agh.ics.oop;
 
 public interface IPositionChangeObserver {
-    void positionChanged(Animal animal, Vector2d oldPosition, Vector2d newPosition);
+    void positionChanged(Vector2d animal, Vector2d oldPosition, Animal newPosition);
 }

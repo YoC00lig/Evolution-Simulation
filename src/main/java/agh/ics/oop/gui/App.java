@@ -17,13 +17,16 @@ import javafx.geometry.Pos;
 import javafx.scene.text.Font;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
-
+import javafx.application.Platform;
+import java.io.FileNotFoundException;
+import javafx.scene.layout.VBox;
 
 public class App extends Application {
     private AbstractWorldMap map;
     SimulationEngine engine;
-    private final GridPane gridPane = new GridPane();
+    private GridPane gridPane = new GridPane();
     private final BorderPane border = new BorderPane();
+    Stage stage;
     Scene scene;
     final int size = 25; // rozmiar mapy
 
@@ -34,6 +37,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        stage = primaryStage;
         Label title = new Label("Input your own parameters: ");
         title.setStyle("-fx-font-weight: bold");
         title.setFont(new Font(40));
@@ -41,17 +45,17 @@ public class App extends Application {
 
         VBox listOfTextField = new VBox();
 
-        TextField widthField = new TextField("25");
-        TextField heightField = new TextField("25");
+        TextField widthField = new TextField("15");
+        TextField heightField = new TextField("15");
         TextField predistinationMode = new TextField("true");
-        TextField toxicDeadMode = new TextField("false");
+        TextField toxicDeadMode = new TextField("true");
         TextField isCrazyMode = new TextField("true");
         TextField hellExistsMode = new TextField("true");
-        TextField reproductionEnergy = new TextField("5");
-        TextField plantEnergy = new TextField("3");
+        TextField reproductionEnergy = new TextField("3");
+        TextField plantEnergy = new TextField("2");
         TextField initialEnergy = new TextField("5");
-        TextField startAnimalsNumber = new TextField("20");
-        TextField startPlantsNumber = new TextField("15");
+        TextField startAnimalsNumber = new TextField("5");
+        TextField startPlantsNumber = new TextField("1");
         TextField dailyGrownGrassNumber = new TextField("1");
 
         widthField.setStyle("-fx-background-color: #f7cac9"); widthField.setPrefColumnCount(14);
@@ -135,9 +139,9 @@ public class App extends Application {
 
             map = new AbstractWorldMap(width,height, predisitination,toxicDead,
                     isCrazy,hellExists,reproductionE,plantE, initialE);
-            engine = new SimulationEngine(map, startAnimalsNum, startPlantsNum, dailyGrown);
-
-            drawGame(primaryStage);
+            engine = new SimulationEngine(map, startAnimalsNum, startPlantsNum, dailyGrown, this);
+            Thread thread = new Thread(engine);
+            thread.start();
         });
 
         scene = new Scene(border, 2000,1000);
@@ -145,18 +149,20 @@ public class App extends Application {
         primaryStage.show();
     }
 
-    public void drawGame(Stage primaryStage) {
-        border.setCenter(null);
-        border.setTop(null);
-        border.setBottom(null);
+    public void drawGame() throws FileNotFoundException{
+//        border.setCenter(null);
+//        border.setTop(null);
+//        border.setBottom(null);
         engine.run();
         drawMap();
         scene.setRoot(gridPane);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        stage.setScene(scene);
+        stage.show();
     }
 
     public void drawMap() {
+        gridPane.getChildren().clear();
+        gridPane = new GridPane();
         Label label = new Label("y/x");
 
         gridPane.add(label, 0, 0);
@@ -194,5 +200,15 @@ public class App extends Application {
         }
         gridPane.setStyle("-fx-background-color: #eea29a;");
         gridPane.setAlignment(Pos.CENTER);
+    }
+
+    public void draw() throws FileNotFoundException{
+        Platform.runLater(() -> {
+            try {
+                drawGame();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        });
     }
 }

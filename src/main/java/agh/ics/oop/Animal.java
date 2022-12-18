@@ -94,10 +94,6 @@ public class Animal extends AbstractWorldMapElement implements IMapElement{
         this.gene = (int) (Math.random() * genotypeLength);
     }
 
-    public void positionChanged(Animal animal, Vector2d oldPosition, Vector2d newPosition){
-        for (IPositionChangeObserver observer : this.observers)
-            observer.positionChanged(animal, oldPosition, newPosition);
-    }
 
     public void move() {
         chooseGene();
@@ -146,6 +142,8 @@ public class Animal extends AbstractWorldMapElement implements IMapElement{
             InfoField info = map.fields1.get(this.position);
             info.decrementElementsStatus();
 //            this.positionChanged(this, this.position, newPosition); //concurrent modification error
+            notify(this.position, newPosition, this);
+            System.out.println("Animal is moving. Previous pos: " + this.position.toString() + " Current pos: " + newPosition.toString()+ "Num of animals: " + map.animals.size());
             position = newPosition;
             info = map.fields1.get(this.position);
             info.incrementElementsStatus();

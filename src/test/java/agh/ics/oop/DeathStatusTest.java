@@ -18,6 +18,13 @@ public class DeathStatusTest {
 
         assertEquals(map.livingAnimals, 1);
         assertEquals(map.freeFields, 24);
+        assertEquals(map.listOfAnimals.size(), 1);
+
+        int cnt = 0;
+        for (Vector2d position: map.animals.keySet()){
+            for (Animal animal: map.animals.get(position)) cnt +=1;
+        }
+        assertEquals(cnt, 1);
     }
 
     @Test
@@ -58,10 +65,17 @@ public class DeathStatusTest {
         assertEquals(map.fields1.get(pos1).elements, 1);
         assertEquals(map.livingAnimals, 0);
         assertEquals(map.plantsNumber, 1);
+        assertEquals(map.listOfAnimals.size(), 0);
 
         for (InfoField i: map.informations) {
             if (Objects.equals(i.position, pos1)) assertEquals(i.elements, 1);
         }
+
+        int cnt = 0;
+        for (Vector2d position: map.animals.keySet()){
+            for (Animal animal: map.animals.get(position)) cnt +=1;
+        }
+        assertEquals(cnt, 0);
 
         map.plantGrass();
         assertEquals(map.plantsNumber, 2);
