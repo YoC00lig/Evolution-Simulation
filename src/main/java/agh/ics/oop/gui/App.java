@@ -29,7 +29,14 @@ public class App extends Application {
     Stage stage;
     Scene scene;
     final int size = 25; // rozmiar mapy
+    private LineCharts animalsNumber = new LineCharts("Animals number");
+    private LineCharts plantsNumber = new LineCharts("Plants number");
+    private LineCharts avgEnergy = new LineCharts("Average animal energy");
+    private LineCharts avgLifeLength = new LineCharts("Average life length");
+    private LineCharts freeFields = new LineCharts("Free fields on the map");
+    private StatisticsReport  statisticsReport;
 
+    HBox mainbox;
 
     public static void main(String[] args) {
         launch(args);
@@ -53,8 +60,8 @@ public class App extends Application {
         TextField hellExistsMode = new TextField("true");
         TextField reproductionEnergy = new TextField("3");
         TextField plantEnergy = new TextField("2");
-        TextField initialEnergy = new TextField("25");
-        TextField startAnimalsNumber = new TextField("10");
+        TextField initialEnergy = new TextField("100");
+        TextField startAnimalsNumber = new TextField("20");
         TextField startPlantsNumber = new TextField("1");
         TextField dailyGrownGrassNumber = new TextField("1");
 
@@ -141,6 +148,8 @@ public class App extends Application {
                     isCrazy,hellExists,reproductionE,plantE, initialE);
             engine = new SimulationEngine(map, startAnimalsNum, startPlantsNum, dailyGrown, this);
 
+            statisticsReport = new StatisticsReport(map);
+
             Thread thread = new Thread(engine);
             thread.start();
         });
@@ -151,12 +160,15 @@ public class App extends Application {
     }
 
     public void drawGame() throws FileNotFoundException{
-//        border.setCenter(null);
-//        border.setTop(null);
-//        border.setBottom(null);
+        animalsNumber.updateAnimalsNumber(map);
+        plantsNumber.updatePlantsNumber(map);
+        freeFields.updateFreeFields(map);
+        avgEnergy.updateEnergy(map);
+        avgLifeLength.updateEnergy(map);
+        statisticsReport.updateStatistics(map);
         engine.run();
         drawMap();
-        scene.setRoot(gridPane);
+        scene.setRoot(mainbox);
         stage.setScene(scene);
         stage.show();
     }
@@ -200,7 +212,15 @@ public class App extends Application {
             GridPane.setHalignment(elem, HPos.CENTER);
         }
         gridPane.setStyle("-fx-background-color: #eea29a;");
-        gridPane.setAlignment(Pos.CENTER);
+        gridPane.setAlignment(Pos.CENTER_LEFT);
+        VBox charts = new VBox(animalsNumber.getChart(), plantsNumber.getChart(), freeFields.getChart(),
+                avgEnergy.getChart(), avgLifeLength.getChart());
+        charts.setAlignment(Pos.CENTER);
+        VBox stats = statisticsReport.getStatistics();
+        mainbox = new HBox(gridPane, charts, stats);
+        HBox.setMargin(stats, new Insets(0,0,0,50));
+        mainbox.setAlignment(Pos.CENTER);
+        mainbox.setStyle("-fx-background-color: #eea29a;");
     }
 
     public void draw() throws FileNotFoundException{

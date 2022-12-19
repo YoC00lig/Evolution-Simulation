@@ -9,8 +9,8 @@ public class SimulationEngine implements IEngine, Runnable{
     private final int startAnimalsNumber;
     private final int startGrassnumber;
     private final int dailyGrowersNumber;
-    private final int moveDelay = 700;
-    private Statistics stats;
+    private final int moveDelay = 100;
+    public Statistics stats;
     private final App application;
 
     public SimulationEngine(AbstractWorldMap map, int animalsNumber, int grassNumber, int dailyGrassNumber, App app){
@@ -37,7 +37,7 @@ public class SimulationEngine implements IEngine, Runnable{
     @Override
     public void run() {
         if (map.listOfAnimals.size()==0) {
-            System.out.println("Wszystkie zwierzątka zmarły");
+            System.out.println("(SimulationEngine-run) Wszystkie zwierzątka zmarły. Ilość dni: " + map.day);
             System.exit(0);
         }
         try {
@@ -52,6 +52,7 @@ public class SimulationEngine implements IEngine, Runnable{
         for (int i = 0; i < dailyGrowersNumber; i++) map.plantGrass();
         map.freeFields();
         map.nextDay();
+
         try {
             application.draw();
         } catch (FileNotFoundException e) {

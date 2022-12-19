@@ -5,7 +5,7 @@ import java.util.Comparator;
 
 public class AbstractWorldMap implements IPositionChangeObserver{
     public Vector2d low, high;
-    public int width, height, minReproductionEnergy, plantEnergy, epoch, initialEnergy;
+    public int width, height, minReproductionEnergy, plantEnergy, day, initialEnergy;
     protected LinkedHashMap<Vector2d, LinkedList<Animal>> animals = new LinkedHashMap<>();
     public ArrayList<Animal> listOfAnimals = new ArrayList<>();
     public LinkedHashMap<Vector2d, Grass> grasses = new LinkedHashMap<>();
@@ -29,7 +29,7 @@ public class AbstractWorldMap implements IPositionChangeObserver{
         this.height = height;
         this.low = new Vector2d(0,0);
         this.high = new Vector2d(this.width-1,this.height-1);
-        this.epoch = 1;
+        this.day = 1;
         this.freeFields = this.width * this.height;
         this.predistinationMode = predistination;
         this.toxicDeadMode = toxicMode;
@@ -77,12 +77,13 @@ public class AbstractWorldMap implements IPositionChangeObserver{
         return Field;
     }
 
-    public void freeFields() {
+    public int freeFields() {
         int result = 0;
         for (InfoField info: fields1.values()){
             if (info.elements == 0) result += 1;
         }
         this.freeFields = result;
+        return this.freeFields;
     }
 
     public boolean canMoveTo(Vector2d position) {
@@ -337,7 +338,7 @@ public class AbstractWorldMap implements IPositionChangeObserver{
     }
     // new day
     public void nextDay() {
-        this.epoch += 1;
+        this.day += 1;
         this.removeDead();
         for (LinkedList<Animal> listOfAnimals: this.animals.values()) {
             for (Animal animal : listOfAnimals) animal.aliveNextDay();

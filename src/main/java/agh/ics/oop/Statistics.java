@@ -7,7 +7,7 @@ public class Statistics {
         this.map = map;
     }
 
-    public void averageEnergy() {
+    public int averageEnergy() {
         int numberOfAnimals = 0;
         int allenergy = 0;
         for (Vector2d position : map.animals.keySet()) {
@@ -16,14 +16,19 @@ public class Statistics {
                 allenergy += animal.getCurrentEnergy();
             }
         }
-        map.averageEnergy = allenergy / numberOfAnimals;
+        if (numberOfAnimals >0) map.averageEnergy = allenergy / numberOfAnimals;
+        return map.averageEnergy;
     }
 
-    public void averageLifeLength() {
+    public int averageLifeLength() {
         map.removeDead();
         if (map.deadAnimals >= 1) map.averageLifeLength = map.daysOfLifeDeadsSum / map.deadAnimals;
+        return map.averageLifeLength;
     }
 
+    public int getDeadAnimals() {
+        return map.deadAnimals;
+    }
     public void findDominantGenotype() {
         int[] cnt = new int[8];
         for (Animal animal: map.listOfAnimals) {

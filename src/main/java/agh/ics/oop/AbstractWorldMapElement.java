@@ -9,6 +9,5 @@ public class AbstractWorldMapElement {
     public Vector2d getPosition() {
         return this.position;
     }
-    protected List<IPositionChangeObserver> observers = new ArrayList<>();
 
 }
