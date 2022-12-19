@@ -43,7 +43,6 @@ public class Animal extends AbstractWorldMapElement implements IMapElement{
         this.orientation = MapDirection.randomDirection();
         this.gene = (int) (Math.random() * genotypeLength);
         this.daysOfLife = 1;
-
         this.isDead = 0;
         this.numberOfChildren = 0;
         this.eatenPlants = 0;
@@ -70,7 +69,7 @@ public class Animal extends AbstractWorldMapElement implements IMapElement{
         Animal[] parents = Genotype.getStrongerWeaker(parent1, parent2);
         return (int) (parents[0].getCurrentEnergy() * 0.75 + parents[1].getCurrentEnergy() * 0.25);
     }
-/// poruszanie
+    /// poruszanie
     public Vector2d teleportTurn(Vector2d newPosition, MapDirection newOrientation) {
 
         MapDirection newOrient = newOrientation;
@@ -94,56 +93,41 @@ public class Animal extends AbstractWorldMapElement implements IMapElement{
         this.gene = (int) (Math.random() * genotypeLength);
     }
 
+    private void positionChanged(Vector2d oldPosition, Vector2d newPosition){
+        for (IPositionChangeObserver observer : observers) {
+            observer.positionChanged(oldPosition, newPosition, this);
+        }
+    }
+
 
     public void move() {
         chooseGene();
         MoveDirection direction = directions[gene];
         boolean hellExists = map.hellExistsMode;
         if (direction != null) {
-            MapDirection newOrientation = orientation;
-            switch (direction) {
-                case RIGHT:
-                    newOrientation = orientation.next().next();
-                    break;
-                case LEFT:
-                    newOrientation = orientation.previous().previous();
-                    break;
-                case UP:
-                    newOrientation = orientation;
-                    break;
-                case DOWN:
-                    newOrientation = orientation.reverse();
-                    break;
-                case UP_LEFT:
-                    newOrientation = orientation.previous();
-                    break;
-                case UP_RIGHT:
-                    newOrientation = orientation.next();
-                    break;
-                case LEFT_DOWN:
-                    newOrientation = orientation.reverse().next();
-                    break;
-                case RIGHT_DOWN:
-                    newOrientation = orientation.reverse().previous();
-                    break;
-            }
+            MapDirection newOrientation = switch (direction) {
+                case RIGHT -> orientation.next().next();
+                case LEFT -> orientation.previous().previous();
+                case UP -> orientation;
+                case DOWN -> orientation.reverse();
+                case UP_LEFT -> orientation.previous();
+                case UP_RIGHT -> orientation.next();
+                case LEFT_DOWN -> orientation.reverse().next();
+                case RIGHT_DOWN -> orientation.reverse().previous();
+            };
+
             Vector2d newPosition = position.add(newOrientation.toUnitVector());
-            if (map.canMoveTo(newPosition)) {
-                orientation = newOrientation;
-            }
+            if (map.canMoveTo(newPosition)) orientation = newOrientation;
             else if(hellExists) {
                 this.setEnergy(this.energy-map.minReproductionEnergy);
                 newPosition = map.HellsPortal();
                 orientation = newOrientation;
             }
-            else {
-                newPosition = this.teleportTurn(newPosition, newOrientation);
-            }
+            else newPosition = this.teleportTurn(newPosition, newOrientation);
+
             InfoField info = map.fields1.get(this.position);
             info.decrementElementsStatus();
-//            this.positionChanged(this, this.position, newPosition); //concurrent modification error
-            notify(this.position, newPosition, this);
-            System.out.println("Animal is moving. Previous pos: " + this.position.toString() + " Current pos: " + newPosition.toString()+ "Num of animals: " + map.animals.size());
+            positionChanged(this.position, newPosition);
             position = newPosition;
             info = map.fields1.get(this.position);
             info.incrementElementsStatus();

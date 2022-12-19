@@ -10,10 +10,5 @@ public class AbstractWorldMapElement {
         return this.position;
     }
     protected List<IPositionChangeObserver> observers = new ArrayList<>();
-    protected void notify(Vector2d oldPos,Vector2d newPos, Animal animal){
-        for (IPositionChangeObserver obs: observers) {
-            obs.positionChanged(oldPos, newPos, animal);
-        }
-    }
 
 }

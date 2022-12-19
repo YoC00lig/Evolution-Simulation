@@ -9,7 +9,7 @@ public class SimulationEngine implements IEngine, Runnable{
     private final int startAnimalsNumber;
     private final int startGrassnumber;
     private final int dailyGrowersNumber;
-    private final int moveDelay = 300;
+    private final int moveDelay = 700;
     private Statistics stats;
     private final App application;
 
@@ -25,14 +25,12 @@ public class SimulationEngine implements IEngine, Runnable{
             Random random = new Random();
             int x = random.nextInt(map.high.x + 1 - map.low.x) + map.low.x;
             int y = random.nextInt(map.high.y + 1 - map.low.y) + map.low.y;
-            System.out.println("Hello, Simulation engine here, generated animal start position: " + x + "," + y);
             Vector2d position = new Vector2d(x,y);
             Animal animal = new Animal(this.map, position);
         }
         for (int i = 0; i < grassNumber; i++) {
             map.plantGrass();
         }
-        System.out.println("Hello, Simulation engine here, generated grass : " + map.grasses.size());
     }
 
 

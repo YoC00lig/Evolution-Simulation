@@ -139,9 +139,7 @@ public class AbstractWorldMap implements IPositionChangeObserver{
     public void removeAnimal(Animal animal, Vector2d oldPosition) {
         fields1.get(oldPosition).decrementElementsStatus();
         if (this.animals.get(oldPosition) != null) {
-            System.out.println("Ilosc zwierzat na danej pozycji przd usunieciem: " + this.animals.get(oldPosition).size());
             this.animals.get(oldPosition).remove(animal);
-            System.out.println("Ilosc zwierzat na danej pozycji po usunieciu: " + this.animals.get(oldPosition).size());
             this.listOfAnimals.remove(animal);
             animal.removeObserver(this);
             if (animals.get(oldPosition).size() == 0) animals.remove(oldPosition);
@@ -150,11 +148,10 @@ public class AbstractWorldMap implements IPositionChangeObserver{
 
     public void removeDead() {
         CopyOnWriteArrayList<Animal> bodiesToRemove = new CopyOnWriteArrayList<>();
-        System.out.println("removeDead(). Current number of animals before: " + listOfAnimals.size());
+
         for (Vector2d position: animals.keySet()){
             for (Animal animal: animals.get(position)){
                 if (animal != null && animal.isDead()) {
-                    System.out.println("removeDead()-energy of animal:" + animal.getCurrentEnergy());
                     InfoField info = fields1.get(animal.getPosition());
                     info.incrementDeathStatus();
                     animal.isDead = animal.daysOfLife;
@@ -169,21 +166,17 @@ public class AbstractWorldMap implements IPositionChangeObserver{
         for (Animal dead : bodiesToRemove) {
             removeAnimal(dead, dead.getPosition());
         }
-        System.out.println("removeDead(). Current number of animals after: " + listOfAnimals.size());
     }
 
     // grass operations
     public void removeGrass(Grass grass) {
-        System.out.println("Grass is being removed. actual number of grass: " + grasses.size());
-        grasses.remove(grass.getPosition(), grass);
-        System.out.println("Grass is removed. actual number of grass: " + grasses.size());
+        grasses.remove(grass.getPosition());
         InfoField info = fields1.get(grass.getPosition());
         info.decrementElementsStatus();
     }
 
     public void plantGrass() { // funkcja zasadza jedną roślinkę
         int ans = (int) (Math.random() * 10);
-        System.out.println("Grass before plant : " + grasses.size());
 
         if (toxicDeadMode) { // wariant toksyczne trupy
             this.informations.sort(new ComparatorForDeaths());
@@ -237,7 +230,6 @@ public class AbstractWorldMap implements IPositionChangeObserver{
             if (!(grassAt(v) instanceof Grass)){
                 Grass element = new Grass(v, this);
                 planted = true;
-                System.out.println("Generated grass at prefer field at position: " + v.toString() + " " + "Current number of grass: " + grasses.size());
                 break;
             }
         }
@@ -251,7 +243,6 @@ public class AbstractWorldMap implements IPositionChangeObserver{
             if (!(grassAt(v) instanceof Grass)) {
                 Grass element = new Grass(v, this);
                 planted = true;
-                System.out.println("Generated grass randomly at position: " + v.toString()+ " " + "Current number of grass: " + grasses.size());
                 break;
             }
         }
@@ -264,7 +255,6 @@ public class AbstractWorldMap implements IPositionChangeObserver{
             Vector2d v = info.position;
             if (!(grassAt(v) instanceof Grass)) {
                 Grass element = new Grass(v, this);
-                System.out.println("Generated grass at position: " + v.toString()+ " " + "Current number of grass: " + grasses.size());
                 return;
             }
         }
@@ -288,7 +278,6 @@ public class AbstractWorldMap implements IPositionChangeObserver{
 
     // todo -check
     public void reproduction() {
-        System.out.println("Animals reproduction. Number of animals before:  " + listOfAnimals.size());
         ArrayList<Animal> toUpdate = new ArrayList<>();
         for (Vector2d position : animals.keySet()){
             if ( animals.get(position) != null && animals.get(position).size() >= 2) {
@@ -301,7 +290,7 @@ public class AbstractWorldMap implements IPositionChangeObserver{
                 weaker.addNewChild();
                 if (weaker.getCurrentEnergy() >= minReproductionEnergy) {
                     Animal baby = getBaby(parents);
-                    System.out.println("Animals reproduction. Its energies: " +stronger.getCurrentEnergy() + " " + weaker.getCurrentEnergy());
+                    System.out.println("baby animal. Num of animals: before-" + this.listOfAnimals.size() + " after-" + (this.listOfAnimals.size()+1));
                     stronger.reproduce(weaker);
                     toUpdate.add(baby);
                     InfoField info = fields1.get(baby.getPosition());
@@ -310,7 +299,6 @@ public class AbstractWorldMap implements IPositionChangeObserver{
             }
         }
         for (Animal baby: toUpdate) this.place(baby);
-        System.out.println("Animals reproduction. Number of animals:  " + listOfAnimals.size());
 //        this.removeDead();
     }
 
@@ -334,12 +322,10 @@ public class AbstractWorldMap implements IPositionChangeObserver{
     public void eat() {
         removeDead();
         List<Grass> toUpdate = new ArrayList<>();
-        for (Vector2d position : grasses.keySet()){
-            if (this.animals.get(position) != null && this.animals.get(position).size() > 0) {
+        for (Vector2d position: animals.keySet()){
+            if (grassAt(position) != null && animals.get(position) != null && animals.get(position).size() > 0){
                 Animal strongestAnimal = findStrongestAtPos(position);
-                System.out.println("Animal is eating grass. Its energy before: " + strongestAnimal.getCurrentEnergy() );
                 feed(strongestAnimal);
-                System.out.println("Animal is eating grass. Its energy after: " + strongestAnimal.getCurrentEnergy() );
                 toUpdate.add(grasses.get(position));
             }
         }
@@ -347,7 +333,6 @@ public class AbstractWorldMap implements IPositionChangeObserver{
             fields1.get(element.getPosition()).decrementElementsStatus();
             removeGrass(element);
             plantsNumber -= 1;
-            System.out.println("animals were eating. Current number of grasses: " + grasses.size() );
         }
     }
     // new day

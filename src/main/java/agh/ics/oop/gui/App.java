@@ -45,16 +45,16 @@ public class App extends Application {
 
         VBox listOfTextField = new VBox();
 
-        TextField widthField = new TextField("15");
-        TextField heightField = new TextField("15");
+        TextField widthField = new TextField("25");
+        TextField heightField = new TextField("25");
         TextField predistinationMode = new TextField("true");
-        TextField toxicDeadMode = new TextField("true");
+        TextField toxicDeadMode = new TextField("false");
         TextField isCrazyMode = new TextField("true");
         TextField hellExistsMode = new TextField("true");
         TextField reproductionEnergy = new TextField("3");
         TextField plantEnergy = new TextField("2");
-        TextField initialEnergy = new TextField("5");
-        TextField startAnimalsNumber = new TextField("5");
+        TextField initialEnergy = new TextField("25");
+        TextField startAnimalsNumber = new TextField("10");
         TextField startPlantsNumber = new TextField("1");
         TextField dailyGrownGrassNumber = new TextField("1");
 
