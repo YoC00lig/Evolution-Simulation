@@ -77,8 +77,8 @@ public class Animal extends AbstractWorldMapElement implements IMapElement{
 
         if (newPos.x == -1) newPos = new Vector2d(map.width - 1, newPos.y);
         else newPos = new Vector2d(0, newPos.y);
-        if (newPos.y == -1) newOrient.reverse();
-        else if (newPos.y == map.height - 1) newOrientation.reverse();
+        if (newPos.y == -1) newOrient = newOrient.reverse();
+        else if (newPos.y == map.height - 1) newOrientation = newOrientation.reverse();
         orientation = newOrientation;
 
         return newPos;

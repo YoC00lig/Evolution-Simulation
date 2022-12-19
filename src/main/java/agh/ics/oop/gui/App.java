@@ -140,6 +140,7 @@ public class App extends Application {
             map = new AbstractWorldMap(width,height, predisitination,toxicDead,
                     isCrazy,hellExists,reproductionE,plantE, initialE);
             engine = new SimulationEngine(map, startAnimalsNum, startPlantsNum, dailyGrown, this);
+
             Thread thread = new Thread(engine);
             thread.start();
         });

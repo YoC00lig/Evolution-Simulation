@@ -233,7 +233,7 @@ public class AbstractWorldMap implements IPositionChangeObserver{
                 break;
             }
         }
-//        if (!planted) plantGrassRandomly();
+        if (!planted) plantGrassRandomly();
     }
 
     public void plantGrassRandomly() {
@@ -246,7 +246,7 @@ public class AbstractWorldMap implements IPositionChangeObserver{
                 break;
             }
         }
-//        if (!planted) plantGrassAtEquator(); // jesli nie uda się zasadzic bo np nie ma miejsc, to ostatecznie sadzimy na rowniku
+        if (!planted) plantGrassAtEquator(); // jesli nie uda się zasadzic bo np nie ma miejsc, to ostatecznie sadzimy na rowniku
     }
 
     public void plantGrassInFieldFromGivenRange(int idx1, int idx2) { // idx2 exclusive
