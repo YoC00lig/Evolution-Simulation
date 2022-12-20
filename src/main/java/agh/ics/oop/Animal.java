@@ -1,6 +1,5 @@
 package agh.ics.oop;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class Animal extends AbstractWorldMapElement implements IMapElement{
@@ -45,7 +44,6 @@ public class Animal extends AbstractWorldMapElement implements IMapElement{
         this.orientation = MapDirection.randomDirection();
         this.gene = (int) (Math.random() * genotypeLength);
         this.daysOfLife = 1;
-
         this.isDead = 0;
         this.numberOfChildren = 0;
         this.eatenPlants = 0;
@@ -72,7 +70,7 @@ public class Animal extends AbstractWorldMapElement implements IMapElement{
         Animal[] parents = Genotype.getStrongerWeaker(parent1, parent2);
         return (int) (parents[0].getCurrentEnergy() * 0.75 + parents[1].getCurrentEnergy() * 0.25);
     }
-/// poruszanie
+    /// poruszanie
     public Vector2d teleportTurn(Vector2d newPosition, MapDirection newOrientation) {
 
         MapDirection newOrient = newOrientation;
@@ -80,8 +78,8 @@ public class Animal extends AbstractWorldMapElement implements IMapElement{
 
         if (newPos.x == -1) newPos = new Vector2d(map.width - 1, newPos.y);
         else newPos = new Vector2d(0, newPos.y);
-        if (newPos.y == -1) newOrient.reverse();
-        else if (newPos.y == map.height - 1) newOrientation.reverse();
+        if (newPos.y == -1) newOrient = newOrient.reverse();
+        else if (newPos.y == map.height - 1) newOrientation = newOrientation.reverse();
         orientation = newOrientation;
 
         return newPos;
@@ -96,57 +94,45 @@ public class Animal extends AbstractWorldMapElement implements IMapElement{
         this.gene = (int) (Math.random() * genotypeLength);
     }
 
+    private void positionChanged(Vector2d oldPosition, Vector2d newPosition){
+        for (IPositionChangeObserver observer : observers) {
+            observer.positionChanged(oldPosition, newPosition, this);
+        }
+    }
+
 
     public void move() {
         chooseGene();
         MoveDirection direction = directions[gene];
         boolean hellExists = map.hellExistsMode;
         if (direction != null) {
-            MapDirection newOrientation = orientation;
-            switch (direction) {
-                case RIGHT:
-                    newOrientation = orientation.next().next();
-                    break;
-                case LEFT:
-                    newOrientation = orientation.previous().previous();
-                    break;
-                case UP:
-                    newOrientation = orientation;
-                    break;
-                case DOWN:
-                    newOrientation = orientation.reverse();
-                    break;
-                case UP_LEFT:
-                    newOrientation = orientation.previous();
-                    break;
-                case UP_RIGHT:
-                    newOrientation = orientation.next();
-                    break;
-                case LEFT_DOWN:
-                    newOrientation = orientation.reverse().next();
-                    break;
-                case RIGHT_DOWN:
-                    newOrientation = orientation.reverse().previous();
-                    break;
-            }
+            MapDirection newOrientation = switch (direction) {
+                case RIGHT -> orientation.next().next();
+                case LEFT -> orientation.previous().previous();
+                case UP -> orientation;
+                case DOWN -> orientation.reverse();
+                case UP_LEFT -> orientation.previous();
+                case UP_RIGHT -> orientation.next();
+                case LEFT_DOWN -> orientation.reverse().next();
+                case RIGHT_DOWN -> orientation.reverse().previous();
+            };
+
             Vector2d newPosition = position.add(newOrientation.toUnitVector());
-            if (map.canMoveTo(newPosition)) {
-                orientation = newOrientation;
-            }
+            if (map.canMoveTo(newPosition)) orientation = newOrientation;
             else if(hellExists) {
                 this.setEnergy(this.energy-map.minReproductionEnergy);
                 newPosition = map.HellsPortal();
                 orientation = newOrientation;
             }
-            else {
-                newPosition = this.teleportTurn(newPosition, newOrientation);
-            }
+            else newPosition = this.teleportTurn(newPosition, newOrientation);
+
             InfoField info = map.fields1.get(this.position);
             info.decrementElementsStatus();
-            positionChanged(this, this.position, newPosition);
+            positionChanged(this.position, newPosition);
             position = newPosition;
             info = map.fields1.get(this.position);
             info.incrementElementsStatus();
+            this.energy -= 1;
         }
     }
 
@@ -162,7 +148,6 @@ public class Animal extends AbstractWorldMapElement implements IMapElement{
         else this.setNextIndex(); // wariant "pełna predystynacja"
     }
 
-// poruszanie
     public void reproduce(Animal partner) {
         partner.energy *= 0.75;
         this.energy *= 0.25;
@@ -181,7 +166,6 @@ public class Animal extends AbstractWorldMapElement implements IMapElement{
     public void setEnergy(int value) {
         this.energy = value;
     }
-    public void setPosition(Vector2d pos) {this.position = pos;}
     public Vector2d getPosition() {
         return this.position;
     }
@@ -199,27 +183,6 @@ public class Animal extends AbstractWorldMapElement implements IMapElement{
         observers.remove(observer);
     }
 
-    private void positionChanged(Animal animal, Vector2d oldPosition, Vector2d newPosition) {
-        for (IPositionChangeObserver observer : this.observers) {
-            observer.positionChanged(animal, oldPosition, newPosition);
-        }
-    }
-
-    public MapDirection convertIdToDirection(int directionId) {
-        return switch (directionId) {
-            case 0 -> MapDirection.NORTH;
-            case 1 -> MapDirection.NORTH_EAST;
-            case 2 -> MapDirection.EAST;
-            case 3 -> MapDirection.SOUTH_EAST;
-            case 4 -> MapDirection.SOUTH;
-            case 5 -> MapDirection.SOUTH_WEST;
-            case 6 -> MapDirection.WEST;
-            case 7 -> MapDirection.NORTH_WEST;
-            default -> throw new IllegalStateException("Unexpected value: " + directionId);
-        };
-
-    }
-
     public void addNewChild() {
         this.numberOfChildren += 1;
     }
@@ -235,4 +198,10 @@ public class Animal extends AbstractWorldMapElement implements IMapElement{
     public String getPath(IMapElement object) {
         return "src/main/resources/snail.png";
     }
+
+    public int getDaysOfLife() {return this.daysOfLife;}
+    public int getNumberOfChildren(){return this.numberOfChildren;}
+
+    public void setDaysOfLife(int value){this.daysOfLife = value;}
+    public void setNumberOfChildren(int value){ this.numberOfChildren = value;}
 }

@@ -10,6 +10,7 @@ public class Grass extends AbstractWorldMapElement implements IMapElement{
         this.map = map;
         map.fields1.get(this.position).incrementElementsStatus();
         map.plantsNumber += 1;
+        map.grasses.put(this.position, this);
     }
 
     public Vector2d getPosition() {

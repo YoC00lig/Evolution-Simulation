@@ -1,49 +1,63 @@
 package agh.ics.oop;
+import java.io.FileNotFoundException;
 import java.util.Random;
+import agh.ics.oop.gui.App;
 
 
-public class SimulationEngine implements IEngine{
+public class SimulationEngine implements IEngine, Runnable{
     private final AbstractWorldMap map;
     private final int startAnimalsNumber;
     private final int startGrassnumber;
     private final int dailyGrowersNumber;
+    private final int moveDelay = 100;
+    public Statistics stats;
+    private final App application;
 
-    public SimulationEngine(AbstractWorldMap map, int animalsNumber, int grassNumber, int dailyGrassNumber){
+    public SimulationEngine(AbstractWorldMap map, int animalsNumber, int grassNumber, int dailyGrassNumber, App app){
         this.map = map;
+        this.stats = new Statistics(map);
         this.startAnimalsNumber = animalsNumber;
         this.startGrassnumber = grassNumber;
         this.dailyGrowersNumber = dailyGrassNumber;
+        this.application =  app;
 
         for (int i = 0; i < startAnimalsNumber; i++){
             Random random = new Random();
             int x = random.nextInt(map.high.x + 1 - map.low.x) + map.low.x;
             int y = random.nextInt(map.high.y + 1 - map.low.y) + map.low.y;
-            System.out.println("Hello, Simulation engine here, generated animal start position: " + x + "," + y);
             Vector2d position = new Vector2d(x,y);
             Animal animal = new Animal(this.map, position);
-            map.place(animal);
         }
-
-        for (int i = 0; i < grassNumber; i++){
+        for (int i = 0; i < grassNumber; i++) {
             map.plantGrass();
-            System.out.println("Hello, Simulation engine here, generated grass number: " + (i + 1));
         }
     }
+
 
     @Override
     public void run() {
+        if (map.listOfAnimals.size()==0) {
+            System.out.println("(SimulationEngine-run) Wszystkie zwierzątka zmarły. Ilość dni: " + map.day);
+            System.exit(0);
+        }
+        try {
+            Thread.sleep(this.moveDelay);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         map.removeDead();
-        map.moveAllAnimals();
+        map.moveAll();
         map.eat();
         map.reproduction();
-        for (int i = 0; i < dailyGrowersNumber; i++) {
-            map.plantGrass();
-        }
-        // statistics
+        for (int i = 0; i < dailyGrowersNumber; i++) map.plantGrass();
         map.freeFields();
-        map.averageEnergy();
-        map.averageLifeLength();
-        map.findDominantGenotype();
         map.nextDay();
+
+        try {
+            application.draw();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
+
