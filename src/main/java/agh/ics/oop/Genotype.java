@@ -69,21 +69,18 @@ public class Genotype {
 
     public static int changeGene(int gen) {
         switch (gen){
-            case 0 -> { // w przypadku 0 i 7 mozemy tylko zmienic w jeden sposob
-                return 1;
-            }
-            case 7 -> {
-                return 6;
-            }
+            // w przypadku 0 i 7 mozemy tylko zmienic w jeden sposob
+            case 0 -> {return 1;}
+            case 7 -> {return 6;}
             default -> {
-                int ans = ifIncrement();
+                int ans = incrementOrNot();
                 if (ans == 0) return gen - 1; // jesli wylosujemy 0 to zmniejszamy wartosc, jesli 1 to zwiekszamy
                 else return  gen + 1;
             }
         }
     }
 
-    public static int ifIncrement() {
+    public static int incrementOrNot() {
         return (int) (Math.random() * 2);
     }
 
