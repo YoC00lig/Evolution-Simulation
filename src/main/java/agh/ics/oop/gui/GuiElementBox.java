@@ -2,7 +2,6 @@ package agh.ics.oop.gui;
 import java.io.FileNotFoundException;
 import java.io.FileInputStream;
 import agh.ics.oop.*;
-import javafx.scene.control.Label;
 import javafx.geometry.Pos;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;

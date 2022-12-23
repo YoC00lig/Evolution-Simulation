@@ -1,5 +1,7 @@
 wątki
-mapy - rozdzielenie (tez w gui)
 buttony
 sledzenie zwierzakow
 energia zwierzakow (kolorki)
+przemyśleć i zmienic nazwe isCrazyMode na bardziej trafną
+przy reproduction nie jest potrzebna funkcja getStronger-weaker, najlepiej byłoby sie tego pozbyc
+w genotypie trzeba zmienic żeby nie przyjmować dlugosci 32 i ilosci genow 8 tylko pobierac z gui

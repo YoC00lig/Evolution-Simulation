@@ -34,7 +34,7 @@ public class FreeFieldsTest {
 
     @Test
     public void Test3(){ // dwa zwierzątka na tym samym polu i jedna roślina
-        AbstractWorldMap map = new ToxicMap(5, 5, true,true,
+        ToxicMap map = new ToxicMap(5, 5, true,true,
                 true, 3, 4, 5);
         Animal animal1 = new Animal(map, new Vector2d(2,3));
         Animal animal2 = new Animal(map, new Vector2d(2,3));
@@ -65,7 +65,7 @@ public class FreeFieldsTest {
 
     @Test
     public void Test4() { // umieszczam 3 zwierzęta, każde na innym polu
-        AbstractWorldMap map = new EquatorMap(5, 5, true,true,
+        ToxicMap map = new ToxicMap(5, 5, true,true,
                 true, 3, 4, 5);
         Animal animal1 = new Animal(map, new Vector2d(2,3));
         Animal animal2 = new Animal(map, new Vector2d(1,4));

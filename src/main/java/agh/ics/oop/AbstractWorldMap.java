@@ -5,16 +5,13 @@ import java.util.Comparator;
 
 abstract public class AbstractWorldMap implements IPositionChangeObserver{
     public Vector2d low, high;
-    public int width, height, minReproductionEnergy, plantEnergy, day, initialEnergy;
+    public int day;
+    protected int width, height, minReproductionEnergy, plantEnergy, initialEnergy;
     protected LinkedHashMap<Vector2d, LinkedList<Animal>> animals = new LinkedHashMap<>();
     public ArrayList<Animal> listOfAnimals = new ArrayList<>();
     public LinkedHashMap<Vector2d, Grass> grasses = new LinkedHashMap<>();
     protected LinkedHashMap<Vector2d, InfoField> fields1; // łatwo można odwoływać się po kluczu do informacji, nie trzeba przeszukiwać całej ArrayList
-    protected TreeMap<Integer, LinkedList<Vector2d>> fields2; // Posortowane według klucza
-    protected ArrayList<Vector2d> preferForEquator; // 20% miejsc na mapie preferowanych w wariancie z równikiem
-    protected ArrayList<Vector2d> notPreferForEquator;
-    protected ArrayList<InfoField> informations = new ArrayList<>(); // żeby móc łatwo posortować po polu death
-    protected boolean predistinationMode, toxicDeadMode, isCrazyMode, hellExistsMode;
+    protected final boolean predistinationMode, isCrazyMode, hellExistsMode;
     //for statistics
     int deadAnimals = 0;
     int daysOfLifeDeadsSum = 0;
@@ -34,14 +31,10 @@ abstract public class AbstractWorldMap implements IPositionChangeObserver{
         this.predistinationMode = predistination;
         this.isCrazyMode = isCrazyMode;
         this.hellExistsMode = hellExistsMode;
-        this.fields1 = generateFields1();
-        this.fields2 = generateFields2();
         this.plantEnergy = plantE;
         this.minReproductionEnergy = reproductionE;
         this.initialEnergy = initialE;
-        this.preferForEquator = classifyToPreferField();
-        this.notPreferForEquator = classifyToNotPreferField();
-        this.informations.addAll(this.fields1.values());
+        this.fields1 = generateFields1();
     }
 
     public LinkedHashMap<Vector2d, InfoField> generateFields1() {
@@ -54,30 +47,6 @@ abstract public class AbstractWorldMap implements IPositionChangeObserver{
         }
         return Field;
     }
-
-    // przypadek do równika
-
-    public TreeMap<Integer, LinkedList<Vector2d>> generateFields2() { // wyznaczamy miejsca preferowane w przypadku wariantu z równikiem
-        TreeMap<Integer, LinkedList<Vector2d>> Field = new TreeMap<>();
-        int middle = this.height/2;
-        for (int i = low.x ; i <= high.x; i++){
-            for (int j = low.y ; j <= high.y; j++) {
-
-                int distance = Math.abs(middle - j);
-                Vector2d v = new Vector2d(i, j);
-
-                if (Field.isEmpty() || Field.get(distance) == null){
-                    LinkedList<Vector2d> list = new LinkedList<>();
-                    list.add(v);
-                    Field.put(distance, list);
-                }
-
-                else if (Field.get(distance) != null) Field.get(distance).add(v);
-            }
-        }
-        return Field;
-    }
-    // koniec
 
     public int freeFields() {
         int result = 0;
@@ -111,6 +80,7 @@ abstract public class AbstractWorldMap implements IPositionChangeObserver{
         for (Animal animal: listOfAnimals) animal.move();
         this.removeDead();
     }
+
     public void place(Animal animal) {
         Vector2d pos = animal.getPosition();
         if (!(pos.x >= this.width || pos.x < 0 || pos.y >= this.height || pos.y < 0)){
@@ -123,8 +93,7 @@ abstract public class AbstractWorldMap implements IPositionChangeObserver{
         return grasses.get(position);
     }
 
-    // animal adding and removing from map
-
+    // usuwanie i dodawanie zwierząt
     public void addAnimal(Animal animal, Vector2d newPosition){
         fields1.get(newPosition).incrementElementsStatus();
         if (animals.get(newPosition) == null) {
@@ -151,7 +120,6 @@ abstract public class AbstractWorldMap implements IPositionChangeObserver{
 
     public void removeDead() {
         CopyOnWriteArrayList<Animal> bodiesToRemove = new CopyOnWriteArrayList<>();
-
         for (Vector2d position: animals.keySet()){
             for (Animal animal: animals.get(position)){
                 if (animal != null && animal.isDead()) {
@@ -165,7 +133,6 @@ abstract public class AbstractWorldMap implements IPositionChangeObserver{
                 }
             }
         }
-
         for (Animal dead : bodiesToRemove) {
             removeAnimal(dead, dead.getPosition());
         }
@@ -178,74 +145,7 @@ abstract public class AbstractWorldMap implements IPositionChangeObserver{
         info.decrementElementsStatus();
     }
 
-    abstract public void plantGrass(); // funkcja zasadza jedną roślinkę
-    // sadzenie trawy - tylko do rownika
-    public ArrayList<Vector2d> classifyToPreferField(){
-        int allFieldsDouble = this.height * this.width * 2;
-        long numOfPrefer = (allFieldsDouble/10);
-        ArrayList<Vector2d> preferList = new ArrayList<>();
-        int cnt = 0;
-
-        while (cnt < numOfPrefer){
-            for (LinkedList<Vector2d> list: fields2.values()){
-                for (Vector2d v: list){
-                    preferList.add(v);
-                    cnt += 1;
-                    if (cnt == numOfPrefer) return preferList;
-                }
-            }
-        }
-        return preferList;
-    }
-
-    public ArrayList<Vector2d> classifyToNotPreferField() {
-        ArrayList<Vector2d> res = new ArrayList<>();
-        for (LinkedList<Vector2d> list: fields2.values()){
-            for (Vector2d v: list){
-                if (!preferForEquator.contains(v)) res.add(v);
-            }
-        }
-        return res;
-    }
-    public void plantGrassAtEquator() {
-        boolean planted = false;
-        Collections.shuffle(preferForEquator);
-        for (Vector2d v: preferForEquator){
-            if (!(grassAt(v) instanceof Grass)){
-                Grass element = new Grass(v, this);
-                planted = true;
-                break;
-            }
-        }
-        if (!planted) plantGrassRandomly();
-    }
-
-
-
-    public void plantGrassRandomly() {
-        boolean planted = false;
-        Collections.shuffle(notPreferForEquator);
-        for (Vector2d v: notPreferForEquator){
-            if (!(grassAt(v) instanceof Grass)) {
-                Grass element = new Grass(v, this);
-                planted = true;
-                break;
-            }
-        }
-        if (!planted) plantGrassAtEquator(); // jesli nie uda się zasadzic bo np nie ma miejsc, to ostatecznie sadzimy na rowniku
-    }
-    // koniec rownika
-
-    public void plantGrassInFieldFromGivenRange(int idx1, int idx2) { // idx2 exclusive do toxic
-        for (int i = idx1; i < idx2; i++){
-            InfoField info = this.informations.get(i);
-            Vector2d v = info.position;
-            if (!(grassAt(v) instanceof Grass)) {
-                new Grass(v, this);
-                return;
-            }
-        }
-    }
+    abstract public void plantGrass();
 
     // reproduction
     public List<Animal> getStrongest(Vector2d position, int howMany){
@@ -263,7 +163,6 @@ abstract public class AbstractWorldMap implements IPositionChangeObserver{
         return new Animal(this, parent1, parent2);
     }
 
-    // todo -check
     public void reproduction() {
         ArrayList<Animal> toUpdate = new ArrayList<>();
         for (Vector2d position : animals.keySet()){
@@ -277,7 +176,6 @@ abstract public class AbstractWorldMap implements IPositionChangeObserver{
                 weaker.addNewChild();
                 if (weaker.getCurrentEnergy() >= minReproductionEnergy) {
                     Animal baby = getBaby(parents);
-                    System.out.println("baby animal. Num of animals: before-" + this.listOfAnimals.size() + " after-" + (this.listOfAnimals.size()+1));
                     stronger.reproduce(weaker);
                     toUpdate.add(baby);
                     InfoField info = fields1.get(baby.getPosition());
@@ -286,16 +184,13 @@ abstract public class AbstractWorldMap implements IPositionChangeObserver{
             }
         }
         for (Animal baby: toUpdate) this.place(baby);
-//        this.removeDead();
     }
 
     // eating
-    // todo - check
     public void feed(Animal animal){
         animal.setEnergy(animal.getCurrentEnergy() + plantEnergy);
         animal.atePlant();
     }
-
 
     public void eat() {
         removeDead();
@@ -316,7 +211,6 @@ abstract public class AbstractWorldMap implements IPositionChangeObserver{
     // new day
     public void nextDay() {
         this.day += 1;
-        this.removeDead();
         for (LinkedList<Animal> listOfAnimals: this.animals.values()) {
             for (Animal animal : listOfAnimals) animal.aliveNextDay();
         }

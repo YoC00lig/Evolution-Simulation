@@ -29,11 +29,11 @@ public class App extends Application {
     Stage stage;
     Scene scene;
     final int size = 25; // rozmiar mapy
-    private LineCharts animalsNumber = new LineCharts("Animals number");
-    private LineCharts plantsNumber = new LineCharts("Plants number");
-    private LineCharts avgEnergy = new LineCharts("Average animal energy");
-    private LineCharts avgLifeLength = new LineCharts("Average life length");
-    private LineCharts freeFields = new LineCharts("Free fields on the map");
+    private final LineCharts animalsNumber = new LineCharts("Animals number");
+    private final LineCharts plantsNumber = new LineCharts("Plants number");
+    private final LineCharts avgEnergy = new LineCharts("Average animal energy");
+    private final LineCharts avgLifeLength = new LineCharts("Average life length");
+    private final LineCharts freeFields = new LineCharts("Free fields on the map");
     private StatisticsReport  statisticsReport;
 
     HBox mainbox;
@@ -85,31 +85,19 @@ public class App extends Application {
         listOfTextField.setSpacing(13);
 
         VBox listOfLabel = new VBox();
-        Label widthFieldLabel = new Label("map width: ");
-        Label heightFieldLabel = new Label("map height: ");
-        Label predistinationModeLabel = new Label("Predistination mode on?");
-        Label toxicDeadModeLabel = new Label("Toxic-dead mode on?");
-        Label isCrazyModeLabel = new Label("Is-crazy mode on?");
-        Label hellExistsModeLabel = new Label("hell's portal mode on?");
-        Label reproductionEnergyLabel = new Label("reproduction energy: ");
-        Label plantEnergyLabel = new Label("plant energy: ");
-        Label initialEnergyLabel = new Label("initial energy for animal: ");
-        Label startAnimalsNumberLabel = new Label("start number of animals: ");
-        Label startPlantsNumberLabel = new Label("start number of plants: ");
-        Label dailyGrownGrassNumberLabel = new Label("number of plants per-day:       ");
+        Label widthFieldLabel = new Label("map width: "); widthFieldLabel.setFont(new Font("Verdana", 14));
+        Label heightFieldLabel = new Label("map height: "); heightFieldLabel.setFont(new Font("Verdana", 14));
+        Label predistinationModeLabel = new Label("Predistination mode on?"); predistinationModeLabel.setFont(new Font("Verdana", 14));
+        Label toxicDeadModeLabel = new Label("Toxic-dead mode on?"); toxicDeadModeLabel.setFont(new Font("Verdana", 14));
+        Label isCrazyModeLabel = new Label("Is-crazy mode on?"); isCrazyModeLabel.setFont(new Font("Verdana", 14));
+        Label hellExistsModeLabel = new Label("hell's portal mode on?"); hellExistsModeLabel.setFont(new Font("Verdana", 14));
+        Label reproductionEnergyLabel = new Label("reproduction energy: "); reproductionEnergyLabel.setFont(new Font("Verdana", 14));
+        Label plantEnergyLabel = new Label("plant energy: "); plantEnergyLabel.setFont(new Font("Verdana", 14));
+        Label initialEnergyLabel = new Label("initial energy for animal: "); initialEnergyLabel.setFont(new Font("Verdana", 14));
+        Label startAnimalsNumberLabel = new Label("start number of animals: "); startAnimalsNumberLabel.setFont(new Font("Verdana", 14));
+        Label startPlantsNumberLabel = new Label("start number of plants: "); startPlantsNumberLabel.setFont(new Font("Verdana", 14));
+        Label dailyGrownGrassNumberLabel = new Label("number of plants per-day:       "); dailyGrownGrassNumberLabel.setFont(new Font("Verdana", 14));
 
-        widthFieldLabel.setFont(new Font("Verdana", 14));
-        heightFieldLabel.setFont(new Font("Verdana", 14));
-        predistinationModeLabel.setFont(new Font("Verdana", 14));
-        toxicDeadModeLabel.setFont(new Font("Verdana", 14));
-        isCrazyModeLabel.setFont(new Font("Verdana", 14));
-        hellExistsModeLabel.setFont(new Font("Verdana", 14));
-        reproductionEnergyLabel.setFont(new Font("Verdana", 14));
-        plantEnergyLabel.setFont(new Font("Verdana", 14));
-        initialEnergyLabel.setFont(new Font("Verdana", 14));
-        startAnimalsNumberLabel.setFont(new Font("Verdana", 14));
-        startPlantsNumberLabel.setFont(new Font("Verdana", 14));
-        dailyGrownGrassNumberLabel.setFont(new Font("Verdana", 14));
 
         Button confirmButton = new Button("CONFIRM");
         confirmButton.setStyle("-fx-background-color: #ff6666");
@@ -144,12 +132,10 @@ public class App extends Application {
             int startPlantsNum = Integer.parseInt(startPlantsNumber.getText());
             int dailyGrown = Integer.parseInt(dailyGrownGrassNumber.getText());
 
-            AbstractWorldMap map;
 
-            if (toxicDead) map = new ToxicMap(width, height, predisitination,
-                        isCrazy, hellExists, reproductionE, plantE, initialE);
-            else map = new EquatorMap(width, height, predisitination,
-                    isCrazy, hellExists, reproductionE, plantE, initialE);
+            if (toxicDead) map = new ToxicMap(width, height, predisitination, isCrazy, hellExists, reproductionE, plantE, initialE);
+            else map = new EquatorMap(width, height, predisitination, isCrazy, hellExists, reproductionE, plantE, initialE);
+
             engine = new SimulationEngine(map, startAnimalsNum, startPlantsNum, dailyGrown, this);
 
             statisticsReport = new StatisticsReport(map);
