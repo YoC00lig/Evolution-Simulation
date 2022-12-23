@@ -20,7 +20,7 @@ public class Animal implements IMapElement{
     public Animal(AbstractWorldMap map, Vector2d position) {
         this.position = position;
         this.map = map;
-        this.genotype = Genotype.createDNA();
+        this.genotype = Genotype.createDNA(map.numberOfGenes);
         this.genotypeLength = genotype.length;
         this.directions = OptionsParser.parse(genotype);
         this.initialEnergy = map.initialEnergy;
@@ -38,7 +38,7 @@ public class Animal implements IMapElement{
     public Animal(AbstractWorldMap map, Animal parent1, Animal parent2){
         this.position = parent1.getPosition();
         this.map = map;
-        this.genotype = Genotype.getChildGenotype(parent1, parent2, map.isCrazyMode);
+        this.genotype = Genotype.getChildGenotype(parent1, parent2, map.isCrazyMode, map.numberOfGenes, map);
         this.genotypeLength = genotype.length;
         this.directions = OptionsParser.parse(genotype);
         this.energy = findChildEnergy(parent1, parent2);
@@ -49,10 +49,6 @@ public class Animal implements IMapElement{
         this.numberOfChildren = 0;
         this.eatenPlants = 0;
         map.livingAnimals += 1;
-    }
-
-    public MoveDirection[] getDirections() {
-        return directions;
     }
 
     public MapDirection getOrientation() {
@@ -80,13 +76,10 @@ public class Animal implements IMapElement{
     }
 
     public static int findChildEnergy(Animal parent1, Animal parent2) {
-        Animal[] parents = Genotype.getStrongerWeaker(parent1, parent2);
-        return (int) (parents[0].getCurrentEnergy() * 0.75 + parents[1].getCurrentEnergy() * 0.25);
+        return (int) (parent1.getCurrentEnergy() * 0.75 + parent2.getCurrentEnergy() * 0.25);
     }
     /// poruszanie
     public Vector2d teleportTurn(Vector2d newPosition, MapDirection newOrientation) {
-        System.out.println(newPosition);
-//        MapDirection newOrient = newOrientation;
         Vector2d newPos = newPosition;
 
         if (newPos.x == -1){

@@ -1,25 +1,20 @@
 package agh.ics.oop.gui;
 
-import agh.ics.oop.AbstractWorldMap;
-import agh.ics.oop.Animal;
-import javafx.application.Application;
-import javafx.stage.Stage;
-import javafx.scene.layout.GridPane;
-import javafx.scene.control.Label;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.RowConstraints;
-import javafx.geometry.HPos;
-import javafx.scene.layout.*;
-import javafx.scene.Scene;
-import javafx.scene.control.TextField;
 import agh.ics.oop.*;
-import javafx.geometry.Pos;
-import javafx.scene.text.Font;
-import javafx.geometry.Insets;
-import javafx.scene.control.Button;
+import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.geometry.HPos;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.*;
+import javafx.scene.text.Font;
+import javafx.stage.Stage;
+
 import java.io.FileNotFoundException;
-import javafx.scene.layout.VBox;
 
 public class App extends Application {
     private AbstractWorldMap map;
@@ -34,6 +29,8 @@ public class App extends Application {
     private final LineCharts avgEnergy = new LineCharts("Average animal energy");
     private final LineCharts avgLifeLength = new LineCharts("Average life length");
     private final LineCharts freeFields = new LineCharts("Free fields on the map");
+    AppButtons buttons;
+    HBox boxWithButtons;
     private StatisticsReport  statisticsReport;
 
     HBox mainbox;
@@ -64,6 +61,7 @@ public class App extends Application {
         TextField startAnimalsNumber = new TextField("20");
         TextField startPlantsNumber = new TextField("1");
         TextField dailyGrownGrassNumber = new TextField("1");
+        TextField numberOfGenes = new TextField("32");
 
         widthField.setStyle("-fx-background-color: #f7cac9"); widthField.setPrefColumnCount(14);
         heightField.setStyle("-fx-background-color: #f7cac9"); heightField.setPrefColumnCount(14);
@@ -77,10 +75,11 @@ public class App extends Application {
         startAnimalsNumber.setStyle("-fx-background-color: #f7cac9"); startAnimalsNumber.setPrefColumnCount(14);
         startPlantsNumber.setStyle("-fx-background-color: #f7cac9"); startPlantsNumber.setPrefColumnCount(14);
         dailyGrownGrassNumber.setStyle("-fx-background-color: #f7cac9"); dailyGrownGrassNumber.setPrefColumnCount(14);
+        numberOfGenes.setStyle("-fx-background-color: #f7cac9"); numberOfGenes.setPrefColumnCount(14);
 
         listOfTextField.getChildren().addAll(widthField, heightField, predistinationMode, toxicDeadMode, isCrazyMode,
                 hellExistsMode, reproductionEnergy, plantEnergy, initialEnergy, startAnimalsNumber,
-                startPlantsNumber, dailyGrownGrassNumber);
+                startPlantsNumber, dailyGrownGrassNumber, numberOfGenes);
 
         listOfTextField.setSpacing(13);
 
@@ -97,14 +96,15 @@ public class App extends Application {
         Label startAnimalsNumberLabel = new Label("start number of animals: "); startAnimalsNumberLabel.setFont(new Font("Verdana", 14));
         Label startPlantsNumberLabel = new Label("start number of plants: "); startPlantsNumberLabel.setFont(new Font("Verdana", 14));
         Label dailyGrownGrassNumberLabel = new Label("number of plants per-day:       "); dailyGrownGrassNumberLabel.setFont(new Font("Verdana", 14));
-
+        Label numberOfGenesLabel = new Label("Length of genotype: "); numberOfGenesLabel.setFont(new Font("Verdana", 14));
 
         Button confirmButton = new Button("CONFIRM");
         confirmButton.setStyle("-fx-background-color: #ff6666");
 
         listOfLabel.getChildren().addAll(widthFieldLabel, heightFieldLabel, predistinationModeLabel, toxicDeadModeLabel, isCrazyModeLabel,
                 hellExistsModeLabel, reproductionEnergyLabel, plantEnergyLabel, initialEnergyLabel,  startAnimalsNumberLabel,
-                startPlantsNumberLabel, dailyGrownGrassNumberLabel, confirmButton);
+                startPlantsNumberLabel, dailyGrownGrassNumberLabel, numberOfGenesLabel, confirmButton);
+
         listOfLabel.setSpacing(20);
 
         HBox inputList = new HBox();
@@ -131,10 +131,11 @@ public class App extends Application {
             int startAnimalsNum = Integer.parseInt(startAnimalsNumber.getText());
             int startPlantsNum = Integer.parseInt(startPlantsNumber.getText());
             int dailyGrown = Integer.parseInt(dailyGrownGrassNumber.getText());
+            int NumberOfGenes = Integer.parseInt(numberOfGenes.getText());
 
 
-            if (toxicDead) map = new ToxicMap(width, height, predisitination, isCrazy, hellExists, reproductionE, plantE, initialE);
-            else map = new EquatorMap(width, height, predisitination, isCrazy, hellExists, reproductionE, plantE, initialE);
+            if (toxicDead) map = new ToxicMap(width, height, predisitination, isCrazy, hellExists, reproductionE, plantE, initialE, NumberOfGenes);
+            else map = new EquatorMap(width, height, predisitination, isCrazy, hellExists, reproductionE, plantE, initialE, NumberOfGenes);
 
             engine = new SimulationEngine(map, startAnimalsNum, startPlantsNum, dailyGrown, this);
 
@@ -142,6 +143,7 @@ public class App extends Application {
 
             Thread thread = new Thread(engine);
             thread.start();
+            buttons = new AppButtons(thread);
         });
 
         scene = new Scene(border, 2000,1000);
@@ -166,23 +168,23 @@ public class App extends Application {
     public void drawMap() {
         gridPane.getChildren().clear();
         gridPane = new GridPane();
-        Label label = new Label("y/x");
+        Label label = new Label("");
 
         gridPane.add(label, 0, 0);
         gridPane.getRowConstraints().add(new RowConstraints(size));
         gridPane.getColumnConstraints().add(new ColumnConstraints(size));
         GridPane.setHalignment(label, HPos.CENTER);
-        gridPane.setGridLinesVisible(true);
+        gridPane.setGridLinesVisible(false);
 
         for (int i = map.low.x; i <= map.high.x; i++){
-            Label numberX = new Label("" + i );
+            Label numberX = new Label("");
             gridPane.add(numberX,  i - map.low.x + 1, 0);
             gridPane.getColumnConstraints().add(new ColumnConstraints(size));
             GridPane.setHalignment(numberX, HPos.CENTER);
         }
 
         for (int i = map.low.y; i <= map.high.y; i++){
-            Label numberY = new Label("" + i);
+            Label numberY = new Label("");
             gridPane.add(numberY, 0,map.high.y - i + 1);
             gridPane.getRowConstraints().add(new RowConstraints(size));
             GridPane.setHalignment(numberY, HPos.CENTER);
@@ -201,13 +203,18 @@ public class App extends Application {
             gridPane.add(elem,  pos.x - map.low.x + 1, map.high.y - pos.y + 1);
             GridPane.setHalignment(elem, HPos.CENTER);
         }
-        gridPane.setStyle("-fx-background-color: #eea29a;");
+        gridPane.setMaxHeight(Region.USE_PREF_SIZE);
+        gridPane.setStyle("-fx-background-color: #f3ffe6;");
         gridPane.setAlignment(Pos.CENTER_LEFT);
         VBox charts = new VBox(animalsNumber.getChart(), plantsNumber.getChart(), freeFields.getChart(),
                 avgEnergy.getChart(), avgLifeLength.getChart());
         charts.setAlignment(Pos.CENTER);
         VBox stats = statisticsReport.getStatistics();
-        mainbox = new HBox(gridPane, charts, stats);
+
+        boxWithButtons = buttons.getBox();
+
+        VBox StatsButtons = new VBox(stats, boxWithButtons);
+        mainbox = new HBox(gridPane, charts, stats, StatsButtons);
         HBox.setMargin(stats, new Insets(0,0,0,50));
         mainbox.setAlignment(Pos.CENTER);
         mainbox.setStyle("-fx-background-color: #eea29a;");
@@ -222,4 +229,5 @@ public class App extends Application {
             }
         });
     }
+
 }

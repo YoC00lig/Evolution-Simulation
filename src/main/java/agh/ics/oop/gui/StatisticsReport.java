@@ -9,7 +9,7 @@ import javafx.scene.text.Font;
 
 public class StatisticsReport {
     VBox statistics;
-    Label animalsNum, plantsNum, freeFields, avgLifeLength, avgEnergy, DeadsNumber;
+    Label animalsNum, plantsNum, freeFields, avgLifeLength, avgEnergy, DeadsNumber, DominantGenotype;
 
     public StatisticsReport(AbstractWorldMap map) {
         Statistics stats = new Statistics(map);
@@ -19,10 +19,11 @@ public class StatisticsReport {
         avgLifeLength = new Label("Average lifespan of dead animals: " + stats.averageLifeLength());
         avgEnergy = new Label("Average energy: " + stats.averageEnergy());
         DeadsNumber = new Label("Number of dead animals: " + stats.getDeadAnimals());
+        DominantGenotype = new Label("Dominant Genotype: " + stats.findDominantGenotype());
 
-        setFonts(animalsNum, plantsNum,freeFields,avgLifeLength,avgEnergy, DeadsNumber);
+        setFonts(animalsNum, plantsNum,freeFields,avgLifeLength,avgEnergy, DeadsNumber, DominantGenotype);
 
-        statistics = new VBox(animalsNum, plantsNum, freeFields, avgLifeLength, avgEnergy, DeadsNumber);
+        statistics = new VBox(animalsNum, plantsNum, freeFields, avgLifeLength, avgEnergy, DeadsNumber, DominantGenotype);
     }
 
     public VBox getStatistics(){
@@ -33,13 +34,14 @@ public class StatisticsReport {
         return statistics;
     }
 
-    public void setFonts(Label a1, Label a2, Label a3, Label a4, Label a5, Label a6){
+    public void setFonts(Label a1, Label a2, Label a3, Label a4, Label a5, Label a6, Label a7){
         a1.setFont(new Font("Verdana", 14));
         a2.setFont(new Font("Verdana", 14));
         a3.setFont(new Font("Verdana", 14));
         a4.setFont(new Font("Verdana", 14));
         a5.setFont(new Font("Verdana", 14));
         a6.setFont(new Font("Verdana", 14));
+        a7.setFont(new Font("Verdana", 14));
     }
     public void updateStatistics(AbstractWorldMap map){
         Statistics stats = new Statistics(map);
@@ -49,10 +51,12 @@ public class StatisticsReport {
         avgLifeLength = new Label("Average lifespan of dead animals: " + stats.averageLifeLength());
         avgEnergy = new Label("Average energy: " + stats.averageEnergy());
         DeadsNumber = new Label("Number of dead animals: " + stats.getDeadAnimals());
+        DominantGenotype = new Label("Dominant Genotype: " + stats.findDominantGenotype());
 
-        setFonts(animalsNum, plantsNum,freeFields,avgLifeLength,avgEnergy, DeadsNumber);
+
+        setFonts(animalsNum, plantsNum,freeFields,avgLifeLength,avgEnergy, DeadsNumber, DominantGenotype);
 
         statistics.getChildren().clear();
-        statistics = new VBox(animalsNum, plantsNum, freeFields, avgLifeLength, avgEnergy, DeadsNumber);
+        statistics = new VBox(animalsNum, plantsNum, freeFields, avgLifeLength, avgEnergy, DeadsNumber, DominantGenotype);
     }
 }

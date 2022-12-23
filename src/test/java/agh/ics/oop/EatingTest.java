@@ -6,7 +6,7 @@ public class EatingTest {
     @Test
     public void Test1(){ // dwa zwierzątka na jednym miejscu
         AbstractWorldMap map = new ToxicMap(5, 5, true,true,
-                true, 3, 4, 5);
+                true, 3, 4, 5,32);
         Animal animal1 = new Animal(map, new Vector2d(2,3));
         Animal animal2 = new Animal(map, new Vector2d(2,3));
 
@@ -24,7 +24,7 @@ public class EatingTest {
     @Test
     public void Test2(){ // dwa zwierzątka na jednym miejscu
         AbstractWorldMap map = new EquatorMap(5, 5, true,false,
-                true,3, 4, 5);
+                true,3, 4, 5,32);
         Animal animal1 = new Animal(map, new Vector2d(2,3));
         Animal animal2 = new Animal(map, new Vector2d(2,3));
 
