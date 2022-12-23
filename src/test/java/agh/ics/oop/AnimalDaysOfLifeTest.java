@@ -6,7 +6,7 @@ public class AnimalDaysOfLifeTest {
 
     @Test
     public void Test1(){ // sprawdza czy wartości są dobrze inicjalizowane, zwierzątko domyślnie gdy zostaje tworzone zyje jeden dzień
-        AbstractWorldMap map = new AbstractWorldMap(5, 5, true,true,true,true, 3, 4, 5);
+        AbstractWorldMap map = new ToxicMap(5, 5, true,true,true, 3, 4, 5);
         Animal animal1 = new Animal(map, new Vector2d(2,3));
         Animal animal2 = new Animal(map, new Vector2d(1,3));
 
@@ -16,7 +16,7 @@ public class AnimalDaysOfLifeTest {
 
     @Test
     public void Test2(){ // sprawdza, czy informacje dobrze się aktualizują
-        AbstractWorldMap map = new AbstractWorldMap(5, 5, true,true,true,true, 3, 4, 5);
+        AbstractWorldMap map = new EquatorMap(5, 5, true,true,true,3, 4, 5);
         Animal animal1 = new Animal(map, new Vector2d(2,3));
         Animal animal2 = new Animal(map, new Vector2d(1,3));
 
@@ -32,7 +32,7 @@ public class AnimalDaysOfLifeTest {
 
     @Test
     public void Test3(){ // sprawdza, czy informacje dobrze aktualizują się w listach na mapie
-        AbstractWorldMap map = new AbstractWorldMap(5, 5, true,true,true,true, 3, 4, 5);
+        AbstractWorldMap map = new ToxicMap(5, 5, true,true,true, 3, 4, 5);
         Animal animal1 = new Animal(map, new Vector2d(2,3));
         Animal animal2 = new Animal(map, new Vector2d(1,3));
 

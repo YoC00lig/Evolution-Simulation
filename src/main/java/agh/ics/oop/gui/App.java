@@ -144,8 +144,12 @@ public class App extends Application {
             int startPlantsNum = Integer.parseInt(startPlantsNumber.getText());
             int dailyGrown = Integer.parseInt(dailyGrownGrassNumber.getText());
 
-            map = new AbstractWorldMap(width,height, predisitination,toxicDead,
-                    isCrazy,hellExists,reproductionE,plantE, initialE);
+            AbstractWorldMap map;
+
+            if (toxicDead) map = new ToxicMap(width, height, predisitination,
+                        isCrazy, hellExists, reproductionE, plantE, initialE);
+            else map = new EquatorMap(width, height, predisitination,
+                    isCrazy, hellExists, reproductionE, plantE, initialE);
             engine = new SimulationEngine(map, startAnimalsNum, startPlantsNum, dailyGrown, this);
 
             statisticsReport = new StatisticsReport(map);

@@ -8,8 +8,8 @@ import static org.junit.jupiter.api.Assertions.*;
 public class DeathStatusTest {
     @Test
     public void Test1(){ // dwa zwierzątka, każde na innym polu
-        AbstractWorldMap map = new AbstractWorldMap(5, 5, true,true,
-                true,true, 3, 4, 5);
+        AbstractWorldMap map = new ToxicMap(5, 5, true,true,
+                true, 3, 4, 5);
         Animal animal1 = new Animal(map, new Vector2d(2,3));
         Animal animal2 = new Animal(map, new Vector2d(1,3));
         animal1.setEnergy(0);
@@ -29,8 +29,8 @@ public class DeathStatusTest {
 
     @Test
     public void Test2(){ // wszystkie zwierzątka umarły, a potem dodana zostaje trawa żeby sprawdzić czy wszystko się poprawnie aktualizuje
-        AbstractWorldMap map = new AbstractWorldMap(5, 5, true,true,
-                true,true, 3, 4, 5);
+        AbstractWorldMap map = new EquatorMap(5, 5, true,true,
+                true, 3, 4, 5);
         Animal animal1 = new Animal(map, new Vector2d(2,3));
         Animal animal2 = new Animal(map, new Vector2d(1,3));
         Vector2d pos1 = animal1.getPosition();

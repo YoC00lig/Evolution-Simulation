@@ -2,7 +2,7 @@ package agh.ics.oop;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Animal extends AbstractWorldMapElement implements IMapElement{
+public class Animal implements IMapElement{
     // trial commit
     private int energy;
     private MapDirection orientation;
@@ -10,6 +10,7 @@ public class Animal extends AbstractWorldMapElement implements IMapElement{
     private final int genotypeLength;
     private MoveDirection[] directions;
     private Vector2d position;
+    private int initialEnergy;
     private final AbstractWorldMap map;
     protected int gene, daysOfLife, numberOfChildren, isDead, eatenPlants;
     protected List<IPositionChangeObserver> observers = new ArrayList<>();
@@ -50,6 +51,18 @@ public class Animal extends AbstractWorldMapElement implements IMapElement{
         map.livingAnimals += 1;
     }
 
+    public MoveDirection[] getDirections() {
+        return directions;
+    }
+
+    public MapDirection getOrientation() {
+        return orientation;
+    }
+
+    public void setOrientation(MapDirection orientation) {
+        this.orientation = orientation;
+    }
+
     public int findDominantGenotype() {
         int[] cnt = new int[8];
         for (int gen: this.genotype) {
@@ -72,15 +85,27 @@ public class Animal extends AbstractWorldMapElement implements IMapElement{
     }
     /// poruszanie
     public Vector2d teleportTurn(Vector2d newPosition, MapDirection newOrientation) {
-
-        MapDirection newOrient = newOrientation;
+        System.out.println(newPosition);
+//        MapDirection newOrient = newOrientation;
         Vector2d newPos = newPosition;
 
-        if (newPos.x == -1) newPos = new Vector2d(map.width - 1, newPos.y);
-        else newPos = new Vector2d(0, newPos.y);
-        if (newPos.y == -1) newOrient = newOrient.reverse();
-        else if (newPos.y == map.height - 1) newOrientation = newOrientation.reverse();
-        orientation = newOrientation;
+        if (newPos.x == -1){
+            newPos = new Vector2d(map.width - 1, newPos.y);
+            System.out.println(newPos);
+        }
+        else if (newPos.x == map.width) {
+            newPos = new Vector2d(0, newPos.y);
+            System.out.println(newPos);
+        }
+        if (newPos.y == -1) {
+            newPos = new Vector2d(newPos.x, 0);
+            newOrientation = newOrientation.reverse();
+        }
+        else if (newPos.y == map.height) {
+            newPos = new Vector2d(newPos.x, map.height - 1);
+            newOrientation = newOrientation.reverse();
+        }
+        this.orientation = newOrientation;
 
         return newPos;
     }

@@ -5,8 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class ComparatorForDeathsTest {
     @Test
     void comparatorTest() {
-        AbstractWorldMap map = new AbstractWorldMap(5, 5, true,true,
-                true,true, 3, 4, 5);
+        AbstractWorldMap map = new ToxicMap(5, 5, true,true,
+                true, 3, 4, 5);
 
         InfoField i1 = new InfoField(new Vector2d(2,5));
         InfoField i2 = new InfoField(new Vector2d(2,5));

@@ -1,6 +1,6 @@
 package agh.ics.oop;
 
-public class Grass extends AbstractWorldMapElement implements IMapElement{
+public class Grass implements IMapElement{
     private final Vector2d position;
     AbstractWorldMap map;
 
