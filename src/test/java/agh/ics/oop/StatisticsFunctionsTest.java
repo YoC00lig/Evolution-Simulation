@@ -8,7 +8,7 @@ public class StatisticsFunctionsTest {
     @Test
     public void Test1() { // test przypadku sredniej dlugosci zycia kiedy żadne jeszcze nie umarło
         AbstractWorldMap map = new EquatorMap(5, 5, true,true,
-                true, 3, 4, 5);
+                true, 3, 4, 5,32);
         new Animal(map, new Vector2d(2,3));
         new Animal(map, new Vector2d(3,1));
         Statistics stats = new Statistics(map);
@@ -19,7 +19,7 @@ public class StatisticsFunctionsTest {
     @Test
     public void Test2() { // jedno żyło 4 dni, drugie 1 = floor( (4+1)/2) ) = 2
         AbstractWorldMap map = new ToxicMap(5, 5, true,true,
-                true, 3, 4, 5);
+                true, 3, 4, 5,32);
         Animal animal1 = new Animal(map, new Vector2d(2,3));
         Animal animal2 = new Animal(map, new Vector2d(3,1));
 
@@ -38,7 +38,7 @@ public class StatisticsFunctionsTest {
     @Test
     public void Test3() {
         AbstractWorldMap map = new EquatorMap(5, 5, true, true,
-                true,  3, 4, 5);
+                true,  3, 4, 5,32);
         Animal animal1 = new Animal(map, new Vector2d(2, 3));
         Animal animal2 = new Animal(map, new Vector2d(3, 1));
 

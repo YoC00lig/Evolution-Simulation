@@ -29,7 +29,7 @@ public class Statistics {
     public int getDeadAnimals() {
         return map.deadAnimals;
     }
-    public void findDominantGenotype() {
+    public int findDominantGenotype() {
         int[] cnt = new int[8];
         for (Animal animal: map.listOfAnimals) {
             int gen = animal.findDominantGenotype();
@@ -45,6 +45,7 @@ public class Statistics {
             }
         }
         map.dominantGenotype = Gen;
+        return map.dominantGenotype;
     }
 
 }

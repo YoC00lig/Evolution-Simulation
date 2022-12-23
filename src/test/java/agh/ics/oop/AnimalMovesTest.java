@@ -3,10 +3,9 @@ package agh.ics.oop;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class AnimalMovesTest {
-    AbstractWorldMap map1 = new EquatorMap(6, 6, true, false, false, 1, 2, 20);
+    AbstractWorldMap map1 = new EquatorMap(6, 6, true, false, false, 1, 2, 20,32);
     @Test
     public void Test1() {
        Animal a = new Animal(map1, new Vector2d(5, 3));
@@ -45,7 +44,7 @@ public class AnimalMovesTest {
         assertEquals(newOrientation2, b.getOrientation());
     }
 
-    AbstractWorldMap hellMap = new ToxicMap(6, 6, true, false, false, 1, 2, 20);
+    AbstractWorldMap hellMap = new ToxicMap(6, 6, true, false, false, 1, 2, 20,32);
 
     @Test
     public void Test3() {

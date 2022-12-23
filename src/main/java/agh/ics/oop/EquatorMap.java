@@ -11,8 +11,8 @@ public class EquatorMap extends AbstractWorldMap {
     private final ArrayList<Vector2d> notPreferForEquator; // pozostałe miejsca na mapie, które nie są preferowane
 
     public EquatorMap( int width, int height, boolean predistination, boolean isCrazyMode,
-        boolean hellExistsMode, int reproductionE, int plantE, int initialE){
-            super(width, height, predistination, isCrazyMode, hellExistsMode, reproductionE, plantE, initialE);
+        boolean hellExistsMode, int reproductionE, int plantE, int initialE, int genesNumber){
+            super(width, height, predistination, isCrazyMode, hellExistsMode, reproductionE, plantE, initialE, genesNumber);
             this.fields2 = generateFields2();
             this.preferForEquator = classifyToPreferField();
             this.notPreferForEquator = classifyToNotPreferField();

@@ -1,15 +1,18 @@
 package agh.ics.oop;
+
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CompareAnimalsTest {
     @Test
     public void Test1() {
         AbstractWorldMap map = new EquatorMap(5, 5, true,true,
-                true, 3, 4, 5);
+                true, 3, 4, 5,32);
         Animal a1 = new Animal(map, new Vector2d(2,3));
         Animal a2 = new Animal(map, new Vector2d(2,4));
         Animal a3 = new Animal(map, new Vector2d(1,3));

@@ -18,10 +18,10 @@ abstract public class AbstractWorldMap implements IPositionChangeObserver{
     int livingAnimals = 0;
     int plantsNumber = 0;
     int dominantGenotype = 0;
-    int averageEnergy, averageLifeLength, freeFields;
+    int averageEnergy, averageLifeLength, freeFields, numberOfGenes;
 
 
-    public AbstractWorldMap(int width, int height,boolean predistination, boolean isCrazyMode, boolean hellExistsMode, int reproductionE, int plantE, int initialE) {
+    public AbstractWorldMap(int width, int height,boolean predistination, boolean isCrazyMode, boolean hellExistsMode, int reproductionE, int plantE, int initialE, int numberOfGenes) {
         this.width = width;
         this.height = height;
         this.low = new Vector2d(0,0);
@@ -35,6 +35,7 @@ abstract public class AbstractWorldMap implements IPositionChangeObserver{
         this.minReproductionEnergy = reproductionE;
         this.initialEnergy = initialE;
         this.fields1 = generateFields1();
+        this.numberOfGenes = numberOfGenes;
     }
 
     public LinkedHashMap<Vector2d, InfoField> generateFields1() {
@@ -78,7 +79,6 @@ abstract public class AbstractWorldMap implements IPositionChangeObserver{
 
     public void moveAll() {
         for (Animal animal: listOfAnimals) animal.move();
-        this.removeDead();
     }
 
     public void place(Animal animal) {
@@ -157,25 +157,21 @@ abstract public class AbstractWorldMap implements IPositionChangeObserver{
         return parents.subList(0, howMany);
     }
 
-    public Animal getBaby(List<Animal> parents){
-        Animal parent1 = parents.get(0);
-        Animal parent2 = parents.get(1);
-        return new Animal(this, parent1, parent2);
+    public Animal getBaby(Animal stronger, Animal weaker){
+        return new Animal(this, stronger, weaker);
     }
 
     public void reproduction() {
         ArrayList<Animal> toUpdate = new ArrayList<>();
         for (Vector2d position : animals.keySet()){
             if ( animals.get(position) != null && animals.get(position).size() >= 2) {
-
                 List<Animal> parents = getStrongest(position, 2);
-                Animal stronger = Genotype.getStrongerWeaker(parents.get(0), parents.get(1))[0];
-                Animal weaker = Genotype.getStrongerWeaker(parents.get(0), parents.get(1))[1];
-
+                Animal stronger = parents.get(0);
+                Animal weaker = parents.get(1);
                 stronger.addNewChild();
                 weaker.addNewChild();
                 if (weaker.getCurrentEnergy() >= minReproductionEnergy) {
-                    Animal baby = getBaby(parents);
+                    Animal baby = getBaby(parents.get(0), parents.get(1)); // tablica jest posortowana
                     stronger.reproduce(weaker);
                     toUpdate.add(baby);
                     InfoField info = fields1.get(baby.getPosition());

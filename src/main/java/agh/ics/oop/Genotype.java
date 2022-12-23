@@ -1,11 +1,11 @@
 package agh.ics.oop;
 
+import java.util.List;
+
 public class Genotype {
-    private static final int numberOfGenes = 32;
     private static final int typesOfGenes = 8;
 
-
-    public static int[] createDNA() {
+    public static int[] createDNA(int numberOfGenes) {
         int[] genes = new int[numberOfGenes];
         for (int i = 0; i < numberOfGenes; i++){
             genes[i] = (int) (Math.random() * typesOfGenes);
@@ -13,16 +13,16 @@ public class Genotype {
         return genes;
     }
 
-    public static int[] getChildGenotype(Animal parent1, Animal parent2, boolean isCrazyMode) {
+    public static int[] getChildGenotype(Animal parent1, Animal parent2, boolean isCrazyMode, int numberOfGenes, AbstractWorldMap map) {
         // isCrazyMode is not the best name
 
         int energy1 = parent1.getCurrentEnergy();
         int energy2 = parent2.getCurrentEnergy();
         int[] genes = new int[numberOfGenes];
         int rightSide = (int) (Math.random() * 2);
-        Animal[] parents = getStrongerWeaker(parent1, parent2);
-        Animal stronger = parents[0];
-        Animal weaker = parents[1];
+        List<Animal> parents = map.getStrongest(parent1.getPosition(), 2);
+        Animal stronger = parents.get(0);
+        Animal weaker = parents.get(1);
 
         int breakPoint = ((stronger.getCurrentEnergy() * numberOfGenes) / (energy1+energy2));
         int remaining = numberOfGenes - breakPoint;
@@ -50,21 +50,6 @@ public class Genotype {
         }
 
         return genes;
-    }
-
-    public static Animal[] getStrongerWeaker(Animal parent1, Animal parent2){
-        Animal stronger;
-        Animal weaker;
-
-        if (parent1.getCurrentEnergy() >  parent2.getCurrentEnergy()) {
-            stronger = parent1;
-            weaker = parent2;
-        }
-        else {
-            stronger = parent2;
-            weaker = parent1;
-        }
-        return new Animal[]{stronger, weaker};
     }
 
     public static int changeGene(int gen) {

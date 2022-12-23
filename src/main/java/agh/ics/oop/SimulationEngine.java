@@ -1,7 +1,9 @@
 package agh.ics.oop;
+
+import agh.ics.oop.gui.App;
+
 import java.io.FileNotFoundException;
 import java.util.Random;
-import agh.ics.oop.gui.App;
 
 
 public class SimulationEngine implements IEngine, Runnable{
@@ -9,7 +11,7 @@ public class SimulationEngine implements IEngine, Runnable{
     private final int startAnimalsNumber;
     private final int startGrassnumber;
     private final int dailyGrowersNumber;
-    private final int moveDelay = 100;
+    private final int moveDelay = 10;
     public Statistics stats;
     private final App application;
 
@@ -59,5 +61,6 @@ public class SimulationEngine implements IEngine, Runnable{
             throw new RuntimeException(e);
         }
     }
+
 }
 
