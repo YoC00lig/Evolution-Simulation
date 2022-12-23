@@ -5,8 +5,8 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ReproductionTest {
     @Test
     public void Test1(){ // dwa zwierzątka na jednym miejscu
-        AbstractWorldMap map = new AbstractWorldMap(5, 5, true,true,
-                true,true, 3, 4, 5);
+        AbstractWorldMap map = new ToxicMap(5, 5, true,true,
+                true, 3, 4, 5);
         Animal animal1 = new Animal(map, new Vector2d(2,3));
         Animal animal2 = new Animal(map, new Vector2d(2,3));
         map.reproduction();
@@ -25,8 +25,8 @@ public class ReproductionTest {
     }
     @Test
     public void Test2(){ // trzy zwierzątka na jednym miejscu
-        AbstractWorldMap map = new AbstractWorldMap(5, 5, true,true,
-                true,true, 3, 4, 5);
+        AbstractWorldMap map = new EquatorMap(5, 5, true,true,
+                true, 3, 4, 5);
         Animal animal1 = new Animal(map, new Vector2d(2,3));
         Animal animal2 = new Animal(map, new Vector2d(2,3));
         Animal animal3 = new Animal(map, new Vector2d(2,3));
@@ -47,8 +47,8 @@ public class ReproductionTest {
 
     @Test
     public void Test3(){ // pięc zwierzątek na jednym miejscu
-        AbstractWorldMap map = new AbstractWorldMap(5, 5, true,true,
-                true,true, 3, 4, 5);
+        AbstractWorldMap map = new ToxicMap(5, 5, true,true,
+                true,3, 4, 5);
         Animal animal1 = new Animal(map, new Vector2d(2,3));
         Animal animal2 = new Animal(map, new Vector2d(2,3));
         Animal animal3 = new Animal(map, new Vector2d(2,3));

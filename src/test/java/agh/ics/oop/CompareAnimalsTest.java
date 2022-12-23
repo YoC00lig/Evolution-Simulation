@@ -8,8 +8,8 @@ import java.util.Comparator;
 public class CompareAnimalsTest {
     @Test
     public void Test1() {
-        AbstractWorldMap map = new AbstractWorldMap(5, 5, true,true,
-                true,true, 3, 4, 5);
+        AbstractWorldMap map = new EquatorMap(5, 5, true,true,
+                true, 3, 4, 5);
         Animal a1 = new Animal(map, new Vector2d(2,3));
         Animal a2 = new Animal(map, new Vector2d(2,4));
         Animal a3 = new Animal(map, new Vector2d(1,3));

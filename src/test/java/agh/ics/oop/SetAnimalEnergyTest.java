@@ -6,8 +6,8 @@ public class SetAnimalEnergyTest {
 
     @Test
     public void Test1(){ // prosty test na ustawianie energii
-        AbstractWorldMap map = new AbstractWorldMap(5, 5, true,true,
-                true,true, 3, 4, 5);
+        AbstractWorldMap map = new ToxicMap(5, 5, true,true,
+                true,3, 4, 5);
         Animal animal1 = new Animal(map, new Vector2d(2,3));
         Animal animal2 = new Animal(map, new Vector2d(2,1));
 
@@ -21,8 +21,8 @@ public class SetAnimalEnergyTest {
 
     @Test
     public void Test2(){ // sprawdzanie, czy wartości aktualizują się w obydwu listach
-        AbstractWorldMap map = new AbstractWorldMap(5, 5, true,true,
-                true,true, 3, 4, 5);
+        AbstractWorldMap map = new EquatorMap(5, 5, true,true,
+                true, 3, 4, 5);
         Animal animal1 = new Animal(map, new Vector2d(2,3));
         Animal animal2 = new Animal(map, new Vector2d(3,1));
 
