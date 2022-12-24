@@ -3,6 +3,8 @@ package agh.ics.oop.gui;
 import agh.ics.oop.*;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -10,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -33,7 +36,7 @@ public class App extends Application {
     HBox boxWithButtons;
     private StatisticsReport  statisticsReport;
 
-    HBox mainbox;
+    HBox mainBox;
 
     public static void main(String[] args) {
         launch(args);
@@ -137,13 +140,24 @@ public class App extends Application {
             if (toxicDead) map = new ToxicMap(width, height, predisitination, isCrazy, hellExists, reproductionE, plantE, initialE, NumberOfGenes);
             else map = new EquatorMap(width, height, predisitination, isCrazy, hellExists, reproductionE, plantE, initialE, NumberOfGenes);
 
+            buttons = new AppButtons();
+            Thread thread = new Thread(engine);
+            thread.start();
+            Button exitButton = buttons.exitButton;
+//            exitButton.setOnAction(event1 -> {
+//                ((Stage) (((Button) event1.getSource()).getScene().getWindow())).close();
+//                thread.stop();
+//                (((Button) event1.getSource())).setEffect(new DropShadow());
+//            });
+
             engine = new SimulationEngine(map, startAnimalsNum, startPlantsNum, dailyGrown, this);
 
             statisticsReport = new StatisticsReport(map);
 
-            Thread thread = new Thread(engine);
-            thread.start();
-            buttons = new AppButtons(thread);
+
+
+
+
         });
 
         scene = new Scene(border, 2000,1000);
@@ -160,7 +174,7 @@ public class App extends Application {
         statisticsReport.updateStatistics(map);
         engine.run();
         drawMap();
-        scene.setRoot(mainbox);
+        scene.setRoot(mainBox);
         stage.setScene(scene);
         stage.show();
     }
@@ -213,11 +227,29 @@ public class App extends Application {
 
         boxWithButtons = buttons.getBox();
 
+
+//        Button exitButton = buttons.exitButton;
+
+//        public void handleCloseButtonAction(ActionEvent event) {
+//            Stage stage = (Stage) exitButton.getScene().getWindow();
+//            stage.close();
+//        }
+//        EventHandler<ActionEvent> event1 = event2 -> {
+//            ((Stage) (((Button) event2.getSource()).getScene().getWindow())).close();
+//            super.stop();
+//            Platform.exit();
+//            System.exit(0);
+//        };
+//
+//        exitButton.setOnAction(event1);
+
+
+
         VBox StatsButtons = new VBox(stats, boxWithButtons);
-        mainbox = new HBox(gridPane, charts, stats, StatsButtons);
+        mainBox = new HBox(gridPane, charts, stats, StatsButtons);
         HBox.setMargin(stats, new Insets(0,0,0,50));
-        mainbox.setAlignment(Pos.CENTER);
-        mainbox.setStyle("-fx-background-color: #eea29a;");
+        mainBox.setAlignment(Pos.CENTER);
+        mainBox.setStyle("-fx-background-color: #eea29a;");
     }
 
     public void draw() throws FileNotFoundException{
