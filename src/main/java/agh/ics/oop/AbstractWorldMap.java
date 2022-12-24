@@ -198,7 +198,7 @@ abstract public class AbstractWorldMap implements IPositionChangeObserver{
                 toUpdate.add(grasses.get(position));
             }
         }
-        for (Grass element : toUpdate) { // to avoid ConcurrentModification
+        for (Grass element : toUpdate) { // ConcurrentModification
             fields1.get(element.getPosition()).decrementElementsStatus();
             removeGrass(element);
             plantsNumber -= 1;
