@@ -14,18 +14,18 @@ public class EquatorMap extends AbstractWorldMap {
             super(width, height, predistination, isCrazyMode, hellExistsMode, reproductionE, plantE, initialE, genesNumber);
             classify();
         }
-
-    public void plantGrass() {// wariant "zalesione równiki
+    @Override
+    public void plantGrass() {
         int ans = (int) (Math.random() * 10);
         switch (ans) {
-            case 0, 1 -> this.plantGrassRandomly(); // 20% szans że wyrośnie w innym miejscu
-            default -> this.plantGrassAtEquator(); // 80% szans że wyrośnie w preferowanym miejscu
+            case 0, 1 -> this.plantGrassAt(this.notPreferForEquator, this.preferForEquator); // 20% szans że wyrośnie w innym miejscu
+            default -> this.plantGrassAt(this.preferForEquator, this.notPreferForEquator); // 80% szans że wyrośnie w preferowanym miejscu
         }
     }
 
     public void classify() { // podział pól na preferowane i niepreferowane
-        // wyznaczanie odległości każdego pola od równika, TreeMap żeby mieć posortowane po kluczu
-        // klucz to odległość, 20% najbliższych od równika to preferowane a reszta nie
+        // 1. wyznaczanie odległości każdego pola od równika, TreeMap żeby mieć posortowane po kluczu
+        // 2.  klucz to odległość, 20% najbliższych od równika to pola preferowane
         TreeMap<Integer, LinkedList<Vector2d>> Field = new TreeMap<>();
         int middle = this.height / 2;
         for (int i = low.x; i <= high.x; i++) {
@@ -54,32 +54,16 @@ public class EquatorMap extends AbstractWorldMap {
         }
     }
 
-    // sadzenie trawy w miejscu preferowanym - równik
-    public void plantGrassAtEquator() {
-        boolean planted = false;
-        Collections.shuffle(this.preferForEquator);
-        for (Vector2d v: this.preferForEquator){
-            if (grassAt(v) == null){
-                new Grass(v, this);
-                planted = true;
-                break;
-            }
-        }
-        if (!planted) plantGrassRandomly(); // jesli nie uda się zasadzic bo np nie ma miejsc, to ostatecznie sadzimy gdzieś indziej
-    }
-
-
-    // sadzenie trawy w miejscu niepreferowanym
-    public void plantGrassRandomly() {
-        boolean planted = false;
-        Collections.shuffle(this.notPreferForEquator);
-        for (Vector2d v: this.notPreferForEquator){
+    public void plantGrassAt(ArrayList<Vector2d> firstOption, ArrayList<Vector2d> secondOption){
+        boolean planted = false; // sadzimy jeśli się da w wylosowanej kategorii,a jeśli nie to na polu drugiej kategorii
+        Collections.shuffle(firstOption);
+        for (Vector2d v: firstOption){
             if (grassAt(v) == null) {
                 new Grass(v, this);
                 planted = true;
                 break;
             }
         }
-        if (!planted) plantGrassAtEquator(); // jesli nie uda się zasadzic bo np nie ma miejsc, to ostatecznie sadzimy na rowniku
+        if (!planted) plantGrassAt(secondOption, firstOption);
     }
 }
