@@ -11,7 +11,7 @@ public class DeathStatusTest {
         ToxicMap map = new ToxicMap(5, 5, true,true,
                 true, 3, 4, 5,32);
         Animal animal1 = new Animal(map, new Vector2d(2,3));
-        Animal animal2 = new Animal(map, new Vector2d(1,3));
+        new Animal(map, new Vector2d(1,3));
         animal1.setEnergy(0);
         map.removeDead();
         map.freeFields();
@@ -22,7 +22,7 @@ public class DeathStatusTest {
 
         int cnt = 0;
         for (Vector2d position: map.animals.keySet()){
-            for (Animal animal: map.animals.get(position)) cnt +=1;
+            for (int i =0; i< map.animals.get(position).size(); i++) cnt +=1;
         }
         assertEquals(cnt, 1);
     }
@@ -61,7 +61,7 @@ public class DeathStatusTest {
             }
         }
 
-        Grass grass = new Grass(pos1, map);
+        new Grass(pos1, map);
         assertEquals(map.fields1.get(pos1).elements, 1);
         assertEquals(map.livingAnimals, 0);
         assertEquals(map.plantsNumber, 1);
@@ -73,7 +73,7 @@ public class DeathStatusTest {
 
         int cnt = 0;
         for (Vector2d position: map.animals.keySet()){
-            for (Animal animal: map.animals.get(position)) cnt +=1;
+            for (int i = 0; i < map.animals.get(position).size() ; i++) cnt +=1;
         }
         assertEquals(cnt, 0);
 

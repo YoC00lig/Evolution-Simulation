@@ -3,8 +3,6 @@ package agh.ics.oop.gui;
 import agh.ics.oop.*;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -36,7 +34,7 @@ public class App extends Application {
     HBox boxWithButtons;
     private StatisticsReport  statisticsReport;
 
-    HBox mainBox;
+    HBox mainbox;
 
     public static void main(String[] args) {
         launch(args);
@@ -87,15 +85,15 @@ public class App extends Application {
         listOfTextField.setSpacing(13);
 
         VBox listOfLabel = new VBox();
-        Label widthFieldLabel = new Label("map width: "); widthFieldLabel.setFont(new Font("Verdana", 14));
-        Label heightFieldLabel = new Label("map height: "); heightFieldLabel.setFont(new Font("Verdana", 14));
-        Label predistinationModeLabel = new Label("Predistination mode on?"); predistinationModeLabel.setFont(new Font("Verdana", 14));
-        Label toxicDeadModeLabel = new Label("Toxic-dead mode on?"); toxicDeadModeLabel.setFont(new Font("Verdana", 14));
-        Label isCrazyModeLabel = new Label("Is-crazy mode on?"); isCrazyModeLabel.setFont(new Font("Verdana", 14));
-        Label hellExistsModeLabel = new Label("hell's portal mode on?"); hellExistsModeLabel.setFont(new Font("Verdana", 14));
+        Label widthFieldLabel = new Label("Width: "); widthFieldLabel.setFont(new Font("Verdana", 14));
+        Label heightFieldLabel = new Label("Height: "); heightFieldLabel.setFont(new Font("Verdana", 14));
+        Label predistinationModeLabel = new Label("Predistination mode?"); predistinationModeLabel.setFont(new Font("Verdana", 14));
+        Label toxicDeadModeLabel = new Label("Toxic-dead mode?"); toxicDeadModeLabel.setFont(new Font("Verdana", 14));
+        Label isCrazyModeLabel = new Label("Is-crazy mode?"); isCrazyModeLabel.setFont(new Font("Verdana", 14));
+        Label hellExistsModeLabel = new Label("hell's portal mode?"); hellExistsModeLabel.setFont(new Font("Verdana", 14));
         Label reproductionEnergyLabel = new Label("reproduction energy: "); reproductionEnergyLabel.setFont(new Font("Verdana", 14));
         Label plantEnergyLabel = new Label("plant energy: "); plantEnergyLabel.setFont(new Font("Verdana", 14));
-        Label initialEnergyLabel = new Label("initial energy for animal: "); initialEnergyLabel.setFont(new Font("Verdana", 14));
+        Label initialEnergyLabel = new Label("initial animal energy: "); initialEnergyLabel.setFont(new Font("Verdana", 14));
         Label startAnimalsNumberLabel = new Label("start number of animals: "); startAnimalsNumberLabel.setFont(new Font("Verdana", 14));
         Label startPlantsNumberLabel = new Label("start number of plants: "); startPlantsNumberLabel.setFont(new Font("Verdana", 14));
         Label dailyGrownGrassNumberLabel = new Label("number of plants per-day:       "); dailyGrownGrassNumberLabel.setFont(new Font("Verdana", 14));
@@ -122,6 +120,8 @@ public class App extends Application {
 
         confirmButton.setOnAction( event -> {
 
+            confirmButton.setEffect(new DropShadow());
+
             int width = Integer.parseInt(widthField.getText());
             int height = Integer.parseInt(heightField.getText());
             boolean predisitination = Boolean.parseBoolean(predistinationMode.getText());
@@ -140,24 +140,14 @@ public class App extends Application {
             if (toxicDead) map = new ToxicMap(width, height, predisitination, isCrazy, hellExists, reproductionE, plantE, initialE, NumberOfGenes);
             else map = new EquatorMap(width, height, predisitination, isCrazy, hellExists, reproductionE, plantE, initialE, NumberOfGenes);
 
-            buttons = new AppButtons();
-            Thread thread = new Thread(engine);
-            thread.start();
-            Button exitButton = buttons.exitButton;
-//            exitButton.setOnAction(event1 -> {
-//                ((Stage) (((Button) event1.getSource()).getScene().getWindow())).close();
-//                thread.stop();
-//                (((Button) event1.getSource())).setEffect(new DropShadow());
-//            });
-
             engine = new SimulationEngine(map, startAnimalsNum, startPlantsNum, dailyGrown, this);
 
             statisticsReport = new StatisticsReport(map);
+            buttons = new AppButtons(engine);
+            boxWithButtons = buttons.getBox();
 
-
-
-
-
+            Thread thread = new Thread(engine);
+            thread.start();
         });
 
         scene = new Scene(border, 2000,1000);
@@ -174,7 +164,7 @@ public class App extends Application {
         statisticsReport.updateStatistics(map);
         engine.run();
         drawMap();
-        scene.setRoot(mainBox);
+        scene.setRoot(mainbox);
         stage.setScene(scene);
         stage.show();
     }
@@ -225,31 +215,11 @@ public class App extends Application {
         charts.setAlignment(Pos.CENTER);
         VBox stats = statisticsReport.getStatistics();
 
-        boxWithButtons = buttons.getBox();
-
-
-//        Button exitButton = buttons.exitButton;
-
-//        public void handleCloseButtonAction(ActionEvent event) {
-//            Stage stage = (Stage) exitButton.getScene().getWindow();
-//            stage.close();
-//        }
-//        EventHandler<ActionEvent> event1 = event2 -> {
-//            ((Stage) (((Button) event2.getSource()).getScene().getWindow())).close();
-//            super.stop();
-//            Platform.exit();
-//            System.exit(0);
-//        };
-//
-//        exitButton.setOnAction(event1);
-
-
-
         VBox StatsButtons = new VBox(stats, boxWithButtons);
-        mainBox = new HBox(gridPane, charts, stats, StatsButtons);
+        mainbox = new HBox(gridPane, charts, stats, StatsButtons);
         HBox.setMargin(stats, new Insets(0,0,0,50));
-        mainBox.setAlignment(Pos.CENTER);
-        mainBox.setStyle("-fx-background-color: #eea29a;");
+        mainbox.setAlignment(Pos.CENTER);
+        mainbox.setStyle("-fx-background-color: #eea29a;");
     }
 
     public void draw() throws FileNotFoundException{

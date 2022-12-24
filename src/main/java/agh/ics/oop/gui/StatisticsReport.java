@@ -13,13 +13,13 @@ public class StatisticsReport {
 
     public StatisticsReport(AbstractWorldMap map) {
         Statistics stats = new Statistics(map);
-        animalsNum = new Label("Number of animals on the map: " + map.listOfAnimals.size());
-        plantsNum = new Label("Number of plants on the map: " + map.grasses.size());
-        freeFields = new Label("Number of free fields on the map: " + map.freeFields());
-        avgLifeLength = new Label("Average lifespan of dead animals: " + stats.averageLifeLength());
+        animalsNum = new Label("Animals number: " + map.listOfAnimals.size());
+        plantsNum = new Label("Plants number: " + map.grasses.size());
+        freeFields = new Label("Empty fields: " + map.freeFields());
+        avgLifeLength = new Label("Average lifespan: " + stats.averageLifeLength());
         avgEnergy = new Label("Average energy: " + stats.averageEnergy());
-        DeadsNumber = new Label("Number of dead animals: " + stats.getDeadAnimals());
-        DominantGenotype = new Label("Dominant Genotype: " + stats.findDominantGenotype());
+        DeadsNumber = new Label("Dead animals: " + stats.getDeadAnimals());
+        DominantGenotype = new Label("Dominant genotype: " + stats.findDominantGenotype());
 
         setFonts(animalsNum, plantsNum,freeFields,avgLifeLength,avgEnergy, DeadsNumber, DominantGenotype);
 
@@ -45,13 +45,13 @@ public class StatisticsReport {
     }
     public void updateStatistics(AbstractWorldMap map){
         Statistics stats = new Statistics(map);
-        animalsNum = new Label("Number of animals on the map: " + map.listOfAnimals.size());
-        plantsNum = new Label("Number of plants on the map: " + map.grasses.size());
-        freeFields = new Label("Number of free fields on the map: " + map.freeFields());
-        avgLifeLength = new Label("Average lifespan of dead animals: " + stats.averageLifeLength());
+        animalsNum = new Label("Animals number: " + map.listOfAnimals.size());
+        plantsNum = new Label("Plants number: " + map.grasses.size());
+        freeFields = new Label("Empty fields: " + map.freeFields());
+        avgLifeLength = new Label("Average lifespan: " + stats.averageLifeLength());
         avgEnergy = new Label("Average energy: " + stats.averageEnergy());
-        DeadsNumber = new Label("Number of dead animals: " + stats.getDeadAnimals());
-        DominantGenotype = new Label("Dominant Genotype: " + stats.findDominantGenotype());
+        DeadsNumber = new Label("Dead animals: " + stats.getDeadAnimals());
+        DominantGenotype = new Label("Dominant genotype: " + stats.findDominantGenotype());
 
 
         setFonts(animalsNum, plantsNum,freeFields,avgLifeLength,avgEnergy, DeadsNumber, DominantGenotype);
