@@ -22,8 +22,10 @@ public class App extends Application {
     SimulationEngine engine;
     private GridPane gridPane = new GridPane();
     private final BorderPane border = new BorderPane();
-    Stage stage;
+    Stage startStage;
     Scene scene;
+    Scene scene2;
+    Scene startScene;
     final int size = 25; // rozmiar mapy
     private final LineCharts animalsNumber = new LineCharts("Animals number");
     private final LineCharts plantsNumber = new LineCharts("Plants number");
@@ -42,7 +44,15 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        stage = primaryStage;
+        initStartScene();
+        scene2 = new Scene(border, 2000,1000);
+        primaryStage.setScene(scene2);
+        primaryStage.show();
+    }
+
+
+    public void initStartScene() {
+
         Label title = new Label("Input your own parameters: ");
         title.setStyle("-fx-font-weight: bold");
         title.setFont(new Font(40));
@@ -141,18 +151,14 @@ public class App extends Application {
             else map = new EquatorMap(width, height, predisitination, isCrazy, hellExists, reproductionE, plantE, initialE, NumberOfGenes);
 
             engine = new SimulationEngine(map, startAnimalsNum, startPlantsNum, dailyGrown, this);
-
+            this.startStage.setScene(scene);
             statisticsReport = new StatisticsReport(map);
-            buttons = new AppButtons(engine);
+            buttons = new AppButtons(engine, this);
             boxWithButtons = buttons.getBox();
 
             Thread thread = new Thread(engine);
             thread.start();
         });
-
-        scene = new Scene(border, 2000,1000);
-        primaryStage.setScene(scene);
-        primaryStage.show();
     }
 
     public void drawGame() throws FileNotFoundException{
@@ -164,9 +170,14 @@ public class App extends Application {
         statisticsReport.updateStatistics(map);
         engine.run();
         drawMap();
-        scene.setRoot(mainbox);
+        scene = new Scene(mainbox, 2000,1000);
+//        scene.setRoot(mainbox);
         stage.setScene(scene);
         stage.show();
+    }
+
+    public void initNewWindow() {
+
     }
 
     public void drawMap() {

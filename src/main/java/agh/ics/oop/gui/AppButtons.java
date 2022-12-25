@@ -15,7 +15,7 @@ public class AppButtons {
     Button exitButton;
     Button stopButton;
 
-    public AppButtons(SimulationEngine engine) {
+    public AppButtons(SimulationEngine engine, App app) {
         exitButton = new Button("EXIT");
         stopButton = new Button("STOP");
         this.box = new HBox(exitButton, stopButton);
@@ -43,7 +43,9 @@ public class AppButtons {
         exitButton.addEventHandler(MouseEvent.MOUSE_EXITED,
                 e -> {
                     exitButton.setEffect(new DropShadow());
-                    ((Stage) (((Button) e.getSource()).getScene().getWindow())).close();
+//                    ((Stage) (((Button) e.getSource()).getScene().getWindow())).close();
+                    Stage stage = ((Stage) (((Button) e.getSource()).getScene().getWindow()));
+                    stage.setScene(app.getScene2());
                     System.exit(0);
                 });
 
