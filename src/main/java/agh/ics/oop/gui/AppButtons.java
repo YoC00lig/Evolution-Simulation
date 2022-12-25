@@ -45,9 +45,11 @@ public class AppButtons {
                     exitButton.setEffect(new DropShadow());
 //                    ((Stage) (((Button) e.getSource()).getScene().getWindow())).close();
                     Stage stage = ((Stage) (((Button) e.getSource()).getScene().getWindow()));
-                    stage.setScene(app.getScene2());
-                    System.exit(0);
+//                    stage.setScene(app.getScene2());
+//                    System.exit(0);
+                    stage.close();
                 });
+
 
         stopButton.addEventHandler(MouseEvent.MOUSE_ENTERED, eventHandler);
     }

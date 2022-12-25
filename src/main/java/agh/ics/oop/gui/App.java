@@ -23,6 +23,7 @@ public class App extends Application {
     private GridPane gridPane = new GridPane();
     private final BorderPane border = new BorderPane();
     Stage startStage;
+    Stage newWindow;
     Scene scene;
     Scene scene2;
     Scene startScene;
@@ -42,11 +43,15 @@ public class App extends Application {
         launch(args);
     }
 
+    public Scene getScene2() {
+        return scene2;
+    }
+
     @Override
     public void start(Stage primaryStage) {
         initStartScene();
-        scene2 = new Scene(border, 2000,1000);
-        primaryStage.setScene(scene2);
+        scene = new Scene(border, 2000,1000);
+        primaryStage.setScene(scene);
         primaryStage.show();
     }
 
@@ -151,7 +156,8 @@ public class App extends Application {
             else map = new EquatorMap(width, height, predisitination, isCrazy, hellExists, reproductionE, plantE, initialE, NumberOfGenes);
 
             engine = new SimulationEngine(map, startAnimalsNum, startPlantsNum, dailyGrown, this);
-            this.startStage.setScene(scene);
+            newWindow = new Stage();
+            newWindow.setScene(scene2);
             statisticsReport = new StatisticsReport(map);
             buttons = new AppButtons(engine, this);
             boxWithButtons = buttons.getBox();
@@ -169,11 +175,13 @@ public class App extends Application {
         avgLifeLength.updateEnergy(map);
         statisticsReport.updateStatistics(map);
         engine.run();
+
+
         drawMap();
-        scene = new Scene(mainbox, 2000,1000);
+        scene2 = new Scene(mainbox, 2000,1000);
 //        scene.setRoot(mainbox);
-        stage.setScene(scene);
-        stage.show();
+        newWindow.setScene(scene2);
+        newWindow.show();
     }
 
     public void initNewWindow() {
