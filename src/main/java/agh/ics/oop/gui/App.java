@@ -161,20 +161,30 @@ public class App extends Application {
             statisticsReport = new StatisticsReport(map);
             buttons = new AppButtons(engine, this);
             boxWithButtons = buttons.getBox();
-
             Thread thread = new Thread(engine);
-            thread.start();
+            try {
+
+                drawGame(thread);
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+//            Thread thread = new Thread(engine);
+//            engine.activate();
+//            thread.start();
         });
     }
 
-    public void drawGame() throws FileNotFoundException{
+    public void drawGame(Thread thread) throws FileNotFoundException{
         animalsNumber.updateAnimalsNumber(map);
         plantsNumber.updatePlantsNumber(map);
         freeFields.updateFreeFields(map);
         avgEnergy.updateEnergy(map);
         avgLifeLength.updateEnergy(map);
         statisticsReport.updateStatistics(map);
-        engine.run();
+//        engine.run();
+
+        engine.activate();
+        thread.start();
 
 
         drawMap();
@@ -189,6 +199,7 @@ public class App extends Application {
     }
 
     public void drawMap() {
+        System.out.println("dziala3");
         gridPane.getChildren().clear();
         gridPane = new GridPane();
         Label label = new Label("");
@@ -244,6 +255,7 @@ public class App extends Application {
     public void draw() throws FileNotFoundException{
         Platform.runLater(() -> {
             try {
+                System.out.println("dziala2");
                 drawGame();
             } catch (FileNotFoundException e) {
                 e.printStackTrace();

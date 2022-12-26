@@ -43,7 +43,8 @@ public class SimulationEngine implements IEngine, Runnable{
         if (this.isActive){
             if (map.listOfAnimals.size()==0) {
                 System.out.println("(SimulationEngine-run) Wszystkie zwierzątka zmarły. Ilość dni: " + map.day);
-                System.exit(0);
+                throw new RuntimeException();
+//                System.exit(0);
             }
             try {
                 Thread.sleep(this.moveDelay);
@@ -60,6 +61,7 @@ public class SimulationEngine implements IEngine, Runnable{
 
         }
         try {
+            System.out.println("dziala");
             application.draw();
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
