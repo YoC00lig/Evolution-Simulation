@@ -16,23 +16,22 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
+import java.util.HashMap;
 
 public class App extends Application {
     private AbstractWorldMap map;
-    SimulationEngine engine;
-    private GridPane gridPane = new GridPane();
+//    private GridPane gridPane = new GridPane();
+
+//    private HashMap<Thread, Stage>
     private final BorderPane border = new BorderPane();
-    Stage startStage;
-    Stage newWindow;
+
     Scene scene;
-    Scene scene2;
-    Scene startScene;
     final int size = 25; // rozmiar mapy
-    private final LineCharts animalsNumber = new LineCharts("Animals number");
-    private final LineCharts plantsNumber = new LineCharts("Plants number");
-    private final LineCharts avgEnergy = new LineCharts("Average animal energy");
-    private final LineCharts avgLifeLength = new LineCharts("Average life length");
-    private final LineCharts freeFields = new LineCharts("Free fields on the map");
+    private final LineCharts animalsNumber = new LineCharts("Animals number", "Animals");
+    private final LineCharts plantsNumber = new LineCharts("Plants number", "Plants");
+    private final LineCharts avgEnergy = new LineCharts("Average animal energy", "Energy");
+    private final LineCharts avgLifeLength = new LineCharts("Average life length", "Life length [days]");
+    private final LineCharts freeFields = new LineCharts("Free fields on the map", "Free fields");
     AppButtons buttons;
     HBox boxWithButtons;
     private StatisticsReport  statisticsReport;
@@ -43,9 +42,7 @@ public class App extends Application {
         launch(args);
     }
 
-    public Scene getScene2() {
-        return scene2;
-    }
+
 
     @Override
     public void start(Stage primaryStage) {
@@ -154,51 +151,60 @@ public class App extends Application {
 
             if (toxicDead) map = new ToxicMap(width, height, predisitination, isCrazy, hellExists, reproductionE, plantE, initialE, NumberOfGenes);
             else map = new EquatorMap(width, height, predisitination, isCrazy, hellExists, reproductionE, plantE, initialE, NumberOfGenes);
+            SimulationEngine engine = new SimulationEngine(map, startAnimalsNum, startPlantsNum, dailyGrown, this);
 
-            engine = new SimulationEngine(map, startAnimalsNum, startPlantsNum, dailyGrown, this);
-            newWindow = new Stage();
-            newWindow.setScene(scene2);
             statisticsReport = new StatisticsReport(map);
             buttons = new AppButtons(engine, this);
             boxWithButtons = buttons.getBox();
             Thread thread = new Thread(engine);
-            try {
+//            try {
+//
+//                drawGame(thread);
+//            } catch (FileNotFoundException e) {
+//                throw new RuntimeException(e);
+//            }
+//            Thread thread = new Thread(engine);
 
-                drawGame(thread);
-            } catch (FileNotFoundException e) {
+
+//            engine.activate();
+            thread.start();
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-//            Thread thread = new Thread(engine);
-//            engine.activate();
 //            thread.start();
         });
     }
 
-    public void drawGame(Thread thread) throws FileNotFoundException{
-        animalsNumber.updateAnimalsNumber(map);
-        plantsNumber.updatePlantsNumber(map);
-        freeFields.updateFreeFields(map);
-        avgEnergy.updateEnergy(map);
-        avgLifeLength.updateEnergy(map);
-        statisticsReport.updateStatistics(map);
+    public void updateCharts() {
+        animalsNumber.handler(1, map);
+        plantsNumber.handler(2, map);
+        freeFields.handler(3, map);
+        avgEnergy.handler(4, map);
+        avgLifeLength.handler(5, map);
+    }
+
+    public void drawGame() throws FileNotFoundException{
+        updateCharts();
+        statisticsReport.updateStatistics();
 //        engine.run();
 
-        engine.activate();
-        thread.start();
+//        engine.activate();
+//        thread.start();
+        Stage newWindow = new Stage();
 
-
-        drawMap();
-        scene2 = new Scene(mainbox, 2000,1000);
+        Scene scene2 = new Scene(mainbox, 2000,1000);
+        newWindow.setScene(scene2);
+//        drawMap();
 //        scene.setRoot(mainbox);
         newWindow.setScene(scene2);
         newWindow.show();
     }
 
-    public void initNewWindow() {
 
-    }
 
-    public void drawMap() {
+    public void drawMap(GridPane gridPane) {
         System.out.println("dziala3");
         gridPane.getChildren().clear();
         gridPane = new GridPane();
@@ -252,15 +258,16 @@ public class App extends Application {
         mainbox.setStyle("-fx-background-color: #eea29a;");
     }
 
-    public void draw() throws FileNotFoundException{
-        Platform.runLater(() -> {
-            try {
-                System.out.println("dziala2");
-                drawGame();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        });
-    }
+//    public void draw() throws FileNotFoundException{
+//        Platform.runLater(() -> {
+//            try {
+//                System.out.println("dziala2");
+//                drawGame();
+//            } catch (FileNotFoundException e) {
+//                e.printStackTrace();
+//                throw new RuntimeException(e);
+//            }
+//        });
+//    }
 
 }
