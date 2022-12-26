@@ -18,7 +18,6 @@ public class SimulationEngine implements IEngine, Runnable{
 
     public SimulationEngine(AbstractWorldMap map, int animalsNumber, int grassNumber, int dailyGrassNumber, App app){
         this.map = map;
-        this.stats = new Statistics(map);
         this.startAnimalsNumber = animalsNumber;
         this.startGrassnumber = grassNumber;
         this.dailyGrowersNumber = dailyGrassNumber;
@@ -35,6 +34,7 @@ public class SimulationEngine implements IEngine, Runnable{
         for (int i = 0; i < grassNumber; i++) {
             map.plantGrass();
         }
+        this.stats = new Statistics(map);
     }
 
 

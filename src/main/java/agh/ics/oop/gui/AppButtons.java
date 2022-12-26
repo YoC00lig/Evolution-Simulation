@@ -33,7 +33,6 @@ public class AppButtons {
                 stopButton.setText("STOP");
                 engine.activate();
             }
-            stopButton.setEffect(null);
         };
 
         box.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);

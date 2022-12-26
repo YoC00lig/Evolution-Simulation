@@ -25,11 +25,11 @@ public class App extends Application {
     Stage stage;
     Scene scene;
     final int size = 25; // rozmiar mapy
-    private final LineCharts animalsNumber = new LineCharts("Animals number");
-    private final LineCharts plantsNumber = new LineCharts("Plants number");
-    private final LineCharts avgEnergy = new LineCharts("Average animal energy");
-    private final LineCharts avgLifeLength = new LineCharts("Average life length");
-    private final LineCharts freeFields = new LineCharts("Free fields on the map");
+    private final LineCharts animalsNumber = new LineCharts("Animals number", "Animals");
+    private final LineCharts plantsNumber = new LineCharts("Plants number", "Plants");
+    private final LineCharts avgEnergy = new LineCharts("Average animal energy", "Energy");
+    private final LineCharts avgLifeLength = new LineCharts("Average life length", "Life length [days]");
+    private final LineCharts freeFields = new LineCharts("Free fields on the map", "Free fields");
     AppButtons buttons;
     HBox boxWithButtons;
     private StatisticsReport  statisticsReport;
@@ -155,13 +155,17 @@ public class App extends Application {
         primaryStage.show();
     }
 
+    public void updateCharts() {
+        animalsNumber.handler(1, map);
+        plantsNumber.handler(2, map);
+        freeFields.handler(3, map);
+        avgEnergy.handler(4, map);
+        avgLifeLength.handler(5, map);
+    }
+
     public void drawGame() throws FileNotFoundException{
-        animalsNumber.updateAnimalsNumber(map);
-        plantsNumber.updatePlantsNumber(map);
-        freeFields.updateFreeFields(map);
-        avgEnergy.updateEnergy(map);
-        avgLifeLength.updateEnergy(map);
-        statisticsReport.updateStatistics(map);
+        updateCharts();
+        statisticsReport.updateStatistics();
         engine.run();
         drawMap();
         scene.setRoot(mainbox);
