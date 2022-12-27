@@ -15,7 +15,7 @@ public class AppButtons {
     Button exitButton;
     Button stopButton;
 
-    public AppButtons(SimulationEngine engine, App app) {
+    public AppButtons(SimulationEngine engine) {
         exitButton = new Button("EXIT");
         stopButton = new Button("STOP");
         this.box = new HBox(exitButton, stopButton);
