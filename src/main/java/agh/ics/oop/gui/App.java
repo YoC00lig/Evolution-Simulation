@@ -14,6 +14,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class App extends Application {
@@ -21,6 +22,8 @@ public class App extends Application {
     private final BorderPane border = new BorderPane();
 
     private List<EvolutionWindow> evolutions = new ArrayList<>();
+
+    List<Thread> threads = new LinkedList<>();
     Scene scene;
     final int size = 25; // rozmiar mapy
     private final LineCharts animalsNumber = new LineCharts("Animals number", "Animals");
@@ -179,6 +182,7 @@ public class App extends Application {
             System.out.println("dupa1");
 
             evolutions.add(newSimulation);
+            threads.add(newSimulation.getThread());
 
         });
         playButton.setOnAction(event -> {
@@ -186,14 +190,23 @@ public class App extends Application {
             System.out.println("dupa3");
             playButton.setEffect(new DropShadow());
 
-            for (EvolutionWindow evolution : evolutions) {
-                evolution.getThread().start();
+            threads.forEach(Thread::start);
+            for (Thread thread : threads) {
                 try {
-                    evolution.getThread().join();
+                    thread.join();
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
             }
+//            for (EvolutionWindow evolution : evolutions) {
+//                evolution.getThread().start();
+//                try {
+//                    evolution.getThread().join();
+//                } catch (InterruptedException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            }
+
         });
     }
 }
