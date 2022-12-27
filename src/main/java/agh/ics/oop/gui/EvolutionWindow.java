@@ -21,21 +21,23 @@ import java.io.FileNotFoundException;
 
 public class EvolutionWindow {
     private AbstractWorldMap map;
-    SimulationEngine engine;
+    private SimulationEngine engine;
     private GridPane gridPane = new GridPane();
-    Stage stage;
-    Scene scene;
+    private Stage stage;
+    private Scene scene;
     final int size = 25; // rozmiar mapy
     private final LineCharts animalsNumber = new LineCharts("Animals number", "Animals");
     private final LineCharts plantsNumber = new LineCharts("Plants number", "Plants");
     private final LineCharts avgEnergy = new LineCharts("Average animal energy", "Energy");
     private final LineCharts avgLifeLength = new LineCharts("Average life length", "Life length [days]");
     private final LineCharts freeFields = new LineCharts("Free fields on the map", "Free fields");
-    AppButtons buttons;
-    HBox boxWithButtons;
+    private AppButtons buttons;
+    private HBox boxWithButtons;
     private StatisticsReport  statisticsReport;
 
-    HBox mainbox;
+    private HBox mainbox;
+
+    private Thread thread;
 
     public EvolutionWindow(AbstractWorldMap map, Stage stage, int startAnimalsNum, int startPlantsNum, int dailyGrown) {
         this.map = map;
@@ -44,7 +46,7 @@ public class EvolutionWindow {
         this.buttons = new AppButtons(engine);
         this.boxWithButtons = buttons.getBox();
         this.statisticsReport = new StatisticsReport(map);
-
+        this.thread = new Thread(engine);
     }
 
     public void updateCharts() {
@@ -118,5 +120,9 @@ public class EvolutionWindow {
         HBox.setMargin(stats, new Insets(0,0,0,50));
         mainbox.setAlignment(Pos.CENTER);
         mainbox.setStyle("-fx-background-color: #eea29a;");
+    }
+
+    public Thread getThread() {
+        return thread;
     }
 }

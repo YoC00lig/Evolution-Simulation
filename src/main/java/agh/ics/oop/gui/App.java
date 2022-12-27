@@ -13,10 +13,14 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class App extends Application {
     private AbstractWorldMap map;
     private final BorderPane border = new BorderPane();
 
+    private List<EvolutionWindow> evolutions = new ArrayList<>();
     Scene scene;
     final int size = 25; // rozmiar mapy
     private final LineCharts animalsNumber = new LineCharts("Animals number", "Animals");
@@ -126,9 +130,12 @@ public class App extends Application {
         Button confirmButton = new Button("CONFIRM");
         confirmButton.setStyle("-fx-background-color: #ff6666");
 
+        Button playButton = new Button("PLAY");
+        playButton.setStyle("-fx-background-color: #ff6666");
+
         listOfLabel.getChildren().addAll(widthFieldLabel, heightFieldLabel, predistinationModeLabel, toxicDeadModeLabel, isCrazyModeLabel,
                 hellExistsModeLabel, reproductionEnergyLabel, plantEnergyLabel, initialEnergyLabel, startAnimalsNumberLabel,
-                startPlantsNumberLabel, dailyGrownGrassNumberLabel, numberOfGenesLabel, confirmButton);
+                startPlantsNumberLabel, dailyGrownGrassNumberLabel, numberOfGenesLabel, confirmButton, playButton);
 
         listOfLabel.setSpacing(20);
 
@@ -170,7 +177,21 @@ public class App extends Application {
 
             EvolutionWindow newSimulation = new EvolutionWindow(map, newStage,startAnimalsNum,  startPlantsNum, dailyGrown);
 
+            evolutions.add(newSimulation);
 
+        });
+        playButton.setOnAction(event -> {
+
+            playButton.setEffect(new DropShadow());
+
+            for (EvolutionWindow evolution : evolutions) {
+                evolution.getThread().start();
+                try {
+                    evolution.getThread().join();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
         });
     }
 }
