@@ -37,9 +37,9 @@ public class EvolutionWindow {
 
     HBox mainbox;
 
-    public EvolutionWindow(AbstractWorldMap map, Stage stage, SimulationEngine engine) {
+    public EvolutionWindow(AbstractWorldMap map, Stage stage, int startAnimalsNum, int startPlantsNum, int dailyGrown) {
         this.map = map;
-        this.engine = engine;
+        this.engine = engine = new SimulationEngine(map, startAnimalsNum, startPlantsNum, dailyGrown, this);
         this.stage = stage;
         this.buttons = new AppButtons(engine);
         this.boxWithButtons = buttons.getBox();

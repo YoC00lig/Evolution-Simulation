@@ -165,7 +165,10 @@ public class App extends Application {
                 map = new ToxicMap(width, height, predisitination, isCrazy, hellExists, reproductionE, plantE, initialE, NumberOfGenes);
             else
                 map = new EquatorMap(width, height, predisitination, isCrazy, hellExists, reproductionE, plantE, initialE, NumberOfGenes);
-            SimulationEngine engine = new SimulationEngine(map, startAnimalsNum, startPlantsNum, dailyGrown, this);
+
+            Stage newStage = new Stage();
+
+            EvolutionWindow newSimulation = new EvolutionWindow(map, newStage,startAnimalsNum,  startPlantsNum, dailyGrown);
 
 
         });

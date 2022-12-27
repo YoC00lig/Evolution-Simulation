@@ -1,6 +1,7 @@
 package agh.ics.oop;
 
 import agh.ics.oop.gui.App;
+import agh.ics.oop.gui.EvolutionWindow;
 import javafx.application.Platform;
 
 import java.io.FileNotFoundException;
@@ -15,15 +16,15 @@ public class SimulationEngine implements IEngine, Runnable{
     private boolean isActive;
     private final int moveDelay = 10;
     public Statistics stats;
-    private final App application;
+    private final EvolutionWindow window;
 
-    public SimulationEngine(AbstractWorldMap map, int animalsNumber, int grassNumber, int dailyGrassNumber, App app){
+    public SimulationEngine(AbstractWorldMap map, int animalsNumber, int grassNumber, int dailyGrassNumber, EvolutionWindow window){
         this.map = map;
         this.stats = new Statistics(map);
         this.startAnimalsNumber = animalsNumber;
         this.startGrassnumber = grassNumber;
         this.dailyGrowersNumber = dailyGrassNumber;
-        this.application =  app;
+        this.window = window;
         this.isActive = true;
 
         for (int i = 0; i < startAnimalsNumber; i++){
@@ -74,7 +75,7 @@ public class SimulationEngine implements IEngine, Runnable{
             Platform.runLater(() -> {
                 try {
                     System.out.println("dziala2");
-                    application.drawGame();
+                    window.drawGame();
                 } catch (FileNotFoundException e) {
 //                    e.printStackTrace();
                     throw new RuntimeException(e);
