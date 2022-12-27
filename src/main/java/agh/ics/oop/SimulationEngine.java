@@ -40,10 +40,10 @@ public class SimulationEngine implements IEngine, Runnable{
     }
 
 
+
     @Override
     public void run() {
-        while (map.listOfAnimals.size()>=0) {
-            System.out.println("dupa6");
+        while (map.listOfAnimals.size()>0) {
             if (this.isActive) {
                 if (map.listOfAnimals.size() == 0) {
                     System.out.println("(SimulationEngine-run) Wszystkie zwierzątka zmarły. Ilość dni: " + map.day);
@@ -51,7 +51,7 @@ public class SimulationEngine implements IEngine, Runnable{
                     throw new RuntimeException();
 
                 }
-                System.out.println("dupa7");
+
                 map.removeDead();
                 map.moveAll();
                 map.eat();
@@ -59,15 +59,7 @@ public class SimulationEngine implements IEngine, Runnable{
                 for (int i = 0; i < dailyGrowersNumber; i++) map.plantGrass();
                 map.freeFields();
                 map.nextDay();
-
-
             }
-//            try {
-//                System.out.println("dziala");
-//                application.draw();
-//            } catch (FileNotFoundException e) {
-//                throw new RuntimeException(e);
-//            }
 
             try {
                 Thread.sleep(this.moveDelay);
@@ -84,12 +76,59 @@ public class SimulationEngine implements IEngine, Runnable{
                 }
             });
         }
-        if (map.listOfAnimals.size() == 0) {
-            System.out.println("(SimulationEngine-run) Wszystkie zwierzątka zmarły. Ilość dni: " + map.day);
-            throw new RuntimeException();
-//                System.exit(0);
-        }
+
     }
+
+//    @Override
+//    public void run() {
+//        while (map.listOfAnimals.size()>=0) {
+//            System.out.println("dupa6");
+//            if (this.isActive) {
+//                if (map.listOfAnimals.size() == 0) {
+//                    System.out.println("(SimulationEngine-run) Wszystkie zwierzątka zmarły. Ilość dni: " + map.day);
+//                    window.getStage().close();
+//                    throw new RuntimeException();
+//
+//                }
+//                System.out.println("dupa7");
+//                map.removeDead();
+//                map.moveAll();
+//                map.eat();
+//                map.reproduction();
+//                for (int i = 0; i < dailyGrowersNumber; i++) map.plantGrass();
+//                map.freeFields();
+//                map.nextDay();
+//
+//
+//            }
+////            try {
+////                System.out.println("dziala");
+////                application.draw();
+////            } catch (FileNotFoundException e) {
+////                throw new RuntimeException(e);
+////            }
+//
+//            try {
+//                Thread.sleep(this.moveDelay);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//            Platform.runLater(() -> {
+//                try {
+//                    System.out.println("dziala2");
+//                    window.drawGame();
+//                } catch (FileNotFoundException e) {
+////                    e.printStackTrace();
+//                    throw new RuntimeException(e);
+//                }
+//            });
+//        }
+//        if (map.listOfAnimals.size() == 0) {
+//            System.out.println("(SimulationEngine-run) Wszystkie zwierzątka zmarły. Ilość dni: " + map.day);
+//            throw new RuntimeException();
+////                System.exit(0);
+//        }
+//    }
 
     public void activate() {this.isActive = true;}
     public void deactivate() {this.isActive = false;}

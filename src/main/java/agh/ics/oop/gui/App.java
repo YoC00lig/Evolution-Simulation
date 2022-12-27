@@ -173,9 +173,8 @@ public class App extends Application {
             else
                 map = new EquatorMap(width, height, predisitination, isCrazy, hellExists, reproductionE, plantE, initialE, NumberOfGenes);
 
-            Stage newStage = new Stage();
 
-            EvolutionWindow newSimulation = new EvolutionWindow(map, newStage,startAnimalsNum,  startPlantsNum, dailyGrown);
+            EvolutionWindow newSimulation = new EvolutionWindow(map, startAnimalsNum,  startPlantsNum, dailyGrown);
 
             System.out.println("dupa1");
 

@@ -35,19 +35,21 @@ public class EvolutionWindow {
     private HBox boxWithButtons;
     private StatisticsReport  statisticsReport;
 
+        private int startAnimalsNum;
     private HBox mainbox;
 
     private Thread thread;
 
-    public EvolutionWindow(AbstractWorldMap map, Stage stage, int startAnimalsNum, int startPlantsNum, int dailyGrown) {
+    public EvolutionWindow(AbstractWorldMap map, int startAnimalsNum, int startPlantsNum, int dailyGrown) {
         this.map = map;
-        this.engine = engine = new SimulationEngine(map, startAnimalsNum, startPlantsNum, dailyGrown, this);
-        this.stage = stage;
+        this.engine = new SimulationEngine(map, startAnimalsNum, startPlantsNum, dailyGrown, this);
+        this.stage = new Stage();
         this.buttons = new AppButtons(engine);
         this.boxWithButtons = buttons.getBox();
         this.statisticsReport = new StatisticsReport(map);
         this.thread = new Thread(engine);
-        System.out.println("dupa2");
+        this.startAnimalsNum = startAnimalsNum;
+        System.out.println("dupa2" + Integer.toString(startAnimalsNum));
     }
 
     public void updateCharts() {
@@ -61,20 +63,20 @@ public class EvolutionWindow {
     public void drawGame() throws FileNotFoundException{
         updateCharts();
         statisticsReport.updateStatistics();
-
-//        scene = new Scene(mainbox, 2000,1000);
+        drawMap();
+        scene = new Scene(mainbox, 2000,1000);
         scene.setRoot(mainbox);
         stage.setScene(scene);
-        drawMap();
+
         stage.show();
-        System.out.println("dupa4");
+        System.out.println("dupa4" + Integer.toString(startAnimalsNum));
     }
 
 
 
     public void drawMap() {
-        System.out.println("dupa5");
-        System.out.println("dziala3");
+        System.out.println("dupa5"  + Integer.toString(startAnimalsNum));
+        System.out.println("dziala3"  + Integer.toString(startAnimalsNum));
         gridPane.getChildren().clear();
         gridPane = new GridPane();
         Label label = new Label("");
