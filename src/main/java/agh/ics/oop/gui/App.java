@@ -177,11 +177,14 @@ public class App extends Application {
 
             EvolutionWindow newSimulation = new EvolutionWindow(map, newStage,startAnimalsNum,  startPlantsNum, dailyGrown);
 
+            System.out.println("dupa1");
+
             evolutions.add(newSimulation);
 
         });
         playButton.setOnAction(event -> {
 
+            System.out.println("dupa3");
             playButton.setEffect(new DropShadow());
 
             for (EvolutionWindow evolution : evolutions) {

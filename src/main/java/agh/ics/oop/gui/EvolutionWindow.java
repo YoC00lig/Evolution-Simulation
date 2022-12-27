@@ -47,6 +47,7 @@ public class EvolutionWindow {
         this.boxWithButtons = buttons.getBox();
         this.statisticsReport = new StatisticsReport(map);
         this.thread = new Thread(engine);
+        System.out.println("dupa2");
     }
 
     public void updateCharts() {
@@ -60,15 +61,19 @@ public class EvolutionWindow {
     public void drawGame() throws FileNotFoundException{
         updateCharts();
         statisticsReport.updateStatistics();
-        drawMap();
-        scene = new Scene(mainbox, 2000,1000);
+
+//        scene = new Scene(mainbox, 2000,1000);
+        scene.setRoot(mainbox);
         stage.setScene(scene);
+        drawMap();
         stage.show();
+        System.out.println("dupa4");
     }
 
 
 
     public void drawMap() {
+        System.out.println("dupa5");
         System.out.println("dziala3");
         gridPane.getChildren().clear();
         gridPane = new GridPane();
@@ -124,5 +129,9 @@ public class EvolutionWindow {
 
     public Thread getThread() {
         return thread;
+    }
+
+    public Stage getStage() {
+        return stage;
     }
 }
