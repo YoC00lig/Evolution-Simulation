@@ -20,9 +20,10 @@ import java.io.FileNotFoundException;
 
 
 public class EvolutionWindow {
-    private AbstractWorldMap map;
+    private AbstractWorldMap mapa;
     private SimulationEngine engine;
     private GridPane gridPane = new GridPane();
+
     private Stage stage;
     private Scene scene;
     final int size = 25; // rozmiar mapy
@@ -30,7 +31,7 @@ public class EvolutionWindow {
     private final LineCharts plantsNumber = new LineCharts("Plants number", "Plants");
     private final LineCharts avgEnergy = new LineCharts("Average animal energy", "Energy");
     private final LineCharts avgLifeLength = new LineCharts("Average life length", "Life length [days]");
-    private final LineCharts freeFields = new LineCharts("Free fields on the map", "Free fields");
+    private final LineCharts freeFields = new LineCharts("Free fields on the mapa", "Free fields");
     private AppButtons buttons;
     private HBox boxWithButtons;
     private StatisticsReport  statisticsReport;
@@ -41,26 +42,29 @@ public class EvolutionWindow {
     private Thread thread;
 
     public EvolutionWindow(AbstractWorldMap map, int startAnimalsNum, int startPlantsNum, int dailyGrown) {
-        this.map = map;
-        this.engine = new SimulationEngine(map, startAnimalsNum, startPlantsNum, dailyGrown, this);
+        this.mapa = map;
+        System.out.println("map1 " + Integer.toString(mapa.listOfAnimals.size()));
+        this.engine = new SimulationEngine(mapa, startAnimalsNum, startPlantsNum, dailyGrown, this);
+        System.out.println("map2 " + Integer.toString(mapa.listOfAnimals.size()));
         this.stage = new Stage();
         this.buttons = new AppButtons(engine);
         this.boxWithButtons = buttons.getBox();
-        this.statisticsReport = new StatisticsReport(map);
+        this.statisticsReport = new StatisticsReport(mapa);
         this.thread = new Thread(engine);
         this.startAnimalsNum = startAnimalsNum;
         System.out.println("dupa2" + Integer.toString(startAnimalsNum));
     }
 
     public void updateCharts() {
-        animalsNumber.handler(1, map);
-        plantsNumber.handler(2, map);
-        freeFields.handler(3, map);
-        avgEnergy.handler(4, map);
-        avgLifeLength.handler(5, map);
+        animalsNumber.handler(1, mapa);
+        plantsNumber.handler(2, mapa);
+        freeFields.handler(3, mapa);
+        avgEnergy.handler(4, mapa);
+        avgLifeLength.handler(5, mapa);
     }
 
     public void drawGame() throws FileNotFoundException{
+        System.out.println("map3 " + Integer.toString(mapa.listOfAnimals.size()));
         updateCharts();
         statisticsReport.updateStatistics();
         drawMap();
@@ -75,6 +79,7 @@ public class EvolutionWindow {
 
 
     public void drawMap() {
+        System.out.println("map4 " + Integer.toString(mapa.listOfAnimals.size()));
         System.out.println("dupa5"  + Integer.toString(startAnimalsNum));
         System.out.println("dziala3"  + Integer.toString(startAnimalsNum));
         gridPane.getChildren().clear();
@@ -86,32 +91,38 @@ public class EvolutionWindow {
         gridPane.getColumnConstraints().add(new ColumnConstraints(size));
         GridPane.setHalignment(label, HPos.CENTER);
         gridPane.setGridLinesVisible(false);
-
-        for (int i = map.low.x; i <= map.high.x; i++){
+        System.out.println("dupa5"  + Integer.toString(startAnimalsNum));
+        System.out.println("dziala3"  + Integer.toString(startAnimalsNum));
+        for (int i = mapa.low.x; i <= mapa.high.x; i++){
             Label numberX = new Label("");
-            gridPane.add(numberX,  i - map.low.x + 1, 0);
+            gridPane.add(numberX,  i - mapa.low.x + 1, 0);
             gridPane.getColumnConstraints().add(new ColumnConstraints(size));
             GridPane.setHalignment(numberX, HPos.CENTER);
         }
 
-        for (int i = map.low.y; i <= map.high.y; i++){
+        for (int i = mapa.low.y; i <= mapa.high.y; i++){
+
             Label numberY = new Label("");
-            gridPane.add(numberY, 0,map.high.y - i + 1);
+            gridPane.add(numberY, 0,mapa.high.y - i + 1);
             gridPane.getRowConstraints().add(new RowConstraints(size));
             GridPane.setHalignment(numberY, HPos.CENTER);
         }
 
-        for (Animal element: map.listOfAnimals){
+        System.out.println(Integer.toString(mapa.listOfAnimals.size()));
+        for (Animal element: mapa.listOfAnimals){
+            System.out.println("dupa9"  + Integer.toString(startAnimalsNum));
+            System.out.println(Integer.toString(mapa.listOfAnimals.size()));
             VBox elem = new GuiElementBox(element).getvBox();
             Vector2d pos = element.getPosition();
-            gridPane.add(elem,  pos.x - map.low.x + 1, map.high.y - pos.y + 1);
+            gridPane.add(elem,  pos.x - mapa.low.x + 1, mapa.high.y - pos.y + 1);
             GridPane.setHalignment(elem, HPos.CENTER);
         }
 
-        for (Grass element : map.grasses.values()){
+        for (Grass element : mapa.grasses.values()){
+
             VBox elem = new GuiElementBox(element).getvBox();
             Vector2d pos = element.getPosition();
-            gridPane.add(elem,  pos.x - map.low.x + 1, map.high.y - pos.y + 1);
+            gridPane.add(elem,  pos.x - mapa.low.x + 1, mapa.high.y - pos.y + 1);
             GridPane.setHalignment(elem, HPos.CENTER);
         }
         gridPane.setMaxHeight(Region.USE_PREF_SIZE);
@@ -136,4 +147,5 @@ public class EvolutionWindow {
     public Stage getStage() {
         return stage;
     }
+
 }

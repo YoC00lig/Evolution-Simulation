@@ -14,7 +14,7 @@ public class SimulationEngine implements IEngine, Runnable{
     private final int startGrassnumber;
     private final int dailyGrowersNumber;
     private boolean isActive;
-    private final int moveDelay = 10;
+    private final int moveDelay = 100;
     public Statistics stats;
     private final EvolutionWindow window;
 
@@ -28,11 +28,14 @@ public class SimulationEngine implements IEngine, Runnable{
         this.isActive = true;
 
         for (int i = 0; i < startAnimalsNumber; i++){
+//            System.out.println(Integer.toString(this.startAnimalsNumber));
             Random random = new Random();
             int x = random.nextInt(map.high.x + 1 - map.low.x) + map.low.x;
             int y = random.nextInt(map.high.y + 1 - map.low.y) + map.low.y;
             Vector2d position = new Vector2d(x,y);
-            new Animal(this.map, position);
+            Animal a = new Animal(this.map, position);
+            map.place(a);
+            map.livingAnimals += 1;
         }
         for (int i = 0; i < grassNumber; i++) {
             map.plantGrass();
@@ -43,14 +46,25 @@ public class SimulationEngine implements IEngine, Runnable{
 
     @Override
     public void run() {
+        System.out.println("animals" + Integer.toString(map.listOfAnimals.size()));
         while (map.listOfAnimals.size()>0) {
             if (this.isActive) {
                 if (map.listOfAnimals.size() == 0) {
                     System.out.println("(SimulationEngine-run) Wszystkie zwierzątka zmarły. Ilość dni: " + map.day);
-                    window.getStage().close();
-                    throw new RuntimeException();
+//                    window.getStage().close();
+//                    throw new RuntimeException();
+                    System.exit(0);
 
                 }
+                Platform.runLater(() -> {
+                    try {
+                        System.out.println("dziala2");
+                        window.drawGame();
+                    } catch (FileNotFoundException e) {
+//                    e.printStackTrace();
+                        throw new RuntimeException(e);
+                    }
+                });
 
                 map.removeDead();
                 map.moveAll();
@@ -66,15 +80,7 @@ public class SimulationEngine implements IEngine, Runnable{
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            Platform.runLater(() -> {
-                try {
-                    System.out.println("dziala2");
-                    window.drawGame();
-                } catch (FileNotFoundException e) {
-//                    e.printStackTrace();
-                    throw new RuntimeException(e);
-                }
-            });
+
         }
 
     }

@@ -18,7 +18,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class App extends Application {
-    private AbstractWorldMap map;
     private final BorderPane border = new BorderPane();
 
     private List<EvolutionWindow> evolutions = new ArrayList<>();
@@ -170,11 +169,11 @@ public class App extends Application {
             int dailyGrown = Integer.parseInt(dailyGrownGrassNumber.getText());
             int NumberOfGenes = Integer.parseInt(numberOfGenes.getText());
 
-
+            AbstractWorldMap map;
             if (toxicDead)
-                map = new ToxicMap(width, height, predisitination, isCrazy, hellExists, reproductionE, plantE, initialE, NumberOfGenes);
+               map = new ToxicMap(width, height, predisitination, isCrazy, hellExists, reproductionE, plantE, initialE, NumberOfGenes);
             else
-                map = new EquatorMap(width, height, predisitination, isCrazy, hellExists, reproductionE, plantE, initialE, NumberOfGenes);
+               map = new EquatorMap(width, height, predisitination, isCrazy, hellExists, reproductionE, plantE, initialE, NumberOfGenes);
 
 
             EvolutionWindow newSimulation = new EvolutionWindow(map, startAnimalsNum,  startPlantsNum, dailyGrown);
