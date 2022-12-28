@@ -1,18 +1,11 @@
 package agh.ics.oop.gui;
 
 import agh.ics.oop.*;
-import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.geometry.HPos;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.*;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
@@ -27,52 +20,57 @@ public class EvolutionWindow {
     private Stage stage;
     private Scene scene;
     final int size = 25; // rozmiar mapy
-    private final LineCharts animalsNumber = new LineCharts("Animals number", "Animals");
-    private final LineCharts plantsNumber = new LineCharts("Plants number", "Plants");
-    private final LineCharts avgEnergy = new LineCharts("Average animal energy", "Energy");
-    private final LineCharts avgLifeLength = new LineCharts("Average life length", "Life length [days]");
-    private final LineCharts freeFields = new LineCharts("Free fields on the mapa", "Free fields");
+//    private final LineCharts animalsNumber = new LineCharts("Animals number", "Animals");
+//    private final LineCharts plantsNumber = new LineCharts("Plants number", "Plants");
+//    private final LineCharts avgEnergy = new LineCharts("Average animal energy", "Energy");
+//    private final LineCharts avgLifeLength = new LineCharts("Average life length", "Life length [days]");
+//    private final LineCharts freeFields = new LineCharts("Free fields on the mapa", "Free fields");
     private AppButtons buttons;
     private HBox boxWithButtons;
-    private StatisticsReport  statisticsReport;
+//    private StatisticsReport  statisticsReport;
 
         private int startAnimalsNum;
     private HBox mainbox;
 
-    private Thread thread;
+//    private Thread thread;
 
-    public EvolutionWindow(AbstractWorldMap map, int startAnimalsNum, int startPlantsNum, int dailyGrown) {
+    public EvolutionWindow(AbstractWorldMap map, int startAnimalsNum, int startPlantsNum, int dailyGrown, SimulationEngine engine) {
         this.mapa = map;
         System.out.println("map1 " + Integer.toString(mapa.listOfAnimals.size()));
-        this.engine = new SimulationEngine(mapa, startAnimalsNum, startPlantsNum, dailyGrown, this);
+        this.engine = engine;
+//        engine.activate();
         System.out.println("map2 " + Integer.toString(mapa.listOfAnimals.size()));
         this.stage = new Stage();
         this.buttons = new AppButtons(engine);
         this.boxWithButtons = buttons.getBox();
-        this.statisticsReport = new StatisticsReport(mapa);
-        this.thread = new Thread(engine);
+//        this.statisticsReport = new StatisticsReport(mapa);
         this.startAnimalsNum = startAnimalsNum;
-        System.out.println("dupa2" + Integer.toString(startAnimalsNum));
-    }
-
-    public void updateCharts() {
-        animalsNumber.handler(1, mapa);
-        plantsNumber.handler(2, mapa);
-        freeFields.handler(3, mapa);
-        avgEnergy.handler(4, mapa);
-        avgLifeLength.handler(5, mapa);
-    }
-
-    public void drawGame() throws FileNotFoundException{
-        System.out.println("map3 " + Integer.toString(mapa.listOfAnimals.size()));
-        updateCharts();
-        statisticsReport.updateStatistics();
-        drawMap();
+        VBox StatsButtons = new VBox(boxWithButtons);
+        mainbox = new HBox(gridPane, StatsButtons);
+//        HBox.setMargin(stats, new Insets(0,0,0,50));
+        mainbox.setAlignment(Pos.CENTER);
+        mainbox.setStyle("-fx-background-color: #eea29a;");
         scene = new Scene(mainbox, 2000,1000);
         scene.setRoot(mainbox);
         stage.setScene(scene);
 
         stage.show();
+//        this.thread = new Thread(engine);
+    }
+
+//    public void updateCharts() {
+//        animalsNumber.handler(1, mapa);
+//        plantsNumber.handler(2, mapa);
+//        freeFields.handler(3, mapa);
+//        avgEnergy.handler(4, mapa);
+//        avgLifeLength.handler(5, mapa);
+//    }
+
+    public void drawGame() throws FileNotFoundException{
+        drawMap();
+        System.out.println("map3 " + Integer.toString(mapa.listOfAnimals.size()));
+//        updateCharts();
+//        statisticsReport.updateStatistics();
         System.out.println("dupa4" + Integer.toString(startAnimalsNum));
     }
 
@@ -128,21 +126,25 @@ public class EvolutionWindow {
         gridPane.setMaxHeight(Region.USE_PREF_SIZE);
         gridPane.setStyle("-fx-background-color: #f3ffe6;");
         gridPane.setAlignment(Pos.CENTER_LEFT);
-        VBox charts = new VBox(animalsNumber.getChart(), plantsNumber.getChart(), freeFields.getChart(),
-                avgEnergy.getChart(), avgLifeLength.getChart());
-        charts.setAlignment(Pos.CENTER);
-        VBox stats = statisticsReport.getStatistics();
+//        VBox charts = new VBox(animalsNumber.getChart(), plantsNumber.getChart(), freeFields.getChart(),
+//                avgEnergy.getChart(), avgLifeLength.getChart());
+//        charts.setAlignment(Pos.CENTER);
+//        VBox stats = statisticsReport.getStatistics();
 
-        VBox StatsButtons = new VBox(stats, boxWithButtons);
-        mainbox = new HBox(gridPane, charts, stats, StatsButtons);
-        HBox.setMargin(stats, new Insets(0,0,0,50));
-        mainbox.setAlignment(Pos.CENTER);
-        mainbox.setStyle("-fx-background-color: #eea29a;");
+
+
+
+
+//        VBox StatsButtons = new VBox(stats, boxWithButtons);
+//        mainbox = new HBox(gridPane, charts, stats, StatsButtons);
+//        HBox.setMargin(stats, new Insets(0,0,0,50));
+
+
     }
 
-    public Thread getThread() {
-        return thread;
-    }
+//    public Thread getThread() {
+//        return thread;
+//    }
 
     public Stage getStage() {
         return stage;

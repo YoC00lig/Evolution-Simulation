@@ -118,6 +118,7 @@ abstract public class AbstractWorldMap implements IPositionChangeObserver{
     }
 
     public void removeDead() {
+        System.out.println("costam");
         CopyOnWriteArrayList<Animal> bodiesToRemove = new CopyOnWriteArrayList<>();
         for (Vector2d position: animals.keySet()){
             for (Animal animal: animals.get(position)){

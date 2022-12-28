@@ -14,18 +14,19 @@ public class SimulationEngine implements IEngine, Runnable{
     private final int startGrassnumber;
     private final int dailyGrowersNumber;
     private boolean isActive;
-    private final int moveDelay = 100;
+    private final int moveDelay = 500;
     public Statistics stats;
-    private final EvolutionWindow window;
+    private App app;
 
-    public SimulationEngine(AbstractWorldMap map, int animalsNumber, int grassNumber, int dailyGrassNumber, EvolutionWindow window){
+    public SimulationEngine(AbstractWorldMap map, int animalsNumber, int grassNumber, int dailyGrassNumber, App app){
+        this.isActive = true;
         this.map = map;
         this.stats = new Statistics(map);
         this.startAnimalsNumber = animalsNumber;
         this.startGrassnumber = grassNumber;
         this.dailyGrowersNumber = dailyGrassNumber;
-        this.window = window;
-        this.isActive = true;
+        this.app = app;
+//        this.isActive = true;
 
         for (int i = 0; i < startAnimalsNumber; i++){
 //            System.out.println(Integer.toString(this.startAnimalsNumber));
@@ -41,49 +42,44 @@ public class SimulationEngine implements IEngine, Runnable{
             map.plantGrass();
         }
     }
-
+public void updateMap() {
+    map.removeDead();
+    map.moveAll();
+    map.eat();
+    map.reproduction();
+    for (int i = 0; i < dailyGrowersNumber; i++) map.plantGrass();
+    map.freeFields();
+    map.nextDay();
+}
 
 
     @Override
     public void run() {
-        System.out.println("animals" + Integer.toString(map.listOfAnimals.size()));
-        while (map.listOfAnimals.size()>0) {
-            if (this.isActive) {
+        while (map.listOfAnimals.size()>=0) {
+//            if (this.isActive) {
                 if (map.listOfAnimals.size() == 0) {
                     System.out.println("(SimulationEngine-run) Wszystkie zwierzątka zmarły. Ilość dni: " + map.day);
 //                    window.getStage().close();
-//                    throw new RuntimeException();
-                    System.exit(0);
-
+                    throw new RuntimeException();
                 }
-                Platform.runLater(() -> {
+                updateMap();
                     try {
                         System.out.println("dziala2");
-                        window.drawGame();
+                        app.draw(this);
                     } catch (FileNotFoundException e) {
-//                    e.printStackTrace();
+                    e.printStackTrace();
                         throw new RuntimeException(e);
                     }
-                });
-
-                map.removeDead();
-                map.moveAll();
-                map.eat();
-                map.reproduction();
-                for (int i = 0; i < dailyGrowersNumber; i++) map.plantGrass();
-                map.freeFields();
-                map.nextDay();
-            }
-
-            try {
-                Thread.sleep(this.moveDelay);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                try {
+                    Thread.sleep(this.moveDelay);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             }
 
         }
 
-    }
+//    }
 
 //    @Override
 //    public void run() {

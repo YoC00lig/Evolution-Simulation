@@ -2,6 +2,7 @@ package agh.ics.oop.gui;
 
 import agh.ics.oop.*;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -13,15 +14,14 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.io.FileNotFoundException;
+import java.util.*;
 
 public class App extends Application {
     private final BorderPane border = new BorderPane();
 
-    private List<EvolutionWindow> evolutions = new ArrayList<>();
-
+//    private List<EvolutionWindow> evolutions = new ArrayList<>();
+    private Map<IEngine, EvolutionWindow> windows = new HashMap<>();
     List<Thread> threads = new LinkedList<>();
     Scene scene;
     final int size = 25; // rozmiar mapy
@@ -175,13 +175,14 @@ public class App extends Application {
             else
                map = new EquatorMap(width, height, predisitination, isCrazy, hellExists, reproductionE, plantE, initialE, NumberOfGenes);
 
-
-            EvolutionWindow newSimulation = new EvolutionWindow(map, startAnimalsNum,  startPlantsNum, dailyGrown);
-
+            SimulationEngine newEngine = new SimulationEngine(map, startAnimalsNum,  startPlantsNum, dailyGrown, this);
+            EvolutionWindow newSimulation = new EvolutionWindow(map, startAnimalsNum,  startPlantsNum, dailyGrown, newEngine);
+            Thread newThread = new Thread(newEngine);
             System.out.println("dupa1");
 
-            evolutions.add(newSimulation);
-            threads.add(newSimulation.getThread());
+//            evolutions.add(newSimulation);
+            threads.add(newThread);
+            windows.put(newEngine, newSimulation);
 
         });
         playButton.setOnAction(event -> {
@@ -208,4 +209,17 @@ public class App extends Application {
 
         });
     }
+    public void draw(SimulationEngine engine) throws FileNotFoundException {
+        Platform.runLater(() -> {
+            try {
+                windows.get(engine).drawGame();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+
+
 }
