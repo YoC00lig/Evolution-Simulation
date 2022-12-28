@@ -207,7 +207,7 @@ public class App extends Application {
             GridPane.setHalignment(elem, HPos.CENTER);
             elem.setOnMouseExited(event -> handle(element));
             ImageView view = guiElement.getImageView();
-            if (element.hasDominantGenotype()) view.setStyle("-fx-effect: dropshadow(three-pass-box, rgba(255, 73, 229, 0.8), 30, 0, 0, 0)");
+            energyVisualizer(element, view);
         }
 
         for (Grass element : map.grasses.values()){
@@ -238,6 +238,19 @@ public class App extends Application {
         stageForAnimal.setScene(sceneForAnimal);
         stageForAnimal.show();
     }
+    public void energyVisualizer(Animal animal, ImageView view) {
+        int maxEnergy = map.getInitialEnergy();
+        float percentage = (float) animal.getCurrentEnergy() / maxEnergy;
+        if (0.9F < percentage  && percentage <= 1) view.setStyle("-fx-effect: dropshadow(three-pass-box, rgba(55, 135, 67, 0.8), 30, 0, 0, 0)");
+        else if (0.8F < percentage  && percentage <= 0.9F) view.setStyle("-fx-effect: dropshadow(three-pass-box, rgba(32, 198, 56, 0.8), 30, 0, 0, 0)");
+        else if (0.7F < percentage  && percentage <= 0.8F) view.setStyle("-fx-effect: dropshadow(three-pass-box, rgba(7, 237, 41, 0.8), 30, 0, 0, 0)");
+        else if (0.6F < percentage  && percentage <= 0.7F) view.setStyle("-fx-effect: dropshadow(three-pass-box, rgba(218, 222, 38, 0.8), 30, 0, 0, 0)");
+        else if (0.5F < percentage  && percentage <= 0.6F) view.setStyle("-fx-effect: dropshadow(three-pass-box, rgba(251, 255, 80, 0.8), 30, 0, 0, 0)");
+        else if (0.4F < percentage  && percentage <= 0.5F) view.setStyle("-fx-effect: dropshadow(three-pass-box, rgba(255, 204, 80, 0.8), 30, 0, 0, 0)");
+        else if (0.3F < percentage  && percentage <= 0.4F) view.setStyle("-fx-effect: dropshadow(three-pass-box, rgba(241, 144, 74, 0.8), 30, 0, 0, 0)");
+        else if (0.2F < percentage  && percentage <= 0.3F) view.setStyle("-fx-effect: dropshadow(three-pass-box, rgba(255, 80, 0, 0.8), 30, 0, 0, 0)");
+        else view.setStyle("-fx-effect: dropshadow(three-pass-box, rgba(234, 14, 14, 1), 30, 0, 0, 0)");
+    }
 
     public void draw() throws FileNotFoundException{
         Platform.runLater(() -> {
@@ -248,5 +261,4 @@ public class App extends Application {
             }
         });
     }
-
 }
