@@ -222,4 +222,15 @@ public class Animal implements IMapElement{
 
     public void setDaysOfLife(int value){this.daysOfLife = value;}
     public void setNumberOfChildren(int value){ this.numberOfChildren = value;}
+    public int getActiveGen() {
+        return this.genotype[this.gene];
+    }
+    public int getEatenPlants() {return this.eatenPlants;}
+    public boolean isAlive() {
+        return this.isDead == 0;
+    }
+    public boolean hasDominantGenotype() {
+        Statistics stats = new Statistics(map);
+        return this.findDominantGenotype() == stats.findDominantGenotype();
+    }
 }

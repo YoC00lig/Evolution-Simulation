@@ -11,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -199,10 +200,14 @@ public class App extends Application {
         }
 
         for (Animal element: map.listOfAnimals){
-            VBox elem = new GuiElementBox(element).getvBox();
+            GuiElementBox guiElement = new GuiElementBox(element);
+            VBox elem = guiElement.getvBox();
             Vector2d pos = element.getPosition();
             gridPane.add(elem,  pos.x - map.low.x + 1, map.high.y - pos.y + 1);
             GridPane.setHalignment(elem, HPos.CENTER);
+            elem.setOnMouseExited(event -> handle(element));
+            ImageView view = guiElement.getImageView();
+            if (element.hasDominantGenotype()) view.setStyle("-fx-effect: dropshadow(three-pass-box, rgba(255, 73, 229, 0.8), 30, 0, 0, 0)");
         }
 
         for (Grass element : map.grasses.values()){
@@ -211,6 +216,7 @@ public class App extends Application {
             gridPane.add(elem,  pos.x - map.low.x + 1, map.high.y - pos.y + 1);
             GridPane.setHalignment(elem, HPos.CENTER);
         }
+
         gridPane.setMaxHeight(Region.USE_PREF_SIZE);
         gridPane.setStyle("-fx-background-color: #f3ffe6;");
         gridPane.setAlignment(Pos.CENTER_LEFT);
@@ -218,12 +224,19 @@ public class App extends Application {
                 avgEnergy.getChart(), avgLifeLength.getChart());
         charts.setAlignment(Pos.CENTER);
         VBox stats = statisticsReport.getStatistics();
-
         VBox StatsButtons = new VBox(stats, boxWithButtons);
         mainbox = new HBox(gridPane, charts, stats, StatsButtons);
         HBox.setMargin(stats, new Insets(0,0,0,50));
         mainbox.setAlignment(Pos.CENTER);
         mainbox.setStyle("-fx-background-color: #eea29a;");
+    }
+
+    public void handle(Animal animal) {
+        AnimalStatistics stats = new AnimalStatistics(animal);
+        Stage stageForAnimal = new Stage();
+        Scene sceneForAnimal = new Scene(stats.getBox(), 400, 400);
+        stageForAnimal.setScene(sceneForAnimal);
+        stageForAnimal.show();
     }
 
     public void draw() throws FileNotFoundException{

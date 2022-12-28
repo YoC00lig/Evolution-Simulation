@@ -67,4 +67,11 @@ public class Genotype {
         return (int) (Math.random() * 2);
     }
 
+    public String toString(int[] genotype) {
+        StringBuilder genotypeString = new StringBuilder();
+        for (int gen: genotype){
+            genotypeString.append(gen);
+        }
+        return genotypeString.toString();
+    }
 }
