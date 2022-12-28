@@ -210,4 +210,7 @@ abstract public class AbstractWorldMap implements IPositionChangeObserver{
         }
     }
 
+    public int getInitialEnergy() {
+        return this.initialEnergy;
+    }
 }

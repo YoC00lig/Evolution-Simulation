@@ -214,7 +214,8 @@ public class Animal implements IMapElement{
     }
 
     public String getPath(IMapElement object) {
-        return "src/main/resources/snail.png";
+        if (this.hasDominantGenotype()) return "src/main/resources/snail2.png";
+        else return "src/main/resources/snail.png";
     }
 
     public int getDaysOfLife() {return this.daysOfLife;}
