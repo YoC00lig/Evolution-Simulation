@@ -14,8 +14,6 @@ public class Genotype {
     }
 
     public static int[] getChildGenotype(Animal parent1, Animal parent2, boolean isCrazyMode, int numberOfGenes, AbstractWorldMap map) {
-        // isCrazyMode is not the best name
-
         int energy1 = parent1.getCurrentEnergy();
         int energy2 = parent2.getCurrentEnergy();
         int[] genes = new int[numberOfGenes];
@@ -69,4 +67,11 @@ public class Genotype {
         return (int) (Math.random() * 2);
     }
 
+    public String toString(int[] genotype) {
+        StringBuilder genotypeString = new StringBuilder();
+        for (int gen: genotype){
+            genotypeString.append(gen);
+        }
+        return genotypeString.toString();
+    }
 }

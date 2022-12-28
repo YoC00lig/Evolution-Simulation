@@ -8,21 +8,21 @@ import agh.ics.oop.Statistics;
 import javafx.scene.text.Font;
 
 public class StatisticsReport {
-    VBox statistics;
-    Label animalsNum, plantsNum, freeFields, avgLifeLength, avgEnergy, DeadsNumber, DominantGenotype;
+    private final VBox statistics;
+    private final AbstractWorldMap map;
+    private Label animalsNum, plantsNum, freeFields, avgLifeLength, avgEnergy, DeadsNumber, DominantGenotype;
 
     public StatisticsReport(AbstractWorldMap map) {
         Statistics stats = new Statistics(map);
-        animalsNum = new Label("Number of animals on the map: " + map.listOfAnimals.size());
-        plantsNum = new Label("Number of plants on the map: " + map.grasses.size());
-        freeFields = new Label("Number of free fields on the map: " + map.freeFields());
-        avgLifeLength = new Label("Average lifespan of dead animals: " + stats.averageLifeLength());
+        this.map = map;
+        animalsNum = new Label("Animals number: " + map.listOfAnimals.size());
+        plantsNum = new Label("Plants number: " + map.grasses.size());
+        freeFields = new Label("Empty fields: " + map.freeFields());
+        avgLifeLength = new Label("Average lifespan: " + stats.averageLifeLength());
         avgEnergy = new Label("Average energy: " + stats.averageEnergy());
-        DeadsNumber = new Label("Number of dead animals: " + stats.getDeadAnimals());
-        DominantGenotype = new Label("Dominant Genotype: " + stats.findDominantGenotype());
-
+        DeadsNumber = new Label("Dead animals: " + stats.getDeadAnimals());
+        DominantGenotype = new Label("Dominant genotype: " + stats.findDominantGenotype());
         setFonts(animalsNum, plantsNum,freeFields,avgLifeLength,avgEnergy, DeadsNumber, DominantGenotype);
-
         statistics = new VBox(animalsNum, plantsNum, freeFields, avgLifeLength, avgEnergy, DeadsNumber, DominantGenotype);
     }
 
@@ -43,20 +43,24 @@ public class StatisticsReport {
         a6.setFont(new Font("Verdana", 14));
         a7.setFont(new Font("Verdana", 14));
     }
-    public void updateStatistics(AbstractWorldMap map){
+
+    public void updateStatistics(){
         Statistics stats = new Statistics(map);
-        animalsNum = new Label("Number of animals on the map: " + map.listOfAnimals.size());
-        plantsNum = new Label("Number of plants on the map: " + map.grasses.size());
-        freeFields = new Label("Number of free fields on the map: " + map.freeFields());
-        avgLifeLength = new Label("Average lifespan of dead animals: " + stats.averageLifeLength());
+        animalsNum = new Label("Animals number: " + map.listOfAnimals.size());
+        plantsNum = new Label("Plants number: " + map.grasses.size());
+        freeFields = new Label("Empty fields: " + map.freeFields());
+        avgLifeLength = new Label("Average lifespan: " + stats.averageLifeLength());
         avgEnergy = new Label("Average energy: " + stats.averageEnergy());
-        DeadsNumber = new Label("Number of dead animals: " + stats.getDeadAnimals());
-        DominantGenotype = new Label("Dominant Genotype: " + stats.findDominantGenotype());
-
-
+        DeadsNumber = new Label("Dead animals: " + stats.getDeadAnimals());
+        DominantGenotype = new Label("Dominant genotype: " + stats.findDominantGenotype());
         setFonts(animalsNum, plantsNum,freeFields,avgLifeLength,avgEnergy, DeadsNumber, DominantGenotype);
-
         statistics.getChildren().clear();
-        statistics = new VBox(animalsNum, plantsNum, freeFields, avgLifeLength, avgEnergy, DeadsNumber, DominantGenotype);
+        statistics.getChildren().add(animalsNum);
+        statistics.getChildren().add(plantsNum);
+        statistics.getChildren().add(freeFields);
+        statistics.getChildren().add(avgLifeLength);
+        statistics.getChildren().add(avgEnergy);
+        statistics.getChildren().add(DeadsNumber);
+        statistics.getChildren().add(DominantGenotype);
     }
 }

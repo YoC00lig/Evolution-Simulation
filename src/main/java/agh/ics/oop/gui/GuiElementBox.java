@@ -1,14 +1,17 @@
 package agh.ics.oop.gui;
-import java.io.FileNotFoundException;
-import java.io.FileInputStream;
-import agh.ics.oop.*;
+
+import agh.ics.oop.IMapElement;
 import javafx.geometry.Pos;
-import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 public class GuiElementBox{
     private final VBox vBox;
+    private final  ImageView imageView;
 
     public GuiElementBox(IMapElement object){
         Image image = null;
@@ -19,7 +22,7 @@ public class GuiElementBox{
             System.exit(1);
         }
 
-        ImageView imageView = new ImageView(image);
+        imageView = new ImageView(image);
         imageView.setFitWidth(20);
         imageView.setFitHeight(20);
 
@@ -30,5 +33,7 @@ public class GuiElementBox{
     public VBox getvBox()  {
         return vBox;
     }
-
+    public ImageView getImageView() {
+        return this.imageView;
+    }
 }

@@ -5,7 +5,7 @@ import java.util.Comparator;
 
 abstract public class AbstractWorldMap implements IPositionChangeObserver{
     public Vector2d low, high;
-    public int day;
+    public int day, averageEnergy, averageLifeLength, freeFields, numberOfGenes;
     protected int width, height, minReproductionEnergy, plantEnergy, initialEnergy;
     protected LinkedHashMap<Vector2d, LinkedList<Animal>> animals = new LinkedHashMap<>();
     public ArrayList<Animal> listOfAnimals = new ArrayList<>();
@@ -18,7 +18,6 @@ abstract public class AbstractWorldMap implements IPositionChangeObserver{
     int livingAnimals = 0;
     int plantsNumber = 0;
     int dominantGenotype = 0;
-    int averageEnergy, averageLifeLength, freeFields, numberOfGenes;
 
 
     public AbstractWorldMap(int width, int height,boolean predistination, boolean isCrazyMode, boolean hellExistsMode, int reproductionE, int plantE, int initialE, int numberOfGenes) {
@@ -189,7 +188,6 @@ abstract public class AbstractWorldMap implements IPositionChangeObserver{
     }
 
     public void eat() {
-        removeDead();
         List<Grass> toUpdate = new ArrayList<>();
         for (Vector2d position: animals.keySet()){
             if (grassAt(position) != null && animals.get(position) != null && animals.get(position).size() > 0){
@@ -198,7 +196,7 @@ abstract public class AbstractWorldMap implements IPositionChangeObserver{
                 toUpdate.add(grasses.get(position));
             }
         }
-        for (Grass element : toUpdate) { // to avoid ConcurrentModification
+        for (Grass element : toUpdate) { // ConcurrentModification
             fields1.get(element.getPosition()).decrementElementsStatus();
             removeGrass(element);
             plantsNumber -= 1;

@@ -7,8 +7,8 @@ public class ReproductionTest {
     public void Test1(){ // dwa zwierzątka na jednym miejscu
         AbstractWorldMap map = new ToxicMap(5, 5, true,true,
                 true, 3, 4, 5,32);
-        Animal animal1 = new Animal(map, new Vector2d(2,3));
-        Animal animal2 = new Animal(map, new Vector2d(2,3));
+        new Animal(map, new Vector2d(2,3));
+        new Animal(map, new Vector2d(2,3));
         map.reproduction();
 
         assertEquals(map.livingAnimals, 3);
@@ -27,9 +27,9 @@ public class ReproductionTest {
     public void Test2(){ // trzy zwierzątka na jednym miejscu
         AbstractWorldMap map = new EquatorMap(5, 5, true,true,
                 true, 3, 4, 5,32);
-        Animal animal1 = new Animal(map, new Vector2d(2,3));
-        Animal animal2 = new Animal(map, new Vector2d(2,3));
-        Animal animal3 = new Animal(map, new Vector2d(2,3));
+        new Animal(map, new Vector2d(2,3));
+        new Animal(map, new Vector2d(2,3));
+        new Animal(map, new Vector2d(2,3));
         map.reproduction();
 
         assertEquals(map.livingAnimals, 4);
@@ -49,11 +49,11 @@ public class ReproductionTest {
     public void Test3(){ // pięc zwierzątek na jednym miejscu
         AbstractWorldMap map = new ToxicMap(5, 5, true,true,
                 true,3, 4, 5,32);
-        Animal animal1 = new Animal(map, new Vector2d(2,3));
-        Animal animal2 = new Animal(map, new Vector2d(2,3));
-        Animal animal3 = new Animal(map, new Vector2d(2,3));
-        Animal animal4 = new Animal(map, new Vector2d(2,3));
-        Animal animal5 = new Animal(map, new Vector2d(2,3));
+        new Animal(map, new Vector2d(2,3));
+        new Animal(map, new Vector2d(2,3));
+        new Animal(map, new Vector2d(2,3));
+        new Animal(map, new Vector2d(2,3));
+        new Animal(map, new Vector2d(2,3));
         map.reproduction();
 
         assertEquals(map.livingAnimals, 6);

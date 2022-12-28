@@ -10,6 +10,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -24,11 +26,11 @@ public class App extends Application {
     Stage stage;
     Scene scene;
     final int size = 25; // rozmiar mapy
-    private final LineCharts animalsNumber = new LineCharts("Animals number");
-    private final LineCharts plantsNumber = new LineCharts("Plants number");
-    private final LineCharts avgEnergy = new LineCharts("Average animal energy");
-    private final LineCharts avgLifeLength = new LineCharts("Average life length");
-    private final LineCharts freeFields = new LineCharts("Free fields on the map");
+    private final LineCharts animalsNumber = new LineCharts("Animals number", "Animals");
+    private final LineCharts plantsNumber = new LineCharts("Plants number", "Plants");
+    private final LineCharts avgEnergy = new LineCharts("Average animal energy", "Energy");
+    private final LineCharts avgLifeLength = new LineCharts("Average life length", "Life length [days]");
+    private final LineCharts freeFields = new LineCharts("Free fields on the map", "Free fields");
     AppButtons buttons;
     HBox boxWithButtons;
     private StatisticsReport  statisticsReport;
@@ -84,15 +86,15 @@ public class App extends Application {
         listOfTextField.setSpacing(13);
 
         VBox listOfLabel = new VBox();
-        Label widthFieldLabel = new Label("map width: "); widthFieldLabel.setFont(new Font("Verdana", 14));
-        Label heightFieldLabel = new Label("map height: "); heightFieldLabel.setFont(new Font("Verdana", 14));
-        Label predistinationModeLabel = new Label("Predistination mode on?"); predistinationModeLabel.setFont(new Font("Verdana", 14));
-        Label toxicDeadModeLabel = new Label("Toxic-dead mode on?"); toxicDeadModeLabel.setFont(new Font("Verdana", 14));
-        Label isCrazyModeLabel = new Label("Is-crazy mode on?"); isCrazyModeLabel.setFont(new Font("Verdana", 14));
-        Label hellExistsModeLabel = new Label("hell's portal mode on?"); hellExistsModeLabel.setFont(new Font("Verdana", 14));
+        Label widthFieldLabel = new Label("Width: "); widthFieldLabel.setFont(new Font("Verdana", 14));
+        Label heightFieldLabel = new Label("Height: "); heightFieldLabel.setFont(new Font("Verdana", 14));
+        Label predistinationModeLabel = new Label("Predistination mode?"); predistinationModeLabel.setFont(new Font("Verdana", 14));
+        Label toxicDeadModeLabel = new Label("Toxic-dead mode?"); toxicDeadModeLabel.setFont(new Font("Verdana", 14));
+        Label isCrazyModeLabel = new Label("Is-crazy mode?"); isCrazyModeLabel.setFont(new Font("Verdana", 14));
+        Label hellExistsModeLabel = new Label("hell's portal mode?"); hellExistsModeLabel.setFont(new Font("Verdana", 14));
         Label reproductionEnergyLabel = new Label("reproduction energy: "); reproductionEnergyLabel.setFont(new Font("Verdana", 14));
         Label plantEnergyLabel = new Label("plant energy: "); plantEnergyLabel.setFont(new Font("Verdana", 14));
-        Label initialEnergyLabel = new Label("initial energy for animal: "); initialEnergyLabel.setFont(new Font("Verdana", 14));
+        Label initialEnergyLabel = new Label("initial animal energy: "); initialEnergyLabel.setFont(new Font("Verdana", 14));
         Label startAnimalsNumberLabel = new Label("start number of animals: "); startAnimalsNumberLabel.setFont(new Font("Verdana", 14));
         Label startPlantsNumberLabel = new Label("start number of plants: "); startPlantsNumberLabel.setFont(new Font("Verdana", 14));
         Label dailyGrownGrassNumberLabel = new Label("number of plants per-day:       "); dailyGrownGrassNumberLabel.setFont(new Font("Verdana", 14));
@@ -119,6 +121,8 @@ public class App extends Application {
 
         confirmButton.setOnAction( event -> {
 
+            confirmButton.setEffect(new DropShadow());
+
             int width = Integer.parseInt(widthField.getText());
             int height = Integer.parseInt(heightField.getText());
             boolean predisitination = Boolean.parseBoolean(predistinationMode.getText());
@@ -140,10 +144,11 @@ public class App extends Application {
             engine = new SimulationEngine(map, startAnimalsNum, startPlantsNum, dailyGrown, this);
 
             statisticsReport = new StatisticsReport(map);
+            buttons = new AppButtons(engine);
+            boxWithButtons = buttons.getBox();
 
             Thread thread = new Thread(engine);
             thread.start();
-            buttons = new AppButtons(thread);
         });
 
         scene = new Scene(border, 2000,1000);
@@ -151,13 +156,17 @@ public class App extends Application {
         primaryStage.show();
     }
 
+    public void updateCharts() {
+        animalsNumber.handler(1, map);
+        plantsNumber.handler(2, map);
+        freeFields.handler(3, map);
+        avgEnergy.handler(4, map);
+        avgLifeLength.handler(5, map);
+    }
+
     public void drawGame() throws FileNotFoundException{
-        animalsNumber.updateAnimalsNumber(map);
-        plantsNumber.updatePlantsNumber(map);
-        freeFields.updateFreeFields(map);
-        avgEnergy.updateEnergy(map);
-        avgLifeLength.updateEnergy(map);
-        statisticsReport.updateStatistics(map);
+        updateCharts();
+        statisticsReport.updateStatistics();
         engine.run();
         drawMap();
         scene.setRoot(mainbox);
@@ -191,10 +200,14 @@ public class App extends Application {
         }
 
         for (Animal element: map.listOfAnimals){
-            VBox elem = new GuiElementBox(element).getvBox();
+            GuiElementBox guiElement = new GuiElementBox(element);
+            VBox elem = guiElement.getvBox();
             Vector2d pos = element.getPosition();
             gridPane.add(elem,  pos.x - map.low.x + 1, map.high.y - pos.y + 1);
             GridPane.setHalignment(elem, HPos.CENTER);
+            elem.setOnMouseExited(event -> handle(element));
+            ImageView view = guiElement.getImageView();
+            if (element.hasDominantGenotype()) view.setStyle("-fx-effect: dropshadow(three-pass-box, rgba(255, 73, 229, 0.8), 30, 0, 0, 0)");
         }
 
         for (Grass element : map.grasses.values()){
@@ -203,6 +216,7 @@ public class App extends Application {
             gridPane.add(elem,  pos.x - map.low.x + 1, map.high.y - pos.y + 1);
             GridPane.setHalignment(elem, HPos.CENTER);
         }
+
         gridPane.setMaxHeight(Region.USE_PREF_SIZE);
         gridPane.setStyle("-fx-background-color: #f3ffe6;");
         gridPane.setAlignment(Pos.CENTER_LEFT);
@@ -210,14 +224,19 @@ public class App extends Application {
                 avgEnergy.getChart(), avgLifeLength.getChart());
         charts.setAlignment(Pos.CENTER);
         VBox stats = statisticsReport.getStatistics();
-
-        boxWithButtons = buttons.getBox();
-
         VBox StatsButtons = new VBox(stats, boxWithButtons);
         mainbox = new HBox(gridPane, charts, stats, StatsButtons);
         HBox.setMargin(stats, new Insets(0,0,0,50));
         mainbox.setAlignment(Pos.CENTER);
         mainbox.setStyle("-fx-background-color: #eea29a;");
+    }
+
+    public void handle(Animal animal) {
+        AnimalStatistics stats = new AnimalStatistics(animal);
+        Stage stageForAnimal = new Stage();
+        Scene sceneForAnimal = new Scene(stats.getBox(), 400, 400);
+        stageForAnimal.setScene(sceneForAnimal);
+        stageForAnimal.show();
     }
 
     public void draw() throws FileNotFoundException{
