@@ -8,6 +8,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
@@ -51,26 +52,39 @@ public class App extends Application {
 
         VBox listOfTextField = new VBox();
 
-        TextField widthField = new TextField("25");
-        TextField heightField = new TextField("25");
-        TextField predistinationMode = new TextField("true");
-        TextField toxicDeadMode = new TextField("false");
-        TextField isCrazyMode = new TextField("true");
-        TextField hellExistsMode = new TextField("true");
+        TextField widthField = new TextField("15");
+        TextField heightField = new TextField("15");
+
+        ComboBox<String> predistinationMode = new ComboBox<>();
+        predistinationMode.getItems().add("true");
+        predistinationMode.getItems().add("false");
+
+        ComboBox<String> toxicDeadMode = new ComboBox<>();
+        toxicDeadMode.getItems().add("true");
+        toxicDeadMode.getItems().add("false");
+
+        ComboBox<String> isCrazyMode = new ComboBox<>();
+        isCrazyMode.getItems().add("true");
+        isCrazyMode.getItems().add("false");
+
+        ComboBox<String> hellExistsMode = new ComboBox<>();
+        hellExistsMode.getItems().add("true");
+        hellExistsMode.getItems().add("false");
+
         TextField reproductionEnergy = new TextField("3");
         TextField plantEnergy = new TextField("2");
         TextField initialEnergy = new TextField("100");
-        TextField startAnimalsNumber = new TextField("20");
+        TextField startAnimalsNumber = new TextField("5");
         TextField startPlantsNumber = new TextField("1");
         TextField dailyGrownGrassNumber = new TextField("1");
         TextField numberOfGenes = new TextField("32");
 
         widthField.setStyle("-fx-background-color: #f7cac9"); widthField.setPrefColumnCount(14);
         heightField.setStyle("-fx-background-color: #f7cac9"); heightField.setPrefColumnCount(14);
-        predistinationMode.setStyle("-fx-background-color: #f7cac9"); predistinationMode.setPrefColumnCount(14);
-        toxicDeadMode.setStyle("-fx-background-color: #f7cac9"); toxicDeadMode.setPrefColumnCount(14);
-        isCrazyMode.setStyle("-fx-background-color: #f7cac9"); isCrazyMode.setPrefColumnCount(14);
-        hellExistsMode.setStyle("-fx-background-color: #f7cac9"); hellExistsMode.setPrefColumnCount(14);
+        predistinationMode.setStyle("-fx-background-color: #f7cac9");
+        toxicDeadMode.setStyle("-fx-background-color: #f7cac9");
+        isCrazyMode.setStyle("-fx-background-color: #f7cac9");
+        hellExistsMode.setStyle("-fx-background-color: #f7cac9");
         reproductionEnergy.setStyle("-fx-background-color: #f7cac9"); reproductionEnergy.setPrefColumnCount(14);
         plantEnergy.setStyle("-fx-background-color: #f7cac9"); plantEnergy.setPrefColumnCount(14);
         initialEnergy.setStyle("-fx-background-color: #f7cac9"); initialEnergy.setPrefColumnCount(14);
@@ -125,10 +139,10 @@ public class App extends Application {
 
             int width = Integer.parseInt(widthField.getText());
             int height = Integer.parseInt(heightField.getText());
-            boolean predisitination = Boolean.parseBoolean(predistinationMode.getText());
-            boolean toxicDead = Boolean.parseBoolean(toxicDeadMode.getText());
-            boolean isCrazy = Boolean.parseBoolean(isCrazyMode.getText());
-            boolean hellExists = Boolean.parseBoolean(isCrazyMode.getText());
+            boolean predisitination = Boolean.parseBoolean(String.valueOf(predistinationMode));
+            boolean toxicDead = Boolean.parseBoolean(String.valueOf(toxicDeadMode));
+            boolean isCrazy = Boolean.parseBoolean(String.valueOf(isCrazyMode));
+            boolean hellExists = Boolean.parseBoolean(String.valueOf(isCrazyMode));
             int reproductionE = Integer.parseInt(reproductionEnergy.getText());
             int plantE = Integer.parseInt(plantEnergy.getText());
             int initialE = Integer.parseInt(initialEnergy.getText());
@@ -183,7 +197,7 @@ public class App extends Application {
         gridPane.getRowConstraints().add(new RowConstraints(size));
         gridPane.getColumnConstraints().add(new ColumnConstraints(size));
         GridPane.setHalignment(label, HPos.CENTER);
-        gridPane.setGridLinesVisible(false);
+        gridPane.setGridLinesVisible(true);
 
         for (int i = map.low.x; i <= map.high.x; i++){
             Label numberX = new Label("");
@@ -220,13 +234,17 @@ public class App extends Application {
         gridPane.setMaxHeight(Region.USE_PREF_SIZE);
         gridPane.setStyle("-fx-background-color: #f3ffe6;");
         gridPane.setAlignment(Pos.CENTER_LEFT);
+
         VBox charts = new VBox(animalsNumber.getChart(), plantsNumber.getChart(), freeFields.getChart(),
                 avgEnergy.getChart(), avgLifeLength.getChart());
         charts.setAlignment(Pos.CENTER);
+
         VBox stats = statisticsReport.getStatistics();
+        Button saveButton = buttons.getSaveButton();
+        stats.getChildren().add(saveButton);
         VBox StatsButtons = new VBox(stats, boxWithButtons);
-        mainbox = new HBox(gridPane, charts, stats, StatsButtons);
-        HBox.setMargin(stats, new Insets(0,0,0,50));
+
+        mainbox = new HBox(gridPane, charts, stats,  StatsButtons);
         mainbox.setAlignment(Pos.CENTER);
         mainbox.setStyle("-fx-background-color: #eea29a;");
     }

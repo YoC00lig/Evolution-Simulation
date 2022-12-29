@@ -1,10 +1,10 @@
 package agh.ics.oop.gui;
 
 import agh.ics.oop.AbstractWorldMap;
-import javafx.geometry.Pos;
-import javafx.scene.layout.VBox;
-import javafx.scene.control.Label;
 import agh.ics.oop.Statistics;
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
 public class StatisticsReport {
@@ -28,9 +28,10 @@ public class StatisticsReport {
 
     public VBox getStatistics(){
         statistics.setStyle("-fx-background-color: #f7cac9");
-        statistics.setSpacing(20);
+        statistics.setSpacing(25);
         statistics.setAlignment(Pos.CENTER);
         statistics.setMaxHeight(500);
+        statistics.setMinWidth(200);
         return statistics;
     }
 
