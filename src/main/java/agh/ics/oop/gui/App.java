@@ -177,23 +177,37 @@ public class App extends Application {
 
             SimulationEngine newEngine = new SimulationEngine(map, startAnimalsNum,  startPlantsNum, dailyGrown, this);
             EvolutionWindow newSimulation = new EvolutionWindow(map, startAnimalsNum,  startPlantsNum, dailyGrown, newEngine);
-            Thread newThread = new Thread(newEngine);
-            System.out.println("dupa1");
+
+                System.out.println("dupa1");
+                Thread newThread = new Thread(newEngine);
+                threads.add(newThread);
+                windows.put(newEngine, newSimulation);
+
+
+
 
 //            evolutions.add(newSimulation);
-            threads.add(newThread);
-            windows.put(newEngine, newSimulation);
+
 
         });
+
         playButton.setOnAction(event -> {
 
             System.out.println("dupa3");
             playButton.setEffect(new DropShadow());
 
-            threads.forEach(Thread::start);
+//            threads.forEach(Thread::start);
             for (Thread thread : threads) {
+                Platform.runLater(() -> {
                 try {
+                    thread.start();
                     thread.join();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                });
+                try {
+                    Thread.sleep(100);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
@@ -208,6 +222,8 @@ public class App extends Application {
 //            }
 
         });
+
+
     }
     public void draw(SimulationEngine engine) throws FileNotFoundException {
         Platform.runLater(() -> {
@@ -218,6 +234,11 @@ public class App extends Application {
                 throw new RuntimeException(e);
             }
         });
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
