@@ -54,13 +54,6 @@ public class SimulationEngine implements IEngine, Runnable{
     public void run() {
         while (map.listOfAnimals.size() >= 0) {
             if (this.isActive) {
-//                if (map.listOfAnimals.size() == 0) {
-//                    System.out.println("(SimulationEngine-run) Wszystkie zwierzątka zmarły. Ilość dni: " + map.day);
-//                    System.exit(0);
-////                    window.getStage().close();
-//                    throw new RuntimeException();
-//                }
-
                 updateMap();
                 try {
                     app.draw(this);

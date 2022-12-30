@@ -5,9 +5,12 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
@@ -45,15 +48,27 @@ public class GameOver {
         border.setCenter(view);
 
         Button exitButton = new Button("EXIT");
+
+        styleButtonHover(exitButton);
         exitButton.setOnAction(event -> {
             ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
         });
 
+        Button saveButton = new Button("SAVE DATA");
+        saveButton.setStyle("-fx-background-color: #ff6666");
         exitButton.setStyle("-fx-background-color: #ff6666");
         BorderPane.setAlignment(exitButton, Pos.CENTER);
-        BorderPane.setMargin(exitButton, new Insets(40,0,100,0));
+        BorderPane.setAlignment(saveButton, Pos.CENTER);
+        saveButton.setStyle("-fx-background-color: #ff6666");
+        saveButton.setMaxWidth(100);
+        styleButtonHover(saveButton);
         exitButton.setMinWidth(80);
-        border.setBottom(exitButton);
+        HBox box = new HBox(exitButton, saveButton);
+        box.setPrefWidth(2000);
+        box.setAlignment(Pos.CENTER);
+        box.setSpacing(20);
+        BorderPane.setMargin(box, new Insets(40,0,100,0));
+        border.setBottom(box);
         scene = new Scene(border, 2000, 1000);
     }
 
@@ -61,5 +76,16 @@ public class GameOver {
     public Scene getScene() {
         create();
         return scene;
+    }
+
+    public void styleButtonHover(Button B) {
+        B.addEventHandler(MouseEvent.MOUSE_ENTERED,
+                e -> {
+                    B.setEffect(new DropShadow());
+                });
+        B.addEventHandler(MouseEvent.MOUSE_EXITED,
+                e -> {
+                    B.setEffect(null);
+                });
     }
 }

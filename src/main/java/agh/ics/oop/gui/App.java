@@ -10,6 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -33,13 +34,13 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        initStartScene();
+        initStartScene(primaryStage);
         scene = new Scene(border, 2000, 1000);
         primaryStage.setScene(scene);
         primaryStage.show();
 
     }
-    public void initStartScene() {
+    public void initStartScene(Stage primaryStage) {
         Label title = new Label("Input your own parameters: ");
         title.setStyle("-fx-font-weight: bold");
         title.setFont(new Font(40));
@@ -130,9 +131,10 @@ public class App extends Application {
         border.setTop(title);
         border.setCenter(inputList);
 
-        confirmButton.setOnAction( event -> {
+        styleButtonHover(confirmButton);
+        styleButtonHover(playButton);
 
-            confirmButton.setEffect(new DropShadow());
+        confirmButton.setOnAction( event -> {
 
             int width = Integer.parseInt(widthField.getText());
             int height = Integer.parseInt(heightField.getText());
@@ -155,17 +157,31 @@ public class App extends Application {
 
             SimulationEngine newEngine = new SimulationEngine(map, startAnimalsNum,  startPlantsNum, dailyGrown, this);
             Thread newThread = new Thread(newEngine);
-            EvolutionWindow newSimulation = new EvolutionWindow(map, startAnimalsNum,  startPlantsNum, dailyGrown, newEngine, newThread);
+            EvolutionWindow newSimulation = new EvolutionWindow(map, newEngine, newThread);
             threads.add(newThread);
             windows.put(newEngine, newSimulation);
+
         });
+
         playButton.setOnAction(event -> {
-            playButton.setEffect(new DropShadow());
             for (Thread thread : threads) {
                 thread.start();
             }
+            primaryStage.close();
         });
     }
+
+    public void styleButtonHover(Button B) {
+        B.addEventHandler(MouseEvent.MOUSE_ENTERED,
+                e -> {
+                    B.setEffect(new DropShadow());
+                });
+        B.addEventHandler(MouseEvent.MOUSE_EXITED,
+                e -> {
+                    B.setEffect(null);
+                });
+    }
+
     public void draw(SimulationEngine engine) throws FileNotFoundException {
         Platform.runLater(() -> {
             try {

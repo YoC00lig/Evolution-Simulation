@@ -5,7 +5,9 @@ import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
@@ -34,7 +36,7 @@ public class EvolutionWindow {
 
 
 
-    public EvolutionWindow(AbstractWorldMap map, int startAnimalsNum, int startPlantsNum, int dailyGrown, SimulationEngine engine, Thread thread) {
+    public EvolutionWindow(AbstractWorldMap map, SimulationEngine engine, Thread thread) {
         this.map = map;
         this.engine = engine;
         this.window = new Stage();
@@ -136,6 +138,14 @@ public class EvolutionWindow {
 
         VBox stats = statisticsReport.getStatistics();
         Button saveButton = buttons.getSaveButton();
+        saveButton.addEventHandler(MouseEvent.MOUSE_ENTERED,
+                e -> {
+                    saveButton.setEffect(new DropShadow());
+                });
+        saveButton.addEventHandler(MouseEvent.MOUSE_EXITED,
+                e -> {
+                    saveButton.setEffect(null);
+                });
         stats.getChildren().add(saveButton);
         VBox StatsButtons = new VBox(stats, boxWithButtons);
 

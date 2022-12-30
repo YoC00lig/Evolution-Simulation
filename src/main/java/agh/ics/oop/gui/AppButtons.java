@@ -44,7 +44,7 @@ public class AppButtons {
         box.setSpacing(10);
         box.setAlignment(Pos.CENTER);
 
-        exitButton.addEventHandler(MouseEvent.MOUSE_EXITED,
+        exitButton.addEventHandler(MouseEvent.MOUSE_CLICKED,
                 e -> {
                     exitButton.setEffect(new DropShadow());
                     ((Stage) (((Button) e.getSource()).getScene().getWindow())).close();
@@ -52,7 +52,10 @@ public class AppButtons {
                     thread.stop();
                 });
 
-        stopButton.addEventHandler(MouseEvent.MOUSE_ENTERED, eventHandler);
+        stopButton.addEventHandler(MouseEvent.MOUSE_CLICKED, eventHandler);
+
+        styleButtonHover(stopButton);
+        styleButtonHover(exitButton);
     }
 
     public HBox getBox(){
@@ -63,8 +66,18 @@ public class AppButtons {
         saveButton.setStyle("-fx-background-color: #ff6666");
         saveButton.setMaxWidth(100);
         saveButton.setAlignment(Pos.BOTTOM_CENTER);
-        saveButton.setEffect(new DropShadow());
         VBox.setMargin(saveButton, new Insets(50,0,0,0));
         return saveButton;
+    }
+
+    public void styleButtonHover(Button B) {
+        B.addEventHandler(MouseEvent.MOUSE_ENTERED,
+                e -> {
+                    B.setEffect(new DropShadow());
+                });
+        B.addEventHandler(MouseEvent.MOUSE_EXITED,
+                e -> {
+                    B.setEffect(null);
+                });
     }
 }
