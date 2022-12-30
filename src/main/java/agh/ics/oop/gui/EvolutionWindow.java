@@ -2,6 +2,7 @@ package agh.ics.oop.gui;
 
 import agh.ics.oop.*;
 import javafx.geometry.HPos;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -20,14 +21,14 @@ public class EvolutionWindow {
     private Stage stage;
     private Scene scene;
     final int size = 25; // rozmiar mapy
-//    private final LineCharts animalsNumber = new LineCharts("Animals number", "Animals");
-//    private final LineCharts plantsNumber = new LineCharts("Plants number", "Plants");
-//    private final LineCharts avgEnergy = new LineCharts("Average animal energy", "Energy");
-//    private final LineCharts avgLifeLength = new LineCharts("Average life length", "Life length [days]");
-//    private final LineCharts freeFields = new LineCharts("Free fields on the mapa", "Free fields");
+    private final LineCharts animalsNumber = new LineCharts("Animals number", "Animals");
+    private final LineCharts plantsNumber = new LineCharts("Plants number", "Plants");
+    private final LineCharts avgEnergy = new LineCharts("Average animal energy", "Energy");
+    private final LineCharts avgLifeLength = new LineCharts("Average life length", "Life length [days]");
+    private final LineCharts freeFields = new LineCharts("Free fields on the mapa", "Free fields");
     private AppButtons buttons;
     private HBox boxWithButtons;
-//    private StatisticsReport  statisticsReport;
+    private StatisticsReport  statisticsReport;
 
         private int startAnimalsNum;
     private HBox mainbox;
@@ -43,7 +44,7 @@ public class EvolutionWindow {
         this.stage = new Stage();
         this.buttons = new AppButtons(engine);
         this.boxWithButtons = buttons.getBox();
-//        this.statisticsReport = new StatisticsReport(mapa);
+        this.statisticsReport = new StatisticsReport(mapa);
         this.startAnimalsNum = startAnimalsNum;
         VBox StatsButtons = new VBox(boxWithButtons);
         mainbox = new HBox(gridPane, StatsButtons);
@@ -58,19 +59,23 @@ public class EvolutionWindow {
 //        this.thread = new Thread(engine);
     }
 
-//    public void updateCharts() {
-//        animalsNumber.handler(1, mapa);
-//        plantsNumber.handler(2, mapa);
-//        freeFields.handler(3, mapa);
-//        avgEnergy.handler(4, mapa);
-//        avgLifeLength.handler(5, mapa);
-//    }
+    public void updateCharts() {
+        animalsNumber.handler(1, mapa);
+        plantsNumber.handler(2, mapa);
+        freeFields.handler(3, mapa);
+        avgEnergy.handler(4, mapa);
+        avgLifeLength.handler(5, mapa);
+    }
 
     public void drawGame() throws FileNotFoundException{
+        updateCharts();
+        statisticsReport.updateStatistics();
         drawMap();
+        scene.setRoot(mainbox);
+        stage.setScene(scene);
+        stage.show();
         System.out.println("map3 " + Integer.toString(mapa.listOfAnimals.size()));
-//        updateCharts();
-//        statisticsReport.updateStatistics();
+
         System.out.println("dupa4" + Integer.toString(startAnimalsNum));
     }
 
@@ -126,18 +131,16 @@ public class EvolutionWindow {
         gridPane.setMaxHeight(Region.USE_PREF_SIZE);
         gridPane.setStyle("-fx-background-color: #f3ffe6;");
         gridPane.setAlignment(Pos.CENTER_LEFT);
-//        VBox charts = new VBox(animalsNumber.getChart(), plantsNumber.getChart(), freeFields.getChart(),
-//                avgEnergy.getChart(), avgLifeLength.getChart());
-//        charts.setAlignment(Pos.CENTER);
-//        VBox stats = statisticsReport.getStatistics();
+        VBox charts = new VBox(animalsNumber.getChart(), plantsNumber.getChart(), freeFields.getChart(),
+                avgEnergy.getChart(), avgLifeLength.getChart());
+        charts.setAlignment(Pos.CENTER);
+        VBox stats = statisticsReport.getStatistics();
 
-
-
-
-
-//        VBox StatsButtons = new VBox(stats, boxWithButtons);
-//        mainbox = new HBox(gridPane, charts, stats, StatsButtons);
-//        HBox.setMargin(stats, new Insets(0,0,0,50));
+        VBox StatsButtons = new VBox(stats, boxWithButtons);
+        mainbox = new HBox(gridPane, charts, stats, StatsButtons);
+        HBox.setMargin(stats, new Insets(0,0,0,50));
+        mainbox.setAlignment(Pos.CENTER);
+        mainbox.setStyle("-fx-background-color: #eea29a;");
 
 
     }

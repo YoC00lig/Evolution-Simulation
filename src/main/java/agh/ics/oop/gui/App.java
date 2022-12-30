@@ -198,19 +198,14 @@ public class App extends Application {
 
 //            threads.forEach(Thread::start);
             for (Thread thread : threads) {
-                Platform.runLater(() -> {
-                try {
+//                Platform.runLater(() -> {
                     thread.start();
-                    thread.join();
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                });
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
+//                });
+//                try {
+//                    Thread.sleep(100);
+//                } catch (InterruptedException e) {
+//                    throw new RuntimeException(e);
+//                }
             }
 //            for (EvolutionWindow evolution : evolutions) {
 //                evolution.getThread().start();
