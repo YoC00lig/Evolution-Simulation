@@ -31,8 +31,6 @@ public class Animal implements IMapElement{
         this.numberOfChildren = 0;
         this.isDead = 0; // 0 oznacza, że jeszcze żyje. Każda inna liczba oznacza którego dnia zmarło
         this.eatenPlants = 0; // tyle roslinek zjadlo
-        map.livingAnimals += 1;
-        map.place(this);
     }
     // baby animal
     public Animal(AbstractWorldMap map, Animal parent1, Animal parent2){
