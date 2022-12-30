@@ -22,7 +22,6 @@ public class LineCharts {
         chart = new LineChart(x, y);
         chart.getData().add(series);
         chart.setTitle(title);
-        chart.setStyle("-fx-background-color: #eea29a;");
         chart.setCreateSymbols(false);
     }
 

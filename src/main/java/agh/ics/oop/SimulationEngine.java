@@ -1,7 +1,6 @@
 package agh.ics.oop;
 
 import agh.ics.oop.gui.App;
-import agh.ics.oop.gui.EvolutionWindow;
 
 import java.io.FileNotFoundException;
 import java.util.Random;
@@ -13,7 +12,7 @@ public class SimulationEngine implements IEngine, Runnable{
     private final int startGrassnumber;
     private final int dailyGrowersNumber;
     private boolean isActive;
-    private final int moveDelay = 900;
+    private final int moveDelay = 300;
     public Statistics stats;
     private final App app;
 
@@ -55,11 +54,12 @@ public class SimulationEngine implements IEngine, Runnable{
     public void run() {
         while (map.listOfAnimals.size() >= 0) {
             if (this.isActive) {
-                if (map.listOfAnimals.size() == 0) {
-                    System.out.println("(SimulationEngine-run) Wszystkie zwierzątka zmarły. Ilość dni: " + map.day);
-//                    window.getStage().close();
-                    throw new RuntimeException();
-                }
+//                if (map.listOfAnimals.size() == 0) {
+//                    System.out.println("(SimulationEngine-run) Wszystkie zwierzątka zmarły. Ilość dni: " + map.day);
+//                    System.exit(0);
+////                    window.getStage().close();
+//                    throw new RuntimeException();
+//                }
 
                 updateMap();
                 try {

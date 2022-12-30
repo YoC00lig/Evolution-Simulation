@@ -1,18 +1,16 @@
 package agh.ics.oop.gui;
 
 import agh.ics.oop.*;
-import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.geometry.HPos;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-
+import javafx.scene.control.Button;
 import java.io.FileNotFoundException;
+import java.util.LinkedList;
 
 public class EvolutionWindow {
     private AppButtons buttons;
@@ -22,9 +20,9 @@ public class EvolutionWindow {
     private HBox mainbox;
     private AbstractWorldMap map;
     private SimulationEngine engine;
-    private Thread thread;
+    Thread thread;
+
     private GridPane gridPane = new GridPane();
-    private final BorderPane border = new BorderPane();
     private Stage window;
     private Scene scene;
     final int size = 25; // rozmiar mapy
@@ -36,12 +34,11 @@ public class EvolutionWindow {
 
 
 
-    public EvolutionWindow(AbstractWorldMap map, int startAnimalsNum, int startPlantsNum, int dailyGrown, SimulationEngine engine) {
+    public EvolutionWindow(AbstractWorldMap map, int startAnimalsNum, int startPlantsNum, int dailyGrown, SimulationEngine engine, Thread thread) {
         this.map = map;
         this.engine = engine;
-//        engine.activate();
         this.window = new Stage();
-        this.buttons = new AppButtons(engine);
+        this.buttons = new AppButtons(engine, window, thread);
         this.boxWithButtons = buttons.getBox();
         this.statisticsReport = new StatisticsReport(map);
         VBox StatsButtons = new VBox(boxWithButtons);
@@ -49,6 +46,7 @@ public class EvolutionWindow {
         mainbox.setAlignment(Pos.CENTER);
         mainbox.setStyle("-fx-background-color: #eea29a;");
         scene = new Scene(mainbox, 2000,1000);
+        this.thread = thread;
         scene.setRoot(mainbox);
         window.setScene(scene);
 
@@ -65,12 +63,22 @@ public class EvolutionWindow {
     }
 
     public void drawGame() throws FileNotFoundException {
-        updateCharts();
-        statisticsReport.updateStatistics();
-        drawMap();
-        scene.setRoot(mainbox);
-        window.setScene(scene);
-        window.show();
+       if (map.listOfAnimals.size() > 0){
+           updateCharts();
+           statisticsReport.updateStatistics();
+           drawMap();
+           scene.setRoot(mainbox);
+           window.setScene(scene);
+           window.show();
+       }
+       else {
+           GameOver gameover = new GameOver(thread);
+           Scene endScene = gameover.getScene();
+           gameover.thread.stop();
+           scene = endScene;
+           window.setScene(scene);
+           window.show();
+       }
     }
 
     public void drawMap() {
@@ -98,15 +106,17 @@ public class EvolutionWindow {
             GridPane.setHalignment(numberY, HPos.CENTER);
         }
 
-        for (Animal element: map.listOfAnimals){
-            GuiElementBox guiElement = new GuiElementBox(element);
-            VBox elem = guiElement.getvBox();
-            Vector2d pos = element.getPosition();
-            gridPane.add(elem,  pos.x - map.low.x + 1, map.high.y - pos.y + 1);
-            GridPane.setHalignment(elem, HPos.CENTER);
-            elem.setOnMouseExited(event -> handle(element));
-            ImageView view = guiElement.getImageView();
-            energyVisualizer(element, view);
+        for (LinkedList<Animal> list: map.animals.values()){
+            for (Animal element: list){
+                GuiElementBox guiElement = new GuiElementBox(element);
+                VBox elem = guiElement.getvBox();
+                Vector2d pos = element.getPosition();
+                gridPane.add(elem,  pos.x - map.low.x + 1, map.high.y - pos.y + 1);
+                GridPane.setHalignment(elem, HPos.CENTER);
+                elem.setOnMouseExited(event -> handle(element));
+                ImageView view = guiElement.getImageView();
+                energyVisualizer(element, view);
+            }
         }
 
         for (Grass element : map.grasses.values()){
@@ -119,13 +129,17 @@ public class EvolutionWindow {
         gridPane.setMaxHeight(Region.USE_PREF_SIZE);
         gridPane.setStyle("-fx-background-color: #f3ffe6;");
         gridPane.setAlignment(Pos.CENTER_LEFT);
+
         VBox charts = new VBox(animalsNumber.getChart(), plantsNumber.getChart(), freeFields.getChart(),
                 avgEnergy.getChart(), avgLifeLength.getChart());
         charts.setAlignment(Pos.CENTER);
+
         VBox stats = statisticsReport.getStatistics();
+        Button saveButton = buttons.getSaveButton();
+        stats.getChildren().add(saveButton);
         VBox StatsButtons = new VBox(stats, boxWithButtons);
-        mainbox = new HBox(gridPane, charts, stats, StatsButtons);
-        HBox.setMargin(stats, new Insets(0,0,0,50));
+
+        mainbox = new HBox(gridPane, charts, stats,  StatsButtons);
         mainbox.setAlignment(Pos.CENTER);
         mainbox.setStyle("-fx-background-color: #eea29a;");
     }

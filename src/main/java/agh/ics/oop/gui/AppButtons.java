@@ -18,7 +18,7 @@ public class AppButtons {
     Button stopButton;
     Button saveButton = new Button("SAVE DATA");
 
-    public AppButtons(SimulationEngine engine) {
+    public AppButtons(SimulationEngine engine, Stage stage, Thread thread) {
         exitButton = new Button("EXIT");
         stopButton = new Button("STOP");
         stopButton.setMinWidth(80);
@@ -48,7 +48,8 @@ public class AppButtons {
                 e -> {
                     exitButton.setEffect(new DropShadow());
                     ((Stage) (((Button) e.getSource()).getScene().getWindow())).close();
-                    System.exit(0);
+                    stage.close();
+                    thread.stop();
                 });
 
         stopButton.addEventHandler(MouseEvent.MOUSE_ENTERED, eventHandler);
