@@ -45,9 +45,6 @@ public class CompareAnimalsTest {
 
         Collections.reverse(list);
 
-//        for (Animal animal:list){
-//            System.out.println("" + animal.getCurrentEnergy() + " " + animal.getDaysOfLife() + " " + animal.getNumberOfChildren());
-//        }
 
         assertEquals(a2, list.get(0));
         assertEquals(a1, list.get(1));

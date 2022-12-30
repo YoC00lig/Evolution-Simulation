@@ -34,9 +34,16 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        initStartScene(primaryStage);
-        scene = new Scene(border, 2000, 1000);
-        primaryStage.setScene(scene);
+        StartScene startscene = new StartScene();
+        Button startButton = startscene.getStartButton();
+        startButton.setOnAction(event -> {
+            initStartScene(primaryStage);
+            scene = new Scene(border, 2000, 1000);
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        });
+        Scene sceneStart = startscene.getScene();
+        primaryStage.setScene(sceneStart);
         primaryStage.show();
 
     }
@@ -69,7 +76,7 @@ public class App extends Application {
 
         TextField reproductionEnergy = new TextField("3");
         TextField plantEnergy = new TextField("2");
-        TextField initialEnergy = new TextField("3");
+        TextField initialEnergy = new TextField("30");
         TextField startAnimalsNumber = new TextField("5");
         TextField startPlantsNumber = new TextField("1");
         TextField dailyGrownGrassNumber = new TextField("1");

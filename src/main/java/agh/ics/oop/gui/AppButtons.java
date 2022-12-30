@@ -52,10 +52,10 @@ public class AppButtons {
                     thread.stop();
                 });
 
-        stopButton.addEventHandler(MouseEvent.MOUSE_CLICKED, eventHandler);
 
         styleButtonHover(stopButton);
         styleButtonHover(exitButton);
+        stopButton.addEventHandler(MouseEvent.MOUSE_CLICKED, eventHandler);
     }
 
     public HBox getBox(){

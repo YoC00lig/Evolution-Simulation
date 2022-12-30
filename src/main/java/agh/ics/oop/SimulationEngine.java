@@ -29,8 +29,7 @@ public class SimulationEngine implements IEngine, Runnable{
             int x = random.nextInt(map.high.x + 1 - map.low.x) + map.low.x;
             int y = random.nextInt(map.high.y + 1 - map.low.y) + map.low.y;
             Vector2d position = new Vector2d(x,y);
-            Animal a = new Animal(this.map, position);
-            map.place(a);
+            new Animal(this.map, position);
             map.livingAnimals += 1;
         }
         for (int i = 0; i < grassNumber; i++) {
@@ -40,36 +39,34 @@ public class SimulationEngine implements IEngine, Runnable{
     }
 
     public void updateMap() {
-        map.removeDead();
-        map.moveAll();
-        map.eat();
-        map.reproduction();
-        for (int i = 0; i < dailyGrowersNumber; i++) map.plantGrass();
-        map.freeFields();
-        map.nextDay();
+        if (this.isActive) {
+            map.removeDead();
+            map.moveAll();
+            map.eat();
+            map.reproduction();
+            for (int i = 0; i < dailyGrowersNumber; i++) map.plantGrass();
+            map.freeFields();
+            map.nextDay();
+        }
     }
 
 
     @Override
     public void run() {
         while (map.listOfAnimals.size() >= 0) {
-            if (this.isActive) {
-                updateMap();
-                try {
-                    app.draw(this);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                    throw new RuntimeException(e);
-                }
-                try {
-                    Thread.sleep(this.moveDelay);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                    throw new RuntimeException(e);
-                }
-
+            updateMap();
+            try {
+                app.draw(this);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                throw new RuntimeException(e);
             }
-
+            try {
+                Thread.sleep(this.moveDelay);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            }
         }
     }
 

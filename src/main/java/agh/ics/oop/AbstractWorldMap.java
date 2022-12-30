@@ -1,8 +1,8 @@
 package agh.ics.oop;
+
 import java.util.*;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.Comparator;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 abstract public class AbstractWorldMap implements IPositionChangeObserver{
     public Vector2d low, high;
@@ -203,6 +203,7 @@ abstract public class AbstractWorldMap implements IPositionChangeObserver{
             plantsNumber -= 1;
         }
     }
+
     // new day
     public void nextDay() {
         this.day += 1;

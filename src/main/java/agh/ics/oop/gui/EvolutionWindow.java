@@ -115,7 +115,7 @@ public class EvolutionWindow {
                 Vector2d pos = element.getPosition();
                 gridPane.add(elem,  pos.x - map.low.x + 1, map.high.y - pos.y + 1);
                 GridPane.setHalignment(elem, HPos.CENTER);
-                elem.setOnMouseExited(event -> handle(element));
+                elem.setOnMouseClicked(event -> handle(element));
                 ImageView view = guiElement.getImageView();
                 energyVisualizer(element, view);
             }
@@ -155,11 +155,13 @@ public class EvolutionWindow {
     }
 
     public void handle(Animal animal) {
-        AnimalStatistics stats = new AnimalStatistics(animal);
-        Stage stageForAnimal = new Stage();
-        Scene sceneForAnimal = new Scene(stats.getBox(), 400, 400);
-        stageForAnimal.setScene(sceneForAnimal);
-        stageForAnimal.show();
+        if (!engine.getStatus()) {
+            AnimalStatistics stats = new AnimalStatistics(animal);
+            Stage stageForAnimal = new Stage();
+            Scene sceneForAnimal = new Scene(stats.getBox(), 400, 400);
+            stageForAnimal.setScene(sceneForAnimal);
+            stageForAnimal.show();
+        }
     }
     public void energyVisualizer(Animal animal, ImageView view) {
         int maxEnergy = map.getInitialEnergy();
