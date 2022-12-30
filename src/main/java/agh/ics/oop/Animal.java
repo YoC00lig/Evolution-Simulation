@@ -31,6 +31,8 @@ public class Animal implements IMapElement{
         this.numberOfChildren = 0;
         this.isDead = 0; // 0 oznacza, że jeszcze żyje. Każda inna liczba oznacza którego dnia zmarło
         this.eatenPlants = 0; // tyle roslinek zjadlo
+        map.livingAnimals += 1;
+        map.place(this);
     }
     // baby animal
     public Animal(AbstractWorldMap map, Animal parent1, Animal parent2){
@@ -59,18 +61,12 @@ public class Animal implements IMapElement{
 
     public int findDominantGenotype() {
         int[] cnt = new int[8];
-        for (int gen: this.genotype) {
-            cnt[gen] += 1;
+        for (int gen: this.genotype) cnt[gen] += 1;
+        int Gen = 0;
+        for (int i = 0; i < cnt.length; i++) {
+            Gen = cnt[i] > cnt[Gen] ? i : Gen;
         }
-        int maxi = 0;
-        int gen = 0;
-        for (int i = 0; i < 8; i++) {
-            if (cnt[i] > maxi) {
-                gen = i;
-                maxi = cnt[i];
-            }
-        }
-        return gen;
+        return Gen;
     }
 
     public static int findChildEnergy(Animal parent1, Animal parent2) {
@@ -82,11 +78,9 @@ public class Animal implements IMapElement{
 
         if (newPos.x == -1){
             newPos = new Vector2d(map.width - 1, newPos.y);
-            System.out.println(newPos);
         }
         else if (newPos.x == map.width) {
             newPos = new Vector2d(0, newPos.y);
-            System.out.println(newPos);
         }
         if (newPos.y == -1) {
             newPos = new Vector2d(newPos.x, 0);
@@ -224,7 +218,9 @@ public class Animal implements IMapElement{
     public int getActiveGen() {
         return this.genotype[this.gene];
     }
-    public int getEatenPlants() {return this.eatenPlants;}
+    public int getEatenPlants() {
+        return this.eatenPlants;
+    }
     public boolean isAlive() {
         return this.isDead == 0;
     }
