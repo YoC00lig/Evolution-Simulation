@@ -38,17 +38,14 @@ public class EvolutionWindow {
 
     public EvolutionWindow(AbstractWorldMap map, int startAnimalsNum, int startPlantsNum, int dailyGrown, SimulationEngine engine) {
         this.map = map;
-        System.out.println("map1 " + Integer.toString(map.listOfAnimals.size()));
         this.engine = engine;
 //        engine.activate();
-        System.out.println("map2 " + Integer.toString(map.listOfAnimals.size()));
         this.window = new Stage();
         this.buttons = new AppButtons(engine);
         this.boxWithButtons = buttons.getBox();
         this.statisticsReport = new StatisticsReport(map);
         VBox StatsButtons = new VBox(boxWithButtons);
         mainbox = new HBox(gridPane, StatsButtons);
-//        HBox.setMargin(stats, new Insets(0,0,0,50));
         mainbox.setAlignment(Pos.CENTER);
         mainbox.setStyle("-fx-background-color: #eea29a;");
         scene = new Scene(mainbox, 2000,1000);

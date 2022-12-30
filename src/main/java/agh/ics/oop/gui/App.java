@@ -3,7 +3,6 @@ package agh.ics.oop.gui;
 import agh.ics.oop.*;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -11,7 +10,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -144,15 +142,11 @@ public class App extends Application {
 
             SimulationEngine newEngine = new SimulationEngine(map, startAnimalsNum,  startPlantsNum, dailyGrown, this);
             EvolutionWindow newSimulation = new EvolutionWindow(map, startAnimalsNum,  startPlantsNum, dailyGrown, newEngine);
-
-            System.out.println("dupa1");
             Thread newThread = new Thread(newEngine);
             threads.add(newThread);
             windows.put(newEngine, newSimulation);
         });
         playButton.setOnAction(event -> {
-
-            System.out.println("dupa3");
             playButton.setEffect(new DropShadow());
             for (Thread thread : threads) {
                 thread.start();
