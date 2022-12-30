@@ -17,12 +17,17 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 public class App extends Application {
 
     private final BorderPane border = new BorderPane();
-    private Stage stage;
     private Scene scene;
+    private Map<IEngine, EvolutionWindow> windows = new HashMap<>();
+    List<Thread> threads = new LinkedList<>();
 
     public static void main(String[] args) {
         launch(args);
@@ -30,7 +35,13 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        stage = primaryStage;
+        initStartScene();
+        scene = new Scene(border, 2000, 1000);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+
+    }
+    public void initStartScene() {
         Label title = new Label("Input your own parameters: ");
         title.setStyle("-fx-font-weight: bold");
         title.setFont(new Font(40));
@@ -89,10 +100,12 @@ public class App extends Application {
 
         Button confirmButton = new Button("CONFIRM");
         confirmButton.setStyle("-fx-background-color: #ff6666");
+        Button playButton = new Button("PLAY");
+        playButton.setStyle("-fx-background-color: #ff6666");
 
         listOfLabel.getChildren().addAll(widthFieldLabel, heightFieldLabel, predistinationModeLabel, toxicDeadModeLabel, isCrazyModeLabel,
                 hellExistsModeLabel, reproductionEnergyLabel, plantEnergyLabel, initialEnergyLabel,  startAnimalsNumberLabel,
-                startPlantsNumberLabel, dailyGrownGrassNumberLabel, numberOfGenesLabel, confirmButton);
+                startPlantsNumberLabel, dailyGrownGrassNumberLabel, numberOfGenesLabel, confirmButton, playButton);
 
         listOfLabel.setSpacing(20);
 
@@ -129,14 +142,38 @@ public class App extends Application {
             if (toxicDead) map = new ToxicMap(width, height, predisitination, isCrazy, hellExists, reproductionE, plantE, initialE, NumberOfGenes);
             else map = new EquatorMap(width, height, predisitination, isCrazy, hellExists, reproductionE, plantE, initialE, NumberOfGenes);
 
-            EvolutionWindow simulation = new EvolutionWindow();
-            simulation.initStartScene(map, startAnimalsNum, startPlantsNum, dailyGrown, this);
-        });
+            SimulationEngine newEngine = new SimulationEngine(map, startAnimalsNum,  startPlantsNum, dailyGrown, this);
+            EvolutionWindow newSimulation = new EvolutionWindow(map, startAnimalsNum,  startPlantsNum, dailyGrown, newEngine);
 
-        scene = new Scene(border, 2000,1000);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+            System.out.println("dupa1");
+            Thread newThread = new Thread(newEngine);
+            threads.add(newThread);
+            windows.put(newEngine, newSimulation);
+        });
+        playButton.setOnAction(event -> {
+
+            System.out.println("dupa3");
+            playButton.setEffect(new DropShadow());
+            for (Thread thread : threads) {
+                thread.start();
+            }
+        });
+    }
+    public void draw(SimulationEngine engine) throws FileNotFoundException {
+        Platform.runLater(() -> {
+            try {
+                windows.get(engine).drawGame();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            }
+        });
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-
 }
+

@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
 
-public class EvolutionWindow extends Application {
+public class EvolutionWindow {
     private AppButtons buttons;
     private HBox boxWithButtons;
     private StatisticsReport  statisticsReport;
@@ -36,22 +36,26 @@ public class EvolutionWindow extends Application {
 
 
 
-    @Override
-    public void start(Stage window) throws Exception {
-        this.window = window;
-        scene = new Scene(border, 2000, 1000);
-        window.setScene(scene);
-        window.show();
-
-    }
-
-    public void initStartScene(AbstractWorldMap map, int startAnimalsNum, int startPlantsNum, int dailyGrown, App app) {
-        this.engine = new SimulationEngine(map, startAnimalsNum, startPlantsNum, dailyGrown, this);
-        this.statisticsReport = new StatisticsReport(map);
+    public EvolutionWindow(AbstractWorldMap map, int startAnimalsNum, int startPlantsNum, int dailyGrown, SimulationEngine engine) {
+        this.map = map;
+        System.out.println("map1 " + Integer.toString(map.listOfAnimals.size()));
+        this.engine = engine;
+//        engine.activate();
+        System.out.println("map2 " + Integer.toString(map.listOfAnimals.size()));
+        this.window = new Stage();
         this.buttons = new AppButtons(engine);
         this.boxWithButtons = buttons.getBox();
-        this.thread = new Thread(engine);
+        this.statisticsReport = new StatisticsReport(map);
+        VBox StatsButtons = new VBox(boxWithButtons);
+        mainbox = new HBox(gridPane, StatsButtons);
+//        HBox.setMargin(stats, new Insets(0,0,0,50));
+        mainbox.setAlignment(Pos.CENTER);
+        mainbox.setStyle("-fx-background-color: #eea29a;");
+        scene = new Scene(mainbox, 2000,1000);
+        scene.setRoot(mainbox);
+        window.setScene(scene);
 
+        window.show();
     }
 
 
@@ -66,7 +70,6 @@ public class EvolutionWindow extends Application {
     public void drawGame() throws FileNotFoundException {
         updateCharts();
         statisticsReport.updateStatistics();
-        engine.run();
         drawMap();
         scene.setRoot(mainbox);
         window.setScene(scene);
@@ -149,19 +152,5 @@ public class EvolutionWindow extends Application {
         else if (0.3F < percentage  && percentage <= 0.4F) view.setStyle("-fx-effect: dropshadow(three-pass-box, rgba(241, 144, 74, 0.8), 30, 0, 0, 0)");
         else if (0.2F < percentage  && percentage <= 0.3F) view.setStyle("-fx-effect: dropshadow(three-pass-box, rgba(255, 80, 0, 0.8), 30, 0, 0, 0)");
         else view.setStyle("-fx-effect: dropshadow(three-pass-box, rgba(234, 14, 14, 1), 30, 0, 0, 0)");
-    }
-
-    public void draw() throws FileNotFoundException{
-        Platform.runLater(() -> {
-            try {
-                drawGame();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        });
-    }
-
-    public Thread getThread() {
-        return thread;
     }
 }

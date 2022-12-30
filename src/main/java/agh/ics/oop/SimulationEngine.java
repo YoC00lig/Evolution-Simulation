@@ -13,16 +13,16 @@ public class SimulationEngine implements IEngine, Runnable{
     private final int startGrassnumber;
     private final int dailyGrowersNumber;
     private boolean isActive;
-    private final int moveDelay = 10;
+    private final int moveDelay = 400;
     public Statistics stats;
-    private final EvolutionWindow window;
+    private final App app;
 
-    public SimulationEngine(AbstractWorldMap map, int animalsNumber, int grassNumber, int dailyGrassNumber, EvolutionWindow window){
+    public SimulationEngine(AbstractWorldMap map, int animalsNumber, int grassNumber, int dailyGrassNumber, App app){
         this.map = map;
         this.startAnimalsNumber = animalsNumber;
         this.startGrassnumber = grassNumber;
         this.dailyGrowersNumber = dailyGrassNumber;
-        this.window =  window;
+        this.app =  app;
         this.isActive = true;
 
         for (int i = 0; i < startAnimalsNumber; i++){
@@ -53,23 +53,26 @@ public class SimulationEngine implements IEngine, Runnable{
 
     @Override
     public void run() {
-        while (map.listOfAnimals.size() > 0) {
+        while (map.listOfAnimals.size() >= 0) {
             if (this.isActive) {
                 if (map.listOfAnimals.size() == 0) {
                     System.out.println("(SimulationEngine-run) Wszystkie zwierzątka zmarły. Ilość dni: " + map.day);
-                    System.exit(0);
+//                    window.getStage().close();
+                    throw new RuntimeException();
                 }
 
                 updateMap();
                 try {
-                    window.draw();
+                    app.draw(this);
                 } catch (FileNotFoundException e) {
+                    e.printStackTrace();
                     throw new RuntimeException(e);
                 }
                 try {
                     Thread.sleep(this.moveDelay);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                    throw new RuntimeException(e);
                 }
 
             }
