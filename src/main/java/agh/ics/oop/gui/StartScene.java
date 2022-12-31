@@ -29,7 +29,7 @@ public class StartScene {
     public void create() {
         Label title = new Label("Welcome!");
         title.setStyle("-fx-font-weight: bold");
-        title.setFont(new Font(40));
+        title.setFont(new Font("Verdana",80));
         title.setAlignment(Pos.CENTER);
         border.setStyle("-fx-background-color: #eea29a;");
         BorderPane.setAlignment(title, Pos.CENTER);
@@ -49,11 +49,7 @@ public class StartScene {
         border.setCenter(view);
         startButton = new Button("START");
         styleButtonHover(startButton);
-        startButton.setOnAction(event -> {
-            ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
-        });
-
-
+        startButton.setOnAction(event -> ((Stage) (((Button) event.getSource()).getScene().getWindow())).close());
         startButton.setStyle("-fx-background-color: #ff6666");
         BorderPane.setAlignment(startButton, Pos.CENTER);
 
@@ -75,13 +71,7 @@ public class StartScene {
 
 
     public void styleButtonHover(Button B) {
-        B.addEventHandler(MouseEvent.MOUSE_ENTERED,
-                e -> {
-                    B.setEffect(new DropShadow());
-                });
-        B.addEventHandler(MouseEvent.MOUSE_EXITED,
-                e -> {
-                    B.setEffect(null);
-                });
+        B.addEventHandler(MouseEvent.MOUSE_ENTERED, e -> B.setEffect(new DropShadow()));
+        B.addEventHandler(MouseEvent.MOUSE_EXITED, e -> B.setEffect(null));
     }
 }

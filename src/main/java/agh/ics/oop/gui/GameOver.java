@@ -21,14 +21,18 @@ public class GameOver {
     private final BorderPane border = new BorderPane();
     Scene scene;
     Thread thread;
+    Stage stage;
+    App app;
 
-    public GameOver(Thread thread){
+    public GameOver(Thread thread, Stage stage, App app){
         this.thread = thread;
+        this.stage = stage;
+        this.app = app;
     }
     public void create() {
         Label title = new Label("All the animals have already died:(");
         title.setStyle("-fx-font-weight: bold");
-        title.setFont(new Font(40));
+        title.setFont(new Font("Verdana",80));
         title.setAlignment(Pos.CENTER);
         border.setStyle("-fx-background-color: #eea29a;");
         BorderPane.setAlignment(title, Pos.CENTER);
@@ -50,20 +54,29 @@ public class GameOver {
         Button exitButton = new Button("EXIT");
 
         styleButtonHover(exitButton);
-        exitButton.setOnAction(event -> {
-            ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
-        });
+        exitButton.setOnAction(event -> ((Stage) (((Button) event.getSource()).getScene().getWindow())).close());
 
         Button saveButton = new Button("SAVE DATA");
+        Button playAgain = new Button("PLAY AGAIN");
         saveButton.setStyle("-fx-background-color: #ff6666");
+        playAgain.setStyle("-fx-background-color: #ff6666");
         exitButton.setStyle("-fx-background-color: #ff6666");
         BorderPane.setAlignment(exitButton, Pos.CENTER);
         BorderPane.setAlignment(saveButton, Pos.CENTER);
-        saveButton.setStyle("-fx-background-color: #ff6666");
+        BorderPane.setAlignment(playAgain, Pos.CENTER);
         saveButton.setMaxWidth(100);
         styleButtonHover(saveButton);
         exitButton.setMinWidth(80);
-        HBox box = new HBox(exitButton, saveButton);
+        styleButtonHover(playAgain);
+        playAgain.setMinWidth(100);
+        playAgain.setOnAction(event -> {
+            for (EvolutionWindow window: app.windows.values()){
+                if (window.getStage() != stage) window.getStage().close();
+            }
+            Scene scene2 = new InputsScene(stage, app).getScene();
+            stage.setScene(scene2);
+        });
+        HBox box = new HBox(exitButton, saveButton, playAgain);
         box.setPrefWidth(2000);
         box.setAlignment(Pos.CENTER);
         box.setSpacing(20);
@@ -79,13 +92,7 @@ public class GameOver {
     }
 
     public void styleButtonHover(Button B) {
-        B.addEventHandler(MouseEvent.MOUSE_ENTERED,
-                e -> {
-                    B.setEffect(new DropShadow());
-                });
-        B.addEventHandler(MouseEvent.MOUSE_EXITED,
-                e -> {
-                    B.setEffect(null);
-                });
+        B.addEventHandler(MouseEvent.MOUSE_ENTERED, e -> B.setEffect(new DropShadow()));
+        B.addEventHandler(MouseEvent.MOUSE_EXITED, e -> B.setEffect(null));
     }
 }

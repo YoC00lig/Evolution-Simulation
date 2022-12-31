@@ -71,13 +71,7 @@ public class AppButtons {
     }
 
     public void styleButtonHover(Button B) {
-        B.addEventHandler(MouseEvent.MOUSE_ENTERED,
-                e -> {
-                    B.setEffect(new DropShadow());
-                });
-        B.addEventHandler(MouseEvent.MOUSE_EXITED,
-                e -> {
-                    B.setEffect(null);
-                });
+        B.addEventHandler(MouseEvent.MOUSE_ENTERED, e -> B.setEffect(new DropShadow()));
+        B.addEventHandler(MouseEvent.MOUSE_EXITED, e -> B.setEffect(null));
     }
 }

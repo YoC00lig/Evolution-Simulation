@@ -15,17 +15,17 @@ import java.io.FileNotFoundException;
 import java.util.LinkedList;
 
 public class EvolutionWindow {
-    private AppButtons buttons;
-    private HBox boxWithButtons;
-    private StatisticsReport  statisticsReport;
+    private final AppButtons buttons;
+    private final HBox boxWithButtons;
+    private final StatisticsReport  statisticsReport;
 
     private HBox mainbox;
-    private AbstractWorldMap map;
-    private SimulationEngine engine;
+    private final AbstractWorldMap map;
+    private final SimulationEngine engine;
     Thread thread;
 
     private GridPane gridPane = new GridPane();
-    private Stage window;
+    private final Stage window;
     private Scene scene;
     final int size = 25; // rozmiar mapy
     private final LineCharts animalsNumber = new LineCharts("Animals number", "Animals");
@@ -33,12 +33,14 @@ public class EvolutionWindow {
     private final LineCharts avgEnergy = new LineCharts("Average animal energy", "Energy");
     private final LineCharts avgLifeLength = new LineCharts("Average life length", "Life length [days]");
     private final LineCharts freeFields = new LineCharts("Free fields on the map", "Free fields");
+    App app;
 
 
 
-    public EvolutionWindow(AbstractWorldMap map, SimulationEngine engine, Thread thread) {
+    public EvolutionWindow(AbstractWorldMap map, SimulationEngine engine, Thread thread, App app) {
         this.map = map;
         this.engine = engine;
+        this.app = app;
         this.window = new Stage();
         this.buttons = new AppButtons(engine, window, thread);
         this.boxWithButtons = buttons.getBox();
@@ -74,7 +76,7 @@ public class EvolutionWindow {
            window.show();
        }
        else {
-           GameOver gameover = new GameOver(thread);
+           GameOver gameover = new GameOver(thread, window, app);
            Scene endScene = gameover.getScene();
            gameover.thread.stop();
            scene = endScene;
@@ -138,14 +140,8 @@ public class EvolutionWindow {
 
         VBox stats = statisticsReport.getStatistics();
         Button saveButton = buttons.getSaveButton();
-        saveButton.addEventHandler(MouseEvent.MOUSE_ENTERED,
-                e -> {
-                    saveButton.setEffect(new DropShadow());
-                });
-        saveButton.addEventHandler(MouseEvent.MOUSE_EXITED,
-                e -> {
-                    saveButton.setEffect(null);
-                });
+        saveButton.addEventHandler(MouseEvent.MOUSE_ENTERED, e -> saveButton.setEffect(new DropShadow()));
+        saveButton.addEventHandler(MouseEvent.MOUSE_EXITED, e -> saveButton.setEffect(null));
         stats.getChildren().add(saveButton);
         VBox StatsButtons = new VBox(stats, boxWithButtons);
 
@@ -175,5 +171,9 @@ public class EvolutionWindow {
         else if (0.3F < percentage  && percentage <= 0.4F) view.setStyle("-fx-effect: dropshadow(three-pass-box, rgba(241, 144, 74, 0.8), 30, 0, 0, 0)");
         else if (0.2F < percentage  && percentage <= 0.3F) view.setStyle("-fx-effect: dropshadow(three-pass-box, rgba(255, 80, 0, 0.8), 30, 0, 0, 0)");
         else view.setStyle("-fx-effect: dropshadow(three-pass-box, rgba(234, 14, 14, 1), 30, 0, 0, 0)");
+    }
+
+    public Stage getStage() {
+        return this.window;
     }
 }
