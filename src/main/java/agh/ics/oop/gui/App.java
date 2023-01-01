@@ -27,6 +27,9 @@ public class App extends Application {
     Button confirmButton = new Button("CONFIRM");
     private Scene scene;
     private Map<IEngine, EvolutionWindow> windows = new HashMap<>();
+    private final AbstractWorldMap[] exampleMaps = {new EquatorMap(10, 10, false, false, true, 2, 1, 20, 20, 1, 7, 2),
+            new ToxicMap(18, 18, true, false, true, 3, 2, 30, 12, 4, 5, 3)};
+    private final SimulationEngine[] exampleEngines = {new SimulationEngine(exampleMaps[0], 5, 2, 2, this), new SimulationEngine(exampleMaps[1], 15, 1, 1, this)};
     List<Thread> threads = new LinkedList<>();
     private int canAgain = 0;
 
