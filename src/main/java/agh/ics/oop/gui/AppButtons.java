@@ -49,8 +49,10 @@ public class AppButtons {
                     exitButton.setEffect(new DropShadow());
                     ((Stage) (((Button) e.getSource()).getScene().getWindow())).close();
                     stage.close();
-                    thread.stop();
+//                    thread.stop();
+                    thread.interrupt();
                 });
+
 
 
         styleButtonHover(stopButton);

@@ -27,6 +27,8 @@ public class App extends Application {
     private Scene scene;
     private Map<IEngine, EvolutionWindow> windows = new HashMap<>();
     List<Thread> threads = new LinkedList<>();
+    Button confirmButton = new Button("CONFIRM");
+    private int canAgain = 0;
 
     public static void main(String[] args) {
         launch(args);
@@ -117,7 +119,7 @@ public class App extends Application {
         Label dailyGrownGrassNumberLabel = new Label("number of plants per-day:       "); dailyGrownGrassNumberLabel.setFont(new Font("Verdana", 14));
         Label numberOfGenesLabel = new Label("Length of genotype: "); numberOfGenesLabel.setFont(new Font("Verdana", 14));
 
-        Button confirmButton = new Button("CONFIRM");
+
         confirmButton.setStyle("-fx-background-color: #ff6666");
         Button playButton = new Button("PLAY");
         playButton.setStyle("-fx-background-color: #ff6666");
@@ -173,9 +175,12 @@ public class App extends Application {
         playButton.setOnAction(event -> {
             for (Thread thread : threads) {
                 thread.start();
+                canAgain += 1;
             }
-            primaryStage.close();
+//            primaryStage.close();
+            confirmButton.setDisable(true);
         });
+
     }
 
     public void styleButtonHover(Button B) {
@@ -201,9 +206,23 @@ public class App extends Application {
         try {
             Thread.sleep(100);
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            Thread.currentThread().interrupt();
+
+//            throw new RuntimeException(e);
         }
     }
 
+    public int getCanAgain() {
+        return canAgain;
+    }
+
+    public void decrementCanAgain() {
+        this.canAgain -= 1;
+        if (canAgain == 0) {
+            confirmButton.setDisable(false);
+            threads = new LinkedList<>();
+            windows = new HashMap<>();
+        }
+    }
 }
 

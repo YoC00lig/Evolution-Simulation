@@ -20,11 +20,11 @@ import java.io.FileNotFoundException;
 public class GameOver {
     private final BorderPane border = new BorderPane();
     Scene scene;
-    Thread thread;
+//    Thread thread;
 
-    public GameOver(Thread thread){
-        this.thread = thread;
-    }
+//    public GameOver(Thread thread){
+//        this.thread = thread;
+//    }
     public void create() {
         Label title = new Label("All the animals have already died:(");
         title.setStyle("-fx-font-weight: bold");

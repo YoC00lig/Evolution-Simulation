@@ -74,9 +74,10 @@ public class EvolutionWindow {
            window.show();
        }
        else {
-           GameOver gameover = new GameOver(thread);
+           GameOver gameover = new GameOver();
            Scene endScene = gameover.getScene();
-           gameover.thread.stop();
+//           gameover.thread.stop();
+           thread.interrupt();
            scene = endScene;
            window.setScene(scene);
            window.show();

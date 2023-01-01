@@ -64,8 +64,11 @@ public class SimulationEngine implements IEngine, Runnable{
             try {
                 Thread.sleep(this.moveDelay);
             } catch (InterruptedException e) {
-                e.printStackTrace();
-                throw new RuntimeException(e);
+                app.decrementCanAgain();
+                System.out.println("dead end");
+//                e.printStackTrace();
+//                throw new RuntimeException(e);
+                break;
             }
         }
     }
