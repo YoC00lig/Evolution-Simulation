@@ -16,10 +16,10 @@ public class CSVFile {
 
     public void update() {
         Statistics stats = new Statistics(this.map);
-        saveRecord(this.map.day, this.map.livingAnimals, this.map.plantsNumber, this.map.freeFields(), stats.findDominantGenotype(), stats.averageEnergy(), stats.averageLifeLength(), this.path);
+        saveRecord(this.map.day, this.map.livingAnimals, this.map.plantsNumber, this.map.freeFields(), stats.findDominantGenotype(), stats.averageEnergy(), stats.averageLifeLength());
     }
 
-    public static void saveRecord(int day, int livingAnimals, int plantsNumber, int freeFields, int mostPopularGenotype, int avgEnergy, int avgLifeLength, String path){
+    public static void saveRecord(int day, int livingAnimals, int plantsNumber, int freeFields, int mostPopularGenotype, int avgEnergy, int avgLifeLength){
         try {
             FileWriter fw = new FileWriter(file, true);
             BufferedWriter bw = new BufferedWriter(fw);
