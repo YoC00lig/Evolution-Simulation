@@ -36,7 +36,7 @@ public class Genotype {
         }
         // mutacje
         Random random = new Random();
-        int number = random.nextInt(map.maxMutations - map.minMutations) + map.minMutations;
+        int number = random.nextInt(map.maxMutations + 1 - map.minMutations) + map.minMutations;
 
         for (int i = 0 ; i < number; i++) {
             int index = (int) (Math.random() * numberOfGenes);
