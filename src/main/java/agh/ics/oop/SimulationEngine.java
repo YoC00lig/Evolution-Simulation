@@ -12,7 +12,7 @@ public class SimulationEngine implements IEngine, Runnable{
     private final int startGrassnumber;
     private final int dailyGrowersNumber;
     private boolean isActive;
-    private final int moveDelay = 100;
+    private final int moveDelay = 400;
     public Statistics stats;
     private final App app;
 
