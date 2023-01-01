@@ -44,25 +44,19 @@ public class GameOver {
         border.setCenter(view);
 
         Button exitButton = new Button("EXIT");
-        Button saveButton = new Button("SAVE DATA");
+
 
         styleButtonHover(exitButton);
         exitButton.setOnAction(event -> ((Stage) (((Button) event.getSource()).getScene().getWindow())).close());
 
-
-        saveButton.setStyle("-fx-background-color: #ff6666");
         exitButton.setStyle("-fx-background-color: #ff6666");
 
         BorderPane.setAlignment(exitButton, Pos.CENTER);
-        BorderPane.setAlignment(saveButton, Pos.CENTER);
 
-
-        saveButton.setMaxWidth(100);
-        styleButtonHover(saveButton);
         exitButton.setMinWidth(80);
         styleButtonHover(exitButton);
 
-        HBox box = new HBox(exitButton, saveButton);
+        HBox box = new HBox(exitButton);
         box.setPrefWidth(2000);
         box.setAlignment(Pos.CENTER);
         box.setSpacing(20);
