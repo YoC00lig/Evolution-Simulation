@@ -130,7 +130,7 @@ public class Animal implements IMapElement{
             Vector2d newPosition = position.add(newOrientation.toUnitVector());
             if (map.canMoveTo(newPosition)) orientation = newOrientation;
             else if(hellExists) {
-                this.setEnergy(this.energy-map.minReproductionEnergy);
+                this.setEnergy(this.energy-map.minReproductionCost);
                 newPosition = map.HellsPortal();
                 orientation = newOrientation;
             }

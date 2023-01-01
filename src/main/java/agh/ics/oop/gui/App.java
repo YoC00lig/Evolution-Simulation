@@ -1,6 +1,7 @@
 package agh.ics.oop.gui;
 
 import agh.ics.oop.*;
+import com.sun.javafx.scene.control.Properties;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -15,7 +16,8 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.scene.control.ComboBox;
-import java.io.FileNotFoundException;
+
+import java.io.*;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -254,6 +256,18 @@ public class App extends Application {
             threads = new LinkedList<>();
             windows = new HashMap<>();
         }
+    }
+
+    public void loadProps() {
+        try (OutputStream output = new FileOutputStream("src/main/resources/config.properties")) {
+            Properties prop = new Properties();
+            prop.loadFromXML(new FileInputStream("src/main/resources/examples.xml"));
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 }
 

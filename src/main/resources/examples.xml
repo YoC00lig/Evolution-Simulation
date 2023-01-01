@@ -1,0 +1,44 @@
+<simulations>
+    <first><entry key="width">18</entry>
+        <entry key="height">18</entry>
+        <entry key="predisitination">true</entry>
+        <entry key="toxicDead">false</entry>
+        <entry key="isCrazy">false</entry>
+        <entry key="hellExists">false</entry>
+        <entry key="reproductionE">2</entry>
+        <entry key="plantE">2</entry>
+        <entry key="initialE">12</entry>
+        <entry key="startAnimalsNum">15</entry>
+        <entry key="startPlantsNum">8</entry>
+        <entry key="dailyGrown">2</entry>
+        <entry key="NumberOfGenes">20</entry>
+    </first>
+
+    <second><entry key="width">10</entry>
+        <entry key="height">10</entry>
+        <entry key="predisitination">false</entry>
+        <entry key="toxicDead">true</entry>
+        <entry key="isCrazy">true</entry>
+        <entry key="hellExists">false</entry>
+        <entry key="reproductionE">4</entry>
+        <entry key="plantE">4</entry>
+        <entry key="initialE">30</entry>
+        <entry key="startAnimalsNum">19</entry>
+        <entry key="startPlantsNum">2</entry>
+        <entry key="dailyGrown">3</entry>
+        <entry key="NumberOfGenes">30</entry></second>
+    <third><entry key="width">15</entry>
+        <entry key="height">15</entry>
+        <entry key="predisitination">true</entry>
+        <entry key="toxicDead">false</entry>
+        <entry key="isCrazy">false</entry>
+        <entry key="hellExists">true</entry>
+        <entry key="reproductionE">5</entry>
+        <entry key="plantE">1</entry>
+        <entry key="initialE">10</entry>
+        <entry key="startAnimalsNum">3</entry>
+        <entry key="startPlantsNum">5</entry>
+        <entry key="dailyGrown">2</entry>
+        <entry key="NumberOfGenes">10</entry></third>
+
+</simulations>
