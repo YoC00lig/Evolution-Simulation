@@ -6,8 +6,8 @@ import java.util.Collections;
 public class ToxicMap extends AbstractWorldMap{
     protected ArrayList<InfoField> informations = new ArrayList<>(); // ArrayList żeby móc łatwo posortować po polu death
 
-    public ToxicMap(int width, int height, boolean predistination, boolean isCrazyMode, boolean hellExistsMode, int reproductionE, int plantE, int initialE, int genesNumber) {
-        super(width, height, predistination, isCrazyMode, hellExistsMode, reproductionE, plantE, initialE, genesNumber);
+    public ToxicMap(int width, int height, boolean predistination, boolean isCrazyMode, boolean hellExistsMode, int reproductionE, int plantE, int initialE, int genesNumber, int minMut, int maxMut, int reprCost) {
+        super(width, height, predistination, isCrazyMode, hellExistsMode, reproductionE, plantE, initialE, genesNumber, minMut, maxMut, reprCost);
         this.informations.addAll(fields1.values()); // interesują nas tylko informacje o liczbie śmierci na samym polu, więc potrzebujemy tylko InfoField, nie potrzebujemy się odwoływać po wektorach
     }
 

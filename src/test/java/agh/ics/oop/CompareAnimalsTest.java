@@ -12,7 +12,7 @@ public class CompareAnimalsTest {
     @Test
     public void Test1() {
         AbstractWorldMap map = new EquatorMap(5, 5, true,true,
-                true, 3, 4, 5,32);
+                true, 3, 4, 5,32,3,6,2);
         Animal a1 = new Animal(map, new Vector2d(2,3));
         Animal a2 = new Animal(map, new Vector2d(2,4));
         Animal a3 = new Animal(map, new Vector2d(1,3));
@@ -45,9 +45,6 @@ public class CompareAnimalsTest {
 
         Collections.reverse(list);
 
-//        for (Animal animal:list){
-//            System.out.println("" + animal.getCurrentEnergy() + " " + animal.getDaysOfLife() + " " + animal.getNumberOfChildren());
-//        }
 
         assertEquals(a2, list.get(0));
         assertEquals(a1, list.get(1));

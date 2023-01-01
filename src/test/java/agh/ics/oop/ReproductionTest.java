@@ -6,7 +6,7 @@ public class ReproductionTest {
     @Test
     public void Test1(){ // dwa zwierzątka na jednym miejscu
         AbstractWorldMap map = new ToxicMap(5, 5, true,true,
-                true, 3, 4, 5,32);
+                true, 3, 4, 5,32,3,6,2);
         new Animal(map, new Vector2d(2,3));
         new Animal(map, new Vector2d(2,3));
         map.reproduction();
@@ -26,7 +26,7 @@ public class ReproductionTest {
     @Test
     public void Test2(){ // trzy zwierzątka na jednym miejscu
         AbstractWorldMap map = new EquatorMap(5, 5, true,true,
-                true, 3, 4, 5,32);
+                true, 3, 4, 5,32,3,6,2);
         new Animal(map, new Vector2d(2,3));
         new Animal(map, new Vector2d(2,3));
         new Animal(map, new Vector2d(2,3));
@@ -48,7 +48,7 @@ public class ReproductionTest {
     @Test
     public void Test3(){ // pięc zwierzątek na jednym miejscu
         AbstractWorldMap map = new ToxicMap(5, 5, true,true,
-                true,3, 4, 5,32);
+                true,3, 4, 5,32,3,6,2);
         new Animal(map, new Vector2d(2,3));
         new Animal(map, new Vector2d(2,3));
         new Animal(map, new Vector2d(2,3));

@@ -15,9 +15,11 @@ public class AppButtons {
     Button exitButton;
     Button stopButton;
 
-    public AppButtons(SimulationEngine engine) {
+    public AppButtons(SimulationEngine engine, Stage stage, Thread thread) {
         exitButton = new Button("EXIT");
         stopButton = new Button("STOP");
+        stopButton.setMinWidth(80);
+        exitButton.setMinWidth(80);
         this.box = new HBox(exitButton, stopButton);
         exitButton.setStyle("-fx-background-color: #ff6666");
         stopButton.setStyle("-fx-background-color: #ff6666");
@@ -33,29 +35,36 @@ public class AppButtons {
                 stopButton.setText("STOP");
                 engine.activate();
             }
-            stopButton.setEffect(null);
         };
 
         box.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
         box.setSpacing(10);
         box.setAlignment(Pos.CENTER);
 
-        exitButton.addEventHandler(MouseEvent.MOUSE_EXITED,
+        exitButton.addEventHandler(MouseEvent.MOUSE_CLICKED,
                 e -> {
                     exitButton.setEffect(new DropShadow());
-//                    ((Stage) (((Button) e.getSource()).getScene().getWindow())).close();
-                    Stage stage = ((Stage) (((Button) e.getSource()).getScene().getWindow()));
-//                    stage.setScene(app.getScene2());
-//                    System.exit(0);
+                    ((Stage) (((Button) e.getSource()).getScene().getWindow())).close();
                     stage.close();
+                    thread.interrupt();
                 });
 
 
-        stopButton.addEventHandler(MouseEvent.MOUSE_ENTERED, eventHandler);
+
+        styleButtonHover(stopButton);
+        styleButtonHover(exitButton);
+        stopButton.addEventHandler(MouseEvent.MOUSE_CLICKED, eventHandler);
     }
 
     public HBox getBox(){
         return this.box;
+    }
+
+    public void styleButtonHover(Button B) {
+        B.addEventHandler(MouseEvent.MOUSE_ENTERED,
+                e -> B.setEffect(new DropShadow()));
+        B.addEventHandler(MouseEvent.MOUSE_EXITED,
+                e -> B.setEffect(null));
     }
 
 }

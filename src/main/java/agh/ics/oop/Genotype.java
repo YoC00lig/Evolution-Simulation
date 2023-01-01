@@ -1,6 +1,7 @@
 package agh.ics.oop;
 
 import java.util.List;
+import java.util.Random;
 
 public class Genotype {
     private static final int typesOfGenes = 8;
@@ -36,7 +37,9 @@ public class Genotype {
             }
         }
 
-        int number = (int) (Math.random() * numberOfGenes);
+        Random random = new Random();
+        int number = random.nextInt(map.maxMutations - map.minMutations) + map.minMutations;
+
         for (int i = 0 ; i < number; i++) {
             int index = (int) (Math.random() * numberOfGenes);
 
@@ -67,4 +70,11 @@ public class Genotype {
         return (int) (Math.random() * 2);
     }
 
+    public String toString(int[] genotype) {
+        StringBuilder genotypeString = new StringBuilder();
+        for (int gen: genotype){
+            genotypeString.append(gen);
+        }
+        return genotypeString.toString();
+    }
 }

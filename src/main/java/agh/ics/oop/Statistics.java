@@ -16,7 +16,7 @@ public class Statistics {
                 allenergy += animal.getCurrentEnergy();
             }
         }
-        if (numberOfAnimals >0) map.averageEnergy = allenergy / numberOfAnimals;
+        if (numberOfAnimals > 0) map.averageEnergy = allenergy / numberOfAnimals;
         return map.averageEnergy;
     }
 
@@ -35,14 +35,9 @@ public class Statistics {
             int gen = animal.findDominantGenotype();
             cnt[gen] += 1;
         }
-        int maxi = 0;
         int Gen = 0;
-
-        for (int i = 0; i < 8; i++) {
-            if (cnt[i] > maxi) {
-                Gen = i;
-                maxi = cnt[i];
-            }
+        for (int i = 0; i < cnt.length; i++) {
+            Gen = cnt[i] > cnt[Gen] ? i : Gen;
         }
         map.dominantGenotype = Gen;
         return map.dominantGenotype;

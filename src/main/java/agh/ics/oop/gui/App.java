@@ -10,157 +10,160 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-
+import javafx.scene.control.ComboBox;
 import java.io.FileNotFoundException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 public class App extends Application {
-    private final BorderPane border = new BorderPane();
 
-//    private List<EvolutionWindow> evolutions = new ArrayList<>();
+    private final BorderPane border = new BorderPane();
+    Button confirmButton = new Button("CONFIRM");
+    private Scene scene;
     private Map<IEngine, EvolutionWindow> windows = new HashMap<>();
     List<Thread> threads = new LinkedList<>();
-    Scene scene;
-    final int size = 25; // rozmiar mapy
-    private final LineCharts animalsNumber = new LineCharts("Animals number", "Animals");
-    private final LineCharts plantsNumber = new LineCharts("Plants number", "Plants");
-    private final LineCharts avgEnergy = new LineCharts("Average animal energy", "Energy");
-    private final LineCharts avgLifeLength = new LineCharts("Average life length", "Life length [days]");
-    private final LineCharts freeFields = new LineCharts("Free fields on the map", "Free fields");
+    private int canAgain = 0;
 
     public static void main(String[] args) {
         launch(args);
     }
 
-
     @Override
     public void start(Stage primaryStage) {
-        initStartScene();
-        scene = new Scene(border, 2000, 1000);
-        primaryStage.setScene(scene);
+        StartScene startscene = new StartScene();
+        Button startButton = startscene.getStartButton();
+        startButton.setOnAction(event -> {
+            initStartScene();
+            scene = new Scene(border, 2000, 1000);
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        });
+        Scene sceneStart = startscene.getScene();
+        primaryStage.setScene(sceneStart);
         primaryStage.show();
+
     }
-
-
     public void initStartScene() {
-
         Label title = new Label("Input your own parameters: ");
         title.setStyle("-fx-font-weight: bold");
-        title.setFont(new Font(40));
+        title.setFont(new Font(60));
         title.setAlignment(Pos.CENTER);
 
-        VBox listOfTextField = new VBox();
+        // textFields and ComboBoxes (for choosing options)
+        TextField widthField = new TextField("15"); widthField.setStyle("-fx-background-color: #f7cac9");
+        TextField heightField = new TextField("15"); heightField.setStyle("-fx-background-color: #f7cac9");
 
-        TextField widthField = new TextField("25");
-        TextField heightField = new TextField("25");
-        TextField predistinationMode = new TextField("true");
-        TextField toxicDeadMode = new TextField("false");
-        TextField isCrazyMode = new TextField("true");
-        TextField hellExistsMode = new TextField("true");
-        TextField reproductionEnergy = new TextField("3");
-        TextField plantEnergy = new TextField("2");
-        TextField initialEnergy = new TextField("100");
-        TextField startAnimalsNumber = new TextField("20");
-        TextField startPlantsNumber = new TextField("1");
-        TextField dailyGrownGrassNumber = new TextField("1");
-        TextField numberOfGenes = new TextField("32");
+        ComboBox<String> SaveToFile = new ComboBox<>();
+        SaveToFile.getItems().add("true");
+        SaveToFile.getItems().add("false");
+        SaveToFile.setStyle("-fx-background-color: #f7cac9");
 
-        widthField.setStyle("-fx-background-color: #f7cac9");
-        widthField.setPrefColumnCount(14);
-        heightField.setStyle("-fx-background-color: #f7cac9");
-        heightField.setPrefColumnCount(14);
+        ComboBox<String> predistinationMode = new ComboBox<>();
+        predistinationMode.getItems().add("true");
+        predistinationMode.getItems().add("false");
         predistinationMode.setStyle("-fx-background-color: #f7cac9");
-        predistinationMode.setPrefColumnCount(14);
+
+        ComboBox<String> toxicDeadMode = new ComboBox<>();
+        toxicDeadMode.getItems().add("true");
+        toxicDeadMode.getItems().add("false");
         toxicDeadMode.setStyle("-fx-background-color: #f7cac9");
-        toxicDeadMode.setPrefColumnCount(14);
+
+        ComboBox<String> isCrazyMode = new ComboBox<>();
+        isCrazyMode.getItems().add("true");
+        isCrazyMode.getItems().add("false");
         isCrazyMode.setStyle("-fx-background-color: #f7cac9");
-        isCrazyMode.setPrefColumnCount(14);
+
+        ComboBox<String> hellExistsMode = new ComboBox<>();
+        hellExistsMode.getItems().add("true");
+        hellExistsMode.getItems().add("false");
         hellExistsMode.setStyle("-fx-background-color: #f7cac9");
-        hellExistsMode.setPrefColumnCount(14);
-        reproductionEnergy.setStyle("-fx-background-color: #f7cac9");
-        reproductionEnergy.setPrefColumnCount(14);
-        plantEnergy.setStyle("-fx-background-color: #f7cac9");
-        plantEnergy.setPrefColumnCount(14);
-        initialEnergy.setStyle("-fx-background-color: #f7cac9");
-        initialEnergy.setPrefColumnCount(14);
-        startAnimalsNumber.setStyle("-fx-background-color: #f7cac9");
-        startAnimalsNumber.setPrefColumnCount(14);
-        startPlantsNumber.setStyle("-fx-background-color: #f7cac9");
-        startPlantsNumber.setPrefColumnCount(14);
-        dailyGrownGrassNumber.setStyle("-fx-background-color: #f7cac9");
-        dailyGrownGrassNumber.setPrefColumnCount(14);
-        numberOfGenes.setStyle("-fx-background-color: #f7cac9");
-        numberOfGenes.setPrefColumnCount(14);
 
-        listOfTextField.getChildren().addAll(widthField, heightField, predistinationMode, toxicDeadMode, isCrazyMode,
-                hellExistsMode, reproductionEnergy, plantEnergy, initialEnergy, startAnimalsNumber,
-                startPlantsNumber, dailyGrownGrassNumber, numberOfGenes);
+        TextField reproductionEnergy = new TextField("3"); reproductionEnergy.setStyle("-fx-background-color: #f7cac9");
+        TextField plantEnergy = new TextField("2"); plantEnergy.setStyle("-fx-background-color: #f7cac9");
+        TextField initialEnergy = new TextField("30");  initialEnergy.setStyle("-fx-background-color: #f7cac9");
+        TextField startAnimalsNumber = new TextField("5"); startAnimalsNumber.setStyle("-fx-background-color: #f7cac9");
+        TextField startPlantsNumber = new TextField("1"); startPlantsNumber.setStyle("-fx-background-color: #f7cac9");
+        TextField dailyGrownGrassNumber = new TextField("1"); dailyGrownGrassNumber.setStyle("-fx-background-color: #f7cac9");
+        TextField numberOfGenes = new TextField("32"); numberOfGenes.setStyle("-fx-background-color: #f7cac9");
+        TextField minMutations = new TextField("3");  minMutations.setStyle("-fx-background-color: #f7cac9");
+        TextField maxMutations = new TextField("6"); maxMutations.setStyle("-fx-background-color: #f7cac9");
+        TextField reproductionCost = new TextField("2"); reproductionCost.setStyle("-fx-background-color: #f7cac9");
 
-        listOfTextField.setSpacing(13);
+
+        // Labels
+        Label SaveToFileLabel = new Label("Save data?: ");
+        Label widthFieldLabel = new Label("Width (5-20): ");
+        Label heightFieldLabel = new Label("Height (5-20): ");
+        Label predistinationModeLabel = new Label("Predistination mode?");
+        Label toxicDeadModeLabel = new Label("Toxic-dead mode?");
+        Label isCrazyModeLabel = new Label("Is-crazy mode?");
+        Label hellExistsModeLabel = new Label("hell's portal mode?");
+        Label reproductionEnergyLabel = new Label("reproduction energy (2-5): ");
+        Label plantEnergyLabel = new Label("plant energy (1-5): ");
+        Label initialEnergyLabel = new Label("initial animal energy (10-50): ");
+        Label startAnimalsNumberLabel = new Label("start number of animals (1-20): ");
+        Label startPlantsNumberLabel = new Label("start number of plants (1-10): ");
+        Label dailyGrownGrassNumberLabel = new Label("number of plants per-day (1-3): ");
+        Label numberOfGenesLabel = new Label("Length of genotype (5-32): ");
+        Label minMutationsLabel = new Label("Minimum number of mutations (0 - maximum number of mutations): ");
+        Label maxMutationsLabel = new Label("Maximum number of mutations (minimum number of mutations - length of genotype): ");
+        Label reproductionCostLabel = new Label("Energy that animal lost in reproduction: ");
+
+        setFonts(new Label[]{SaveToFileLabel, widthFieldLabel, heightFieldLabel, predistinationModeLabel,
+                toxicDeadModeLabel, isCrazyModeLabel, hellExistsModeLabel,
+                reproductionEnergyLabel, plantEnergyLabel, initialEnergyLabel, startAnimalsNumberLabel,
+                startPlantsNumberLabel, dailyGrownGrassNumberLabel, numberOfGenesLabel, minMutationsLabel, maxMutationsLabel, reproductionCostLabel});
+
+
+        // labels with textFields - input list
+
+        VBox TextFields = new VBox();
+        TextFields.setSpacing(13);
 
         VBox listOfLabel = new VBox();
-        Label widthFieldLabel = new Label("Width: ");
-        widthFieldLabel.setFont(new Font("Verdana", 14));
-        Label heightFieldLabel = new Label("Height: ");
-        heightFieldLabel.setFont(new Font("Verdana", 14));
-        Label predistinationModeLabel = new Label("Predistination mode?");
-        predistinationModeLabel.setFont(new Font("Verdana", 14));
-        Label toxicDeadModeLabel = new Label("Toxic-dead mode?");
-        toxicDeadModeLabel.setFont(new Font("Verdana", 14));
-        Label isCrazyModeLabel = new Label("Is-crazy mode?");
-        isCrazyModeLabel.setFont(new Font("Verdana", 14));
-        Label hellExistsModeLabel = new Label("hell's portal mode?");
-        hellExistsModeLabel.setFont(new Font("Verdana", 14));
-        Label reproductionEnergyLabel = new Label("reproduction energy: ");
-        reproductionEnergyLabel.setFont(new Font("Verdana", 14));
-        Label plantEnergyLabel = new Label("plant energy: ");
-        plantEnergyLabel.setFont(new Font("Verdana", 14));
-        Label initialEnergyLabel = new Label("initial animal energy: ");
-        initialEnergyLabel.setFont(new Font("Verdana", 14));
-        Label startAnimalsNumberLabel = new Label("start number of animals: ");
-        startAnimalsNumberLabel.setFont(new Font("Verdana", 14));
-        Label startPlantsNumberLabel = new Label("start number of plants: ");
-        startPlantsNumberLabel.setFont(new Font("Verdana", 14));
-        Label dailyGrownGrassNumberLabel = new Label("number of plants per-day:       ");
-        dailyGrownGrassNumberLabel.setFont(new Font("Verdana", 14));
-        Label numberOfGenesLabel = new Label("Length of genotype: ");
-        numberOfGenesLabel.setFont(new Font("Verdana", 14));
+        listOfLabel.setSpacing(20);
 
-        Button confirmButton = new Button("CONFIRM");
-        confirmButton.setStyle("-fx-background-color: #ff6666");
+        TextFields.getChildren().addAll(SaveToFile, widthField, heightField, predistinationMode, toxicDeadMode, isCrazyMode,
+                hellExistsMode, reproductionEnergy, plantEnergy, initialEnergy, startAnimalsNumber,
+                startPlantsNumber, dailyGrownGrassNumber, numberOfGenes, minMutations, maxMutations, reproductionCost);
+
+        listOfLabel.getChildren().addAll(SaveToFileLabel, widthFieldLabel, heightFieldLabel, predistinationModeLabel, toxicDeadModeLabel, isCrazyModeLabel,
+                hellExistsModeLabel, reproductionEnergyLabel, plantEnergyLabel, initialEnergyLabel,  startAnimalsNumberLabel,
+                startPlantsNumberLabel, dailyGrownGrassNumberLabel, numberOfGenesLabel, minMutationsLabel, maxMutationsLabel, reproductionCostLabel);
+
+        HBox inputList = new HBox();
+        inputList.getChildren().addAll(listOfLabel, TextFields);
+        inputList.setAlignment(Pos.TOP_CENTER);
+
+        // buttons
 
         Button playButton = new Button("PLAY");
         playButton.setStyle("-fx-background-color: #ff6666");
+        styleButtonHover(playButton);
 
-        listOfLabel.getChildren().addAll(widthFieldLabel, heightFieldLabel, predistinationModeLabel, toxicDeadModeLabel, isCrazyModeLabel,
-                hellExistsModeLabel, reproductionEnergyLabel, plantEnergyLabel, initialEnergyLabel, startAnimalsNumberLabel,
-                startPlantsNumberLabel, dailyGrownGrassNumberLabel, numberOfGenesLabel, confirmButton, playButton);
 
-        listOfLabel.setSpacing(20);
+        styleButtonHover(confirmButton);
+        confirmButton.setStyle("-fx-background-color: #ff6666");
 
-        HBox inputList = new HBox();
-        inputList.getChildren().addAll(listOfLabel, listOfTextField);
-        inputList.setAlignment(Pos.TOP_CENTER);
+        HBox startButtons = new HBox(confirmButton, playButton);
+        startButtons.setSpacing(20);
+        startButtons.setAlignment(Pos.CENTER);
 
-        border.setStyle("-fx-background-color: #eea29a;");
-        BorderPane.setAlignment(title, Pos.CENTER);
-        BorderPane.setMargin(title, new Insets(40, 0, 40, 0));
-        border.setTop(title);
-        border.setCenter(inputList);
-
-        confirmButton.setOnAction(event -> {
-
-            confirmButton.setEffect(new DropShadow());
+        confirmButton.setOnAction( event -> {
 
             int width = Integer.parseInt(widthField.getText());
             int height = Integer.parseInt(heightField.getText());
-            boolean predisitination = Boolean.parseBoolean(predistinationMode.getText());
-            boolean toxicDead = Boolean.parseBoolean(toxicDeadMode.getText());
-            boolean isCrazy = Boolean.parseBoolean(isCrazyMode.getText());
-            boolean hellExists = Boolean.parseBoolean(isCrazyMode.getText());
+            boolean saveCSV = Boolean.parseBoolean(SaveToFile.getValue());
+            boolean predisitination = Boolean.parseBoolean(predistinationMode.getValue());
+            boolean toxicDead = Boolean.parseBoolean(toxicDeadMode.getValue());
+            boolean isCrazy = Boolean.parseBoolean(isCrazyMode.getValue());
+            boolean hellExists = Boolean.parseBoolean(hellExistsMode.getValue());
             int reproductionE = Integer.parseInt(reproductionEnergy.getText());
             int plantE = Integer.parseInt(plantEnergy.getText());
             int initialE = Integer.parseInt(initialEnergy.getText());
@@ -168,58 +171,50 @@ public class App extends Application {
             int startPlantsNum = Integer.parseInt(startPlantsNumber.getText());
             int dailyGrown = Integer.parseInt(dailyGrownGrassNumber.getText());
             int NumberOfGenes = Integer.parseInt(numberOfGenes.getText());
+            int minMut = Integer.parseInt(minMutations.getText());
+            int maxMut = Integer.parseInt(maxMutations.getText());
+            int reprCost = Integer.parseInt(reproductionCost.getText());
+
+            checkArguments(width, height, startAnimalsNum, startPlantsNum, dailyGrown, initialE, plantE, reproductionE, NumberOfGenes, minMut, maxMut, NumberOfGenes);
 
             AbstractWorldMap map;
-            if (toxicDead)
-               map = new ToxicMap(width, height, predisitination, isCrazy, hellExists, reproductionE, plantE, initialE, NumberOfGenes);
-            else
-               map = new EquatorMap(width, height, predisitination, isCrazy, hellExists, reproductionE, plantE, initialE, NumberOfGenes);
 
-            SimulationEngine newEngine = new SimulationEngine(map, startAnimalsNum,  startPlantsNum, dailyGrown, this);
-            EvolutionWindow newSimulation = new EvolutionWindow(map, startAnimalsNum,  startPlantsNum, dailyGrown, newEngine);
+            if (toxicDead) map = new ToxicMap(width, height, predisitination, isCrazy, hellExists, reproductionE, plantE, initialE, NumberOfGenes, minMut, maxMut, reprCost);
+            else map = new EquatorMap(width, height, predisitination, isCrazy, hellExists, reproductionE, plantE, initialE, NumberOfGenes, minMut, maxMut, reprCost);
 
-                System.out.println("dupa1");
-                Thread newThread = new Thread(newEngine);
-                threads.add(newThread);
-                windows.put(newEngine, newSimulation);
+            SimulationEngine newEngine = new SimulationEngine(map, startAnimalsNum, startPlantsNum, dailyGrown, this);
 
-
-
-
-//            evolutions.add(newSimulation);
-
+            Thread newThread = new Thread(newEngine);
+            EvolutionWindow newSimulation = new EvolutionWindow(map, newEngine, newThread, saveCSV);
+            threads.add(newThread);
+            windows.put(newEngine, newSimulation);
 
         });
 
         playButton.setOnAction(event -> {
-
-            System.out.println("dupa3");
-            playButton.setEffect(new DropShadow());
-
-//            threads.forEach(Thread::start);
             for (Thread thread : threads) {
-//                Platform.runLater(() -> {
-                    thread.start();
-//                });
-//                try {
-//                    Thread.sleep(100);
-//                } catch (InterruptedException e) {
-//                    throw new RuntimeException(e);
-//                }
+                thread.start();
+                canAgain += 1;
             }
-//            for (EvolutionWindow evolution : evolutions) {
-//                evolution.getThread().start();
-//                try {
-//                    evolution.getThread().join();
-//                } catch (InterruptedException e) {
-//                    throw new RuntimeException(e);
-//                }
-//            }
-
+            confirmButton.setDisable(true);
         });
 
+        // border
+        border.setStyle("-fx-background-color: #eea29a;");
+        border.setTop(title);
+        border.setCenter(inputList);
+        border.setBottom(startButtons);
+        BorderPane.setAlignment(title, Pos.CENTER);
+        BorderPane.setMargin(title, new Insets(20,0,50,0));
+        BorderPane.setMargin(startButtons, new Insets(0,0,100,0));
 
     }
+
+    public void styleButtonHover(Button B) {
+        B.addEventHandler(MouseEvent.MOUSE_ENTERED, e -> B.setEffect(new DropShadow()));
+        B.addEventHandler(MouseEvent.MOUSE_EXITED, e -> B.setEffect(null));
+    }
+
     public void draw(SimulationEngine engine) throws FileNotFoundException {
         Platform.runLater(() -> {
             try {
@@ -232,10 +227,33 @@ public class App extends Application {
         try {
             Thread.sleep(100);
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            Thread.currentThread().interrupt();
         }
     }
 
+    public void setFonts(Label[] labels){
+        for (Label label: labels) label.setFont(new Font("Verdana", 14));
+    }
 
-
+    public void checkArguments(int width, int height, int animalsNum, int plantsNum, int plantsPerDay, int initE, int plantE, int reprE, int genotypeLeng, int minMut, int maxMut, int numberOfGenes) {
+        if (4 >= width || width > 20) throw new IllegalArgumentException("Width out of range");
+        if (4 >= height || height > 20) throw new IllegalArgumentException("Height out of range");
+        if (0 >= animalsNum || animalsNum > 20) throw new IllegalArgumentException("Start number of animals out of range");
+        if (0 >= plantsNum || plantsNum > 10) throw new IllegalArgumentException("Start number of plants out of range");
+        if (0 >= plantsPerDay || plantsPerDay > 3) throw new IllegalArgumentException("Plants-per-day number out of range");
+        if (10 > initE || initE > 50) throw new IllegalArgumentException("Initial energy for animal number out of range");
+        if (1 > plantE || plantE > 5) throw new IllegalArgumentException("Plant energy number out of range");
+        if (2 > reprE || reprE > 5) throw new IllegalArgumentException("Reproduction energy number out of range");
+        if (5 > genotypeLeng || genotypeLeng > 32) throw new IllegalArgumentException("Genotype length number out of range");
+        if (minMut < 0 || maxMut < 0 || minMut > maxMut || maxMut > numberOfGenes)  throw new IllegalArgumentException("Mutations number out of range");
+    }
+    public void decrementCanAgain() {
+        this.canAgain -= 1;
+        if (canAgain == 0) {
+            confirmButton.setDisable(false);
+            threads = new LinkedList<>();
+            windows = new HashMap<>();
+        }
+    }
 }
+
