@@ -29,7 +29,7 @@ public class StartScene {
     public void create() {
         Label title = new Label("Welcome!");
         title.setStyle("-fx-font-weight: bold");
-        title.setFont(new Font(40));
+        title.setFont(new Font(60));
         title.setAlignment(Pos.CENTER);
         border.setStyle("-fx-background-color: #eea29a;");
         BorderPane.setAlignment(title, Pos.CENTER);

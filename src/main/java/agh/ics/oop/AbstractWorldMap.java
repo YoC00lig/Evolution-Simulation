@@ -7,7 +7,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 abstract public class AbstractWorldMap implements IPositionChangeObserver{
     public Vector2d low, high;
     public int day, averageEnergy, averageLifeLength, freeFields, numberOfGenes;
-    protected int width, height, minReproductionEnergy, plantEnergy, initialEnergy;
+    protected int width, height, minReproductionEnergy, plantEnergy, initialEnergy, minMutations, maxMutations, reproductionCost;
 
     public ConcurrentHashMap<Vector2d, LinkedList<Animal>> animals = new ConcurrentHashMap<>();
     public ArrayList<Animal> listOfAnimals = new ArrayList<>();
@@ -22,7 +22,7 @@ abstract public class AbstractWorldMap implements IPositionChangeObserver{
     int dominantGenotype = 0;
 
 
-    public AbstractWorldMap(int width, int height,boolean predistination, boolean isCrazyMode, boolean hellExistsMode, int reproductionE, int plantE, int initialE, int numberOfGenes) {
+    public AbstractWorldMap(int width, int height,boolean predistination, boolean isCrazyMode, boolean hellExistsMode, int reproductionE, int plantE, int initialE, int numberOfGenes, int minMutations, int maxMutations, int reproductionCost) {
         this.width = width;
         this.height = height;
         this.low = new Vector2d(0,0);
@@ -37,6 +37,9 @@ abstract public class AbstractWorldMap implements IPositionChangeObserver{
         this.initialEnergy = initialE;
         this.fields1 = generateFields1();
         this.numberOfGenes = numberOfGenes;
+        this.minMutations = minMutations;
+        this.maxMutations = maxMutations;
+        this.reproductionCost = reproductionCost;
     }
 
     public LinkedHashMap<Vector2d, InfoField> generateFields1() {

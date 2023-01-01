@@ -7,7 +7,7 @@ public class RemoveOrAddAnimalTest {
     @Test
     public void Test1(){ // zwykłe usuwanie
         AbstractWorldMap map = new ToxicMap(5, 5, true,true,
-                true, 3, 4, 5,32);
+                true, 3, 4, 5,32,3,6,2);
         Animal animal1 = new Animal(map, new Vector2d(2,3));
         Animal animal2 = new Animal(map, new Vector2d(2,1));
 
@@ -22,7 +22,7 @@ public class RemoveOrAddAnimalTest {
     @Test
     public void Test2(){ // usuwanie martwych zwierząt
         AbstractWorldMap map = new EquatorMap(5, 5, true,true,
-                true, 3, 4, 5,32);
+                true, 3, 4, 5,32,3,6,2);
         Animal animal1 = new Animal(map, new Vector2d(2,3));
         Animal animal2 = new Animal(map, new Vector2d(2,1));
 
@@ -37,7 +37,7 @@ public class RemoveOrAddAnimalTest {
     @Test
     public void Test3(){ // zwykłe dodawanie
         AbstractWorldMap map = new ToxicMap(5, 5, true,true,
-                true, 3, 4, 5,32);
+                true, 3, 4, 5,32,3,6,2);
         Animal animal1 = new Animal(map, new Vector2d(2,3));
         Animal animal2 = new Animal(map, new Vector2d(2,1));
         Animal animal3 = new Animal(map, new Vector2d(2,1));
@@ -51,7 +51,7 @@ public class RemoveOrAddAnimalTest {
     @Test
     public void Test4(){ // dodawanie przy reprodukcji
         AbstractWorldMap map = new EquatorMap(5, 5, true,true,
-                true, 3, 4, 5,32);
+                true, 3, 4, 5,32,3,6,2);
         Animal animal1 = new Animal(map, new Vector2d(2,3));
         Animal animal2 = new Animal(map, new Vector2d(2,3));
         map.reproduction();

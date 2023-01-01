@@ -20,15 +20,11 @@ import java.io.FileNotFoundException;
 public class GameOver {
     private final BorderPane border = new BorderPane();
     Scene scene;
-//    Thread thread;
 
-//    public GameOver(Thread thread){
-//        this.thread = thread;
-//    }
     public void create() {
-        Label title = new Label("All the animals have already died:(");
+        Label title = new Label("All the animals have already died");
         title.setStyle("-fx-font-weight: bold");
-        title.setFont(new Font(40));
+        title.setFont(new Font(60));
         title.setAlignment(Pos.CENTER);
         border.setStyle("-fx-background-color: #eea29a;");
         BorderPane.setAlignment(title, Pos.CENTER);
@@ -48,21 +44,24 @@ public class GameOver {
         border.setCenter(view);
 
         Button exitButton = new Button("EXIT");
+        Button saveButton = new Button("SAVE DATA");
 
         styleButtonHover(exitButton);
-        exitButton.setOnAction(event -> {
-            ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
-        });
+        exitButton.setOnAction(event -> ((Stage) (((Button) event.getSource()).getScene().getWindow())).close());
 
-        Button saveButton = new Button("SAVE DATA");
+
         saveButton.setStyle("-fx-background-color: #ff6666");
         exitButton.setStyle("-fx-background-color: #ff6666");
+
         BorderPane.setAlignment(exitButton, Pos.CENTER);
         BorderPane.setAlignment(saveButton, Pos.CENTER);
-        saveButton.setStyle("-fx-background-color: #ff6666");
+
+
         saveButton.setMaxWidth(100);
         styleButtonHover(saveButton);
         exitButton.setMinWidth(80);
+        styleButtonHover(exitButton);
+
         HBox box = new HBox(exitButton, saveButton);
         box.setPrefWidth(2000);
         box.setAlignment(Pos.CENTER);
@@ -79,10 +78,8 @@ public class GameOver {
     }
 
     public void styleButtonHover(Button B) {
-        B.addEventHandler(MouseEvent.MOUSE_ENTERED,
-                e -> B.setEffect(new DropShadow()));
-        B.addEventHandler(MouseEvent.MOUSE_EXITED,
-                e -> B.setEffect(null));
+        B.addEventHandler(MouseEvent.MOUSE_ENTERED, e -> B.setEffect(new DropShadow()));
+        B.addEventHandler(MouseEvent.MOUSE_EXITED, e -> B.setEffect(null));
     }
 
 }
