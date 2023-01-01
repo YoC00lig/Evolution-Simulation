@@ -18,8 +18,8 @@ public class EquatorMap extends AbstractWorldMap {
     public void plantGrass() {
         int ans = (int) (Math.random() * 10);
         switch (ans) {
-            case 0, 1 -> this.plantGrassAt(this.notPreferForEquator, this.preferForEquator); // 20% szans że wyrośnie w innym miejscu
-            default -> this.plantGrassAt(this.preferForEquator, this.notPreferForEquator); // 80% szans że wyrośnie w preferowanym miejscu
+            case 0, 1 -> this.plantGrassAt(this.notPreferForEquator, this.preferForEquator, true); // 20% szans że wyrośnie w innym miejscu
+            default -> this.plantGrassAt(this.preferForEquator, this.notPreferForEquator, true); // 80% szans że wyrośnie w preferowanym miejscu
         }
     }
 
@@ -54,7 +54,7 @@ public class EquatorMap extends AbstractWorldMap {
         }
     }
 
-    public void plantGrassAt(ArrayList<Vector2d> firstOption, ArrayList<Vector2d> secondOption){
+    public void plantGrassAt(ArrayList<Vector2d> firstOption, ArrayList<Vector2d> secondOption, boolean firstTime){
         boolean planted = false; // sadzimy jeśli się da w wylosowanej kategorii,a jeśli nie to na polu drugiej kategorii
         Collections.shuffle(firstOption);
         for (Vector2d v: firstOption){
@@ -64,6 +64,6 @@ public class EquatorMap extends AbstractWorldMap {
                 break;
             }
         }
-        if (!planted) plantGrassAt(secondOption, firstOption);
+        if (!planted && firstTime) plantGrassAt(secondOption, firstOption, false); // flaga żeby rekurencja nie biegła w nieskonczonosc jesli nie ma miejsca na mapie np
     }
 }
