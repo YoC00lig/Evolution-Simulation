@@ -61,18 +61,12 @@ public class Animal implements IMapElement{
 
     public int findDominantGenotype() {
         int[] cnt = new int[8];
-        for (int gen: this.genotype) {
-            cnt[gen] += 1;
+        for (int gen: this.genotype) cnt[gen] += 1;
+        int Gen = 0;
+        for (int i = 0; i < cnt.length; i++) {
+            Gen = cnt[i] > cnt[Gen] ? i : Gen;
         }
-        int maxi = 0;
-        int gen = 0;
-        for (int i = 0; i < 8; i++) {
-            if (cnt[i] > maxi) {
-                gen = i;
-                maxi = cnt[i];
-            }
-        }
-        return gen;
+        return Gen;
     }
 
     public static int findChildEnergy(Animal parent1, Animal parent2) {
@@ -84,11 +78,9 @@ public class Animal implements IMapElement{
 
         if (newPos.x == -1){
             newPos = new Vector2d(map.width - 1, newPos.y);
-            System.out.println(newPos);
         }
         else if (newPos.x == map.width) {
             newPos = new Vector2d(0, newPos.y);
-            System.out.println(newPos);
         }
         if (newPos.y == -1) {
             newPos = new Vector2d(newPos.x, 0);
@@ -214,7 +206,8 @@ public class Animal implements IMapElement{
     }
 
     public String getPath(IMapElement object) {
-        return "src/main/resources/snail.png";
+        if (this.hasDominantGenotype()) return "src/main/resources/snail2.png";
+        else return "src/main/resources/snail.png";
     }
 
     public int getDaysOfLife() {return this.daysOfLife;}
@@ -222,4 +215,17 @@ public class Animal implements IMapElement{
 
     public void setDaysOfLife(int value){this.daysOfLife = value;}
     public void setNumberOfChildren(int value){ this.numberOfChildren = value;}
+    public int getActiveGen() {
+        return this.genotype[this.gene];
+    }
+    public int getEatenPlants() {
+        return this.eatenPlants;
+    }
+    public boolean isAlive() {
+        return this.isDead == 0;
+    }
+    public boolean hasDominantGenotype() {
+        Statistics stats = new Statistics(map);
+        return this.findDominantGenotype() == stats.findDominantGenotype();
+    }
 }

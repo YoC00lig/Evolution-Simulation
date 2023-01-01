@@ -5,6 +5,7 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Series;
+
 public class LineCharts {
     private final LineChart chart;
     private final Series series =  new Series();
@@ -21,7 +22,6 @@ public class LineCharts {
         chart = new LineChart(x, y);
         chart.getData().add(series);
         chart.setTitle(title);
-        chart.setStyle("-fx-background-color: #eea29a;");
         chart.setCreateSymbols(false);
     }
 

@@ -1,15 +1,16 @@
 package agh.ics.oop;
+
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.Comparator;
 
 abstract public class AbstractWorldMap implements IPositionChangeObserver{
     public Vector2d low, high;
     public int day, averageEnergy, averageLifeLength, freeFields, numberOfGenes;
     protected int width, height, minReproductionEnergy, plantEnergy, initialEnergy;
-    protected LinkedHashMap<Vector2d, LinkedList<Animal>> animals = new LinkedHashMap<>();
+    public ConcurrentHashMap<Vector2d, LinkedList<Animal>> animals = new ConcurrentHashMap<>();
     public ArrayList<Animal> listOfAnimals = new ArrayList<>();
-    public LinkedHashMap<Vector2d, Grass> grasses = new LinkedHashMap<>();
+    public ConcurrentHashMap<Vector2d, Grass> grasses = new ConcurrentHashMap<>();
     protected LinkedHashMap<Vector2d, InfoField> fields1; // łatwo można odwoływać się po kluczu do informacji, nie trzeba przeszukiwać całej ArrayList
     protected final boolean predistinationMode, isCrazyMode, hellExistsMode;
     //for statistics
@@ -203,6 +204,7 @@ abstract public class AbstractWorldMap implements IPositionChangeObserver{
             plantsNumber -= 1;
         }
     }
+
     // new day
     public void nextDay() {
         this.day += 1;
@@ -211,4 +213,7 @@ abstract public class AbstractWorldMap implements IPositionChangeObserver{
         }
     }
 
+    public int getInitialEnergy() {
+        return this.initialEnergy;
+    }
 }
