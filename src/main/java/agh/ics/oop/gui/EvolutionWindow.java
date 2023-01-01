@@ -5,12 +5,10 @@ import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import javafx.scene.control.Button;
+
 import java.io.FileNotFoundException;
 import java.util.LinkedList;
 
@@ -27,6 +25,8 @@ public class EvolutionWindow {
     private GridPane gridPane = new GridPane();
     private Stage window;
     private Scene scene;
+    boolean writeToCSV;
+    CSVFile file;
     final int size = 25; // rozmiar mapy
     private final LineCharts animalsNumber = new LineCharts("Animals number", "Animals");
     private final LineCharts plantsNumber = new LineCharts("Plants number", "Plants");
@@ -36,7 +36,11 @@ public class EvolutionWindow {
 
 
 
-    public EvolutionWindow(AbstractWorldMap map, SimulationEngine engine, Thread thread) {
+    public EvolutionWindow(AbstractWorldMap map, SimulationEngine engine, Thread thread, boolean writeToCSV) {
+        if (writeToCSV) {
+            int fileID = (int) (Math.random() * 100);
+            file =  new CSVFile("src/main/resources/Statistics" + fileID + ".csv", map);
+        }
         this.map = map;
         this.engine = engine;
         this.window = new Stage();
@@ -51,7 +55,7 @@ public class EvolutionWindow {
         this.thread = thread;
         scene.setRoot(mainbox);
         window.setScene(scene);
-
+        this.writeToCSV = writeToCSV;
         window.show();
     }
 
@@ -69,14 +73,15 @@ public class EvolutionWindow {
            updateCharts();
            statisticsReport.updateStatistics();
            drawMap();
+           if (writeToCSV) file.update();
            scene.setRoot(mainbox);
            window.setScene(scene);
            window.show();
        }
        else {
-           GameOver gameover = new GameOver(thread);
+           GameOver gameover = new GameOver();
            Scene endScene = gameover.getScene();
-           gameover.thread.stop();
+           thread.interrupt();
            scene = endScene;
            window.setScene(scene);
            window.show();
@@ -137,16 +142,6 @@ public class EvolutionWindow {
         charts.setAlignment(Pos.CENTER);
 
         VBox stats = statisticsReport.getStatistics();
-        Button saveButton = buttons.getSaveButton();
-        saveButton.addEventHandler(MouseEvent.MOUSE_ENTERED,
-                e -> {
-                    saveButton.setEffect(new DropShadow());
-                });
-        saveButton.addEventHandler(MouseEvent.MOUSE_EXITED,
-                e -> {
-                    saveButton.setEffect(null);
-                });
-        stats.getChildren().add(saveButton);
         VBox StatsButtons = new VBox(stats, boxWithButtons);
 
         mainbox = new HBox(gridPane, charts, stats,  StatsButtons);

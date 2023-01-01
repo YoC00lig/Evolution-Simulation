@@ -6,7 +6,7 @@ public class ComparatorForDeathsTest {
     @Test
     void comparatorTest() {
         ToxicMap map = new ToxicMap(5, 5, true,true,
-                true, 3, 4, 5,32);
+                true, 3, 4, 5,32,3,6,2);
 
         InfoField i1 = new InfoField(new Vector2d(2,5));
         InfoField i2 = new InfoField(new Vector2d(2,5));

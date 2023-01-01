@@ -24,7 +24,7 @@ public class Animal implements IMapElement{
         this.genotypeLength = genotype.length;
         this.directions = OptionsParser.parse(genotype);
         this.initialEnergy = map.initialEnergy;
-        this.energy = initialEnergy;
+        this.energy = map.initialEnergy;
         this.orientation = MapDirection.randomDirection();
         this.gene = (int) (Math.random() * genotypeLength); // indeks w tablicy genotypów, który będzie wskazywać na następny ruch - gdy tworzymy zwierzatko to jest ustawiany randomowo
         this.daysOfLife = 1;
@@ -159,8 +159,8 @@ public class Animal implements IMapElement{
     }
 
     public void reproduce(Animal partner) {
-        partner.energy *= 0.75;
-        this.energy *= 0.25;
+        partner.energy -= map.reproductionCost;
+        this.energy -= map.reproductionCost;
     }
     // getters and setters
     public int getCurrentEnergy() {
