@@ -14,16 +14,14 @@ public class Genotype {
         return genes;
     }
 
-    public static int[] getChildGenotype(Animal parent1, Animal parent2, boolean isCrazyMode, int numberOfGenes, AbstractWorldMap map) {
-        int energy1 = parent1.getCurrentEnergy();
-        int energy2 = parent2.getCurrentEnergy();
+    public static int[] getChildGenotype(Animal parent1, boolean isCrazyMode, int numberOfGenes, AbstractWorldMap map) {
         int[] genes = new int[numberOfGenes];
         int rightSide = (int) (Math.random() * 2);
         List<Animal> parents = map.getStrongest(parent1.getPosition(), 2);
         Animal stronger = parents.get(0);
         Animal weaker = parents.get(1);
 
-        int breakPoint = ((stronger.getCurrentEnergy() * numberOfGenes) / (energy1+energy2));
+        int breakPoint = (numberOfGenes * 3) / 4;
         int remaining = numberOfGenes - breakPoint;
 
         switch (rightSide) {
@@ -36,7 +34,7 @@ public class Genotype {
                 if (breakPoint >= 0) System.arraycopy(stronger.getGenotype(), remaining, genes, remaining, breakPoint);
             }
         }
-
+        // mutacje
         Random random = new Random();
         int number = random.nextInt(map.maxMutations - map.minMutations) + map.minMutations;
 

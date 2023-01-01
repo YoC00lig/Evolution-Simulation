@@ -2,6 +2,7 @@ package agh.ics.oop;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class ToxicMap extends AbstractWorldMap{
     protected ArrayList<InfoField> informations = new ArrayList<>(); // ArrayList żeby móc łatwo posortować po polu death
@@ -29,9 +30,10 @@ public class ToxicMap extends AbstractWorldMap{
     }
 
     public boolean plantGrassInFieldFromGivenRange(int idx1, int idx2) { // [idx1, idx2)
-        Collections.shuffle(informations.subList(idx1, idx2));
+        List<InfoField> infofields = informations.subList(idx1, idx2);
+        Collections.shuffle(infofields);
         for (int i = idx1; i < idx2; i++){
-            InfoField info = this.informations.get(i);
+            InfoField info = infofields.get(i);
             Vector2d v = info.position;
             if (grassAt(v) == null) {
                 new Grass(v, this);

@@ -38,7 +38,7 @@ public class Animal implements IMapElement{
     public Animal(AbstractWorldMap map, Animal parent1, Animal parent2){
         this.position = parent1.getPosition();
         this.map = map;
-        this.genotype = Genotype.getChildGenotype(parent1, parent2, map.isCrazyMode, map.numberOfGenes, map);
+        this.genotype = Genotype.getChildGenotype(parent1, map.isCrazyMode, map.numberOfGenes, map);
         this.genotypeLength = genotype.length;
         this.directions = OptionsParser.parse(genotype);
         this.energy = findChildEnergy(parent1, parent2);
@@ -130,7 +130,7 @@ public class Animal implements IMapElement{
             Vector2d newPosition = position.add(newOrientation.toUnitVector());
             if (map.canMoveTo(newPosition)) orientation = newOrientation;
             else if(hellExists) {
-                this.setEnergy(this.energy-map.minReproductionEnergy);
+                this.setEnergy(this.energy-map.reproductionCost);
                 newPosition = map.HellsPortal();
                 orientation = newOrientation;
             }
