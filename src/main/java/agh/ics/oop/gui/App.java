@@ -105,8 +105,8 @@ public class App extends Application {
         listOfTextField.setSpacing(13);
 
         VBox listOfLabel = new VBox();
-        Label widthFieldLabel = new Label("Width: "); widthFieldLabel.setFont(new Font("Verdana", 14));
-        Label heightFieldLabel = new Label("Height: "); heightFieldLabel.setFont(new Font("Verdana", 14));
+        Label widthFieldLabel = new Label("Width (5-20): "); widthFieldLabel.setFont(new Font("Verdana", 14));
+        Label heightFieldLabel = new Label("Height (5-20): "); heightFieldLabel.setFont(new Font("Verdana", 14));
         Label predistinationModeLabel = new Label("Predistination mode?"); predistinationModeLabel.setFont(new Font("Verdana", 14));
         Label toxicDeadModeLabel = new Label("Toxic-dead mode?"); toxicDeadModeLabel.setFont(new Font("Verdana", 14));
         Label isCrazyModeLabel = new Label("Is-crazy mode?"); isCrazyModeLabel.setFont(new Font("Verdana", 14));
@@ -114,7 +114,7 @@ public class App extends Application {
         Label reproductionEnergyLabel = new Label("reproduction energy: "); reproductionEnergyLabel.setFont(new Font("Verdana", 14));
         Label plantEnergyLabel = new Label("plant energy: "); plantEnergyLabel.setFont(new Font("Verdana", 14));
         Label initialEnergyLabel = new Label("initial animal energy: "); initialEnergyLabel.setFont(new Font("Verdana", 14));
-        Label startAnimalsNumberLabel = new Label("start number of animals: "); startAnimalsNumberLabel.setFont(new Font("Verdana", 14));
+        Label startAnimalsNumberLabel = new Label("start number of animals (1-20): "); startAnimalsNumberLabel.setFont(new Font("Verdana", 14));
         Label startPlantsNumberLabel = new Label("start number of plants: "); startPlantsNumberLabel.setFont(new Font("Verdana", 14));
         Label dailyGrownGrassNumberLabel = new Label("number of plants per-day:       "); dailyGrownGrassNumberLabel.setFont(new Font("Verdana", 14));
         Label numberOfGenesLabel = new Label("Length of genotype: "); numberOfGenesLabel.setFont(new Font("Verdana", 14));
@@ -177,7 +177,6 @@ public class App extends Application {
                 thread.start();
                 canAgain += 1;
             }
-//            primaryStage.close();
             confirmButton.setDisable(true);
         });
 
@@ -185,13 +184,9 @@ public class App extends Application {
 
     public void styleButtonHover(Button B) {
         B.addEventHandler(MouseEvent.MOUSE_ENTERED,
-                e -> {
-                    B.setEffect(new DropShadow());
-                });
+                e -> B.setEffect(new DropShadow()));
         B.addEventHandler(MouseEvent.MOUSE_EXITED,
-                e -> {
-                    B.setEffect(null);
-                });
+                e -> B.setEffect(null));
     }
 
     public void draw(SimulationEngine engine) throws FileNotFoundException {
@@ -208,12 +203,13 @@ public class App extends Application {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
 
-//            throw new RuntimeException(e);
         }
     }
 
-    public int getCanAgain() {
-        return canAgain;
+    public void checkArguments(int height, int width, int animalsNum) {
+        if ( 0 <= height || height > 20) throw new IllegalArgumentException("Height out of range");
+        if ( 0 <= width || width > 20) throw new IllegalArgumentException("Width out of range");
+        if ( 0 <= animalsNum || animalsNum > 20) throw new IllegalArgumentException("Number of animals out of range");
     }
 
     public void decrementCanAgain() {

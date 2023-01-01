@@ -20,11 +20,7 @@ import java.io.FileNotFoundException;
 public class GameOver {
     private final BorderPane border = new BorderPane();
     Scene scene;
-//    Thread thread;
 
-//    public GameOver(Thread thread){
-//        this.thread = thread;
-//    }
     public void create() {
         Label title = new Label("All the animals have already died:(");
         title.setStyle("-fx-font-weight: bold");
@@ -80,12 +76,8 @@ public class GameOver {
 
     public void styleButtonHover(Button B) {
         B.addEventHandler(MouseEvent.MOUSE_ENTERED,
-                e -> {
-                    B.setEffect(new DropShadow());
-                });
+                e -> B.setEffect(new DropShadow()));
         B.addEventHandler(MouseEvent.MOUSE_EXITED,
-                e -> {
-                    B.setEffect(null);
-                });
+                e -> B.setEffect(null));
     }
 }

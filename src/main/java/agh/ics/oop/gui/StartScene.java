@@ -76,12 +76,8 @@ public class StartScene {
 
     public void styleButtonHover(Button B) {
         B.addEventHandler(MouseEvent.MOUSE_ENTERED,
-                e -> {
-                    B.setEffect(new DropShadow());
-                });
+                e -> B.setEffect(new DropShadow()));
         B.addEventHandler(MouseEvent.MOUSE_EXITED,
-                e -> {
-                    B.setEffect(null);
-                });
+                e -> B.setEffect(null));
     }
 }
