@@ -8,6 +8,7 @@ abstract public class AbstractWorldMap implements IPositionChangeObserver{
     public Vector2d low, high;
     public int day, averageEnergy, averageLifeLength, freeFields, numberOfGenes;
     protected int width, height, minReproductionEnergy, plantEnergy, initialEnergy;
+
     public ConcurrentHashMap<Vector2d, LinkedList<Animal>> animals = new ConcurrentHashMap<>();
     public ArrayList<Animal> listOfAnimals = new ArrayList<>();
     public ConcurrentHashMap<Vector2d, Grass> grasses = new ConcurrentHashMap<>();

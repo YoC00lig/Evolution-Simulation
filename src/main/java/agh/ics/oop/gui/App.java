@@ -60,6 +60,10 @@ public class App extends Application {
         TextField widthField = new TextField("15");
         TextField heightField = new TextField("15");
 
+        ComboBox<String> SaveToFile = new ComboBox<>();
+        SaveToFile.getItems().add("true");
+        SaveToFile.getItems().add("false");
+
         ComboBox<String> predistinationMode = new ComboBox<>();
         predistinationMode.getItems().add("true");
         predistinationMode.getItems().add("false");
@@ -90,6 +94,7 @@ public class App extends Application {
         toxicDeadMode.setStyle("-fx-background-color: #f7cac9");
         isCrazyMode.setStyle("-fx-background-color: #f7cac9");
         hellExistsMode.setStyle("-fx-background-color: #f7cac9");
+        SaveToFile.setStyle("-fx-background-color: #f7cac9");
         reproductionEnergy.setStyle("-fx-background-color: #f7cac9"); reproductionEnergy.setPrefColumnCount(14);
         plantEnergy.setStyle("-fx-background-color: #f7cac9"); plantEnergy.setPrefColumnCount(14);
         initialEnergy.setStyle("-fx-background-color: #f7cac9"); initialEnergy.setPrefColumnCount(14);
@@ -98,13 +103,14 @@ public class App extends Application {
         dailyGrownGrassNumber.setStyle("-fx-background-color: #f7cac9"); dailyGrownGrassNumber.setPrefColumnCount(14);
         numberOfGenes.setStyle("-fx-background-color: #f7cac9"); numberOfGenes.setPrefColumnCount(14);
 
-        listOfTextField.getChildren().addAll(widthField, heightField, predistinationMode, toxicDeadMode, isCrazyMode,
+        listOfTextField.getChildren().addAll(SaveToFile, widthField, heightField, predistinationMode, toxicDeadMode, isCrazyMode,
                 hellExistsMode, reproductionEnergy, plantEnergy, initialEnergy, startAnimalsNumber,
                 startPlantsNumber, dailyGrownGrassNumber, numberOfGenes);
 
         listOfTextField.setSpacing(13);
 
         VBox listOfLabel = new VBox();
+        Label SaveToFileLabel = new Label("Save data: "); SaveToFileLabel.setFont(new Font("Verdana", 14));
         Label widthFieldLabel = new Label("Width (5-20): "); widthFieldLabel.setFont(new Font("Verdana", 14));
         Label heightFieldLabel = new Label("Height (5-20): "); heightFieldLabel.setFont(new Font("Verdana", 14));
         Label predistinationModeLabel = new Label("Predistination mode?"); predistinationModeLabel.setFont(new Font("Verdana", 14));
@@ -124,7 +130,7 @@ public class App extends Application {
         Button playButton = new Button("PLAY");
         playButton.setStyle("-fx-background-color: #ff6666");
 
-        listOfLabel.getChildren().addAll(widthFieldLabel, heightFieldLabel, predistinationModeLabel, toxicDeadModeLabel, isCrazyModeLabel,
+        listOfLabel.getChildren().addAll(SaveToFileLabel, widthFieldLabel, heightFieldLabel, predistinationModeLabel, toxicDeadModeLabel, isCrazyModeLabel,
                 hellExistsModeLabel, reproductionEnergyLabel, plantEnergyLabel, initialEnergyLabel,  startAnimalsNumberLabel,
                 startPlantsNumberLabel, dailyGrownGrassNumberLabel, numberOfGenesLabel, confirmButton, playButton);
 
@@ -147,10 +153,11 @@ public class App extends Application {
 
             int width = Integer.parseInt(widthField.getText());
             int height = Integer.parseInt(heightField.getText());
-            boolean predisitination = Boolean.parseBoolean(String.valueOf(predistinationMode));
-            boolean toxicDead = Boolean.parseBoolean(String.valueOf(toxicDeadMode));
-            boolean isCrazy = Boolean.parseBoolean(String.valueOf(isCrazyMode));
-            boolean hellExists = Boolean.parseBoolean(String.valueOf(hellExistsMode));
+            boolean saveCSV = Boolean.parseBoolean(SaveToFile.getValue());
+            boolean predisitination = Boolean.parseBoolean(predistinationMode.getValue());
+            boolean toxicDead = Boolean.parseBoolean(toxicDeadMode.getValue());
+            boolean isCrazy = Boolean.parseBoolean(isCrazyMode.getValue());
+            boolean hellExists = Boolean.parseBoolean(hellExistsMode.getValue());
             int reproductionE = Integer.parseInt(reproductionEnergy.getText());
             int plantE = Integer.parseInt(plantEnergy.getText());
             int initialE = Integer.parseInt(initialEnergy.getText());
@@ -166,9 +173,10 @@ public class App extends Application {
             if (toxicDead) map = new ToxicMap(width, height, predisitination, isCrazy, hellExists, reproductionE, plantE, initialE, NumberOfGenes);
             else map = new EquatorMap(width, height, predisitination, isCrazy, hellExists, reproductionE, plantE, initialE, NumberOfGenes);
 
-            SimulationEngine newEngine = new SimulationEngine(map, startAnimalsNum,  startPlantsNum, dailyGrown, this);
+            SimulationEngine newEngine = new SimulationEngine(map, startAnimalsNum, startPlantsNum, dailyGrown, this);
+
             Thread newThread = new Thread(newEngine);
-            EvolutionWindow newSimulation = new EvolutionWindow(map, newEngine, newThread);
+            EvolutionWindow newSimulation = new EvolutionWindow(map, newEngine, newThread, saveCSV);
             threads.add(newThread);
             windows.put(newEngine, newSimulation);
 
@@ -208,15 +216,15 @@ public class App extends Application {
     }
 
     public void checkArguments(int width, int height, int animalsNum, int plantsNum, int plantsPerDay, int initE, int plantE, int reprE, int genotypeLeng) {
-        if (0 >= width || width > 20) throw new IllegalArgumentException("Width out of range");
-        if (0 >= height || height > 20) throw new IllegalArgumentException("Height out of range");
+        if (4 >= width || width > 20) throw new IllegalArgumentException("Width out of range");
+        if (4 >= height || height > 20) throw new IllegalArgumentException("Height out of range");
         if (0 >= animalsNum || animalsNum > 20) throw new IllegalArgumentException("Start number of animals out of range");
         if (0 >= plantsNum || plantsNum > 10) throw new IllegalArgumentException("Start number of plants out of range");
         if (0 >= plantsPerDay || plantsPerDay > 3) throw new IllegalArgumentException("Plants-per-day number out of range");
-        if (10 >= initE || initE > 50) throw new IllegalArgumentException("Initial energy for animal number out of range");
-        if (1 >= plantE || plantE > 5) throw new IllegalArgumentException("Plant energy number out of range");
-        if (2 >= reprE || reprE > 5) throw new IllegalArgumentException("Reproduction energy number out of range");
-        if (5 >= genotypeLeng || genotypeLeng > 32) throw new IllegalArgumentException("Genotype length number out of range");
+        if (10 > initE || initE > 50) throw new IllegalArgumentException("Initial energy for animal number out of range");
+        if (1 > plantE || plantE > 5) throw new IllegalArgumentException("Plant energy number out of range");
+        if (2 > reprE || reprE > 5) throw new IllegalArgumentException("Reproduction energy number out of range");
+        if (5 > genotypeLeng || genotypeLeng > 32) throw new IllegalArgumentException("Genotype length number out of range");
     }
     public void decrementCanAgain() {
         this.canAgain -= 1;

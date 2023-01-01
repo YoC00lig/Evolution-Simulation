@@ -2,21 +2,18 @@ package agh.ics.oop.gui;
 
 import agh.ics.oop.SimulationEngine;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class AppButtons {
     HBox box;
     Button exitButton;
     Button stopButton;
-    Button saveButton = new Button("SAVE DATA");
 
     public AppButtons(SimulationEngine engine, Stage stage, Thread thread) {
         exitButton = new Button("EXIT");
@@ -49,7 +46,6 @@ public class AppButtons {
                     exitButton.setEffect(new DropShadow());
                     ((Stage) (((Button) e.getSource()).getScene().getWindow())).close();
                     stage.close();
-//                    thread.stop();
                     thread.interrupt();
                 });
 
@@ -62,14 +58,6 @@ public class AppButtons {
 
     public HBox getBox(){
         return this.box;
-    }
-
-    public Button getSaveButton() {
-        saveButton.setStyle("-fx-background-color: #ff6666");
-        saveButton.setMaxWidth(100);
-        saveButton.setAlignment(Pos.BOTTOM_CENTER);
-        VBox.setMargin(saveButton, new Insets(50,0,0,0));
-        return saveButton;
     }
 
     public void styleButtonHover(Button B) {

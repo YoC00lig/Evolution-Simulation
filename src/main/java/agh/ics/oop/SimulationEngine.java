@@ -30,7 +30,6 @@ public class SimulationEngine implements IEngine, Runnable{
             int y = random.nextInt(map.high.y + 1 - map.low.y) + map.low.y;
             Vector2d position = new Vector2d(x,y);
             new Animal(this.map, position);
-            map.livingAnimals += 1;
         }
         for (int i = 0; i < grassNumber; i++) {
             map.plantGrass();
