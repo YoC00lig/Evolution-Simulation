@@ -16,17 +16,19 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.scene.control.ComboBox;
 import java.io.FileNotFoundException;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class App extends Application {
 
     private final BorderPane border = new BorderPane();
     Button confirmButton = new Button("CONFIRM");
+    private boolean isdefault = false;
     private Scene scene;
     private Map<IEngine, EvolutionWindow> windows = new HashMap<>();
+    private AbstractWorldMap[] exampleMaps = {new EquatorMap(10, 10, false, false, true, 2, 1, 20, 20, 1, 7, 2),
+            new ToxicMap(18, 18, true, false, true, 3, 2, 30, 12, 4, 5, 3)};
+    private SimulationEngine[] exampleEngines = {new SimulationEngine(exampleMaps[0], 5, 2, 2, this), new SimulationEngine(exampleMaps[1], 15, 1, 1, this)};
+
     List<Thread> threads = new LinkedList<>();
     private int canAgain = 0;
 
@@ -146,44 +148,64 @@ public class App extends Application {
         Button playButton = new Button("PLAY");
         playButton.setStyle("-fx-background-color: #ff6666");
         styleButtonHover(playButton);
+        Button defaultButton = new Button("Default");
+        defaultButton.setStyle("-fx-background-color: #ff6666");
+        styleButtonHover(defaultButton);
 
 
         styleButtonHover(confirmButton);
         confirmButton.setStyle("-fx-background-color: #ff6666");
 
-        HBox startButtons = new HBox(confirmButton, playButton);
+        HBox startButtons = new HBox(confirmButton, playButton, defaultButton);
         startButtons.setSpacing(20);
         startButtons.setAlignment(Pos.CENTER);
 
+        defaultButton.setOnAction(event -> {
+            this.isdefault = true;
+        });
+
         confirmButton.setOnAction( event -> {
-
-            int width = Integer.parseInt(widthField.getText());
-            int height = Integer.parseInt(heightField.getText());
-            boolean saveCSV = Boolean.parseBoolean(SaveToFile.getValue());
-            boolean predisitination = Boolean.parseBoolean(predistinationMode.getValue());
-            boolean toxicDead = Boolean.parseBoolean(toxicDeadMode.getValue());
-            boolean isCrazy = Boolean.parseBoolean(isCrazyMode.getValue());
-            boolean hellExists = Boolean.parseBoolean(hellExistsMode.getValue());
-            int reproductionE = Integer.parseInt(reproductionEnergy.getText());
-            int plantE = Integer.parseInt(plantEnergy.getText());
-            int initialE = Integer.parseInt(initialEnergy.getText());
-            int startAnimalsNum = Integer.parseInt(startAnimalsNumber.getText());
-            int startPlantsNum = Integer.parseInt(startPlantsNumber.getText());
-            int dailyGrown = Integer.parseInt(dailyGrownGrassNumber.getText());
-            int NumberOfGenes = Integer.parseInt(numberOfGenes.getText());
-            int minMut = Integer.parseInt(minMutations.getText());
-            int maxMut = Integer.parseInt(maxMutations.getText());
-            int reprCost = Integer.parseInt(reproductionCost.getText());
-
-            checkArguments(width, height, startAnimalsNum, startPlantsNum, dailyGrown, initialE, plantE, reproductionE, NumberOfGenes, minMut, maxMut, NumberOfGenes);
-
             AbstractWorldMap map;
+            SimulationEngine newEngine;
+            boolean saveCSV;
+            if (!isdefault) {
+                int width = Integer.parseInt(widthField.getText());
+                int height = Integer.parseInt(heightField.getText());
+                saveCSV = Boolean.parseBoolean(SaveToFile.getValue());
+                boolean predisitination = Boolean.parseBoolean(predistinationMode.getValue());
+                boolean toxicDead = Boolean.parseBoolean(toxicDeadMode.getValue());
+                boolean isCrazy = Boolean.parseBoolean(isCrazyMode.getValue());
+                boolean hellExists = Boolean.parseBoolean(hellExistsMode.getValue());
+                int reproductionE = Integer.parseInt(reproductionEnergy.getText());
+                int plantE = Integer.parseInt(plantEnergy.getText());
+                int initialE = Integer.parseInt(initialEnergy.getText());
+                int startAnimalsNum = Integer.parseInt(startAnimalsNumber.getText());
+                int startPlantsNum = Integer.parseInt(startPlantsNumber.getText());
+                int dailyGrown = Integer.parseInt(dailyGrownGrassNumber.getText());
+                int NumberOfGenes = Integer.parseInt(numberOfGenes.getText());
+                int minMut = Integer.parseInt(minMutations.getText());
+                int maxMut = Integer.parseInt(maxMutations.getText());
+                int reprCost = Integer.parseInt(reproductionCost.getText());
 
-            if (toxicDead) map = new ToxicMap(width, height, predisitination, isCrazy, hellExists, reproductionE, plantE, initialE, NumberOfGenes, minMut, maxMut, reprCost);
-            else map = new EquatorMap(width, height, predisitination, isCrazy, hellExists, reproductionE, plantE, initialE, NumberOfGenes, minMut, maxMut, reprCost);
+                checkArguments(width, height, startAnimalsNum, startPlantsNum, dailyGrown, initialE, plantE, reproductionE, NumberOfGenes, minMut, maxMut, NumberOfGenes);
 
-            SimulationEngine newEngine = new SimulationEngine(map, startAnimalsNum, startPlantsNum, dailyGrown, this);
 
+
+                if (toxicDead)
+                    map = new ToxicMap(width, height, predisitination, isCrazy, hellExists, reproductionE, plantE, initialE, NumberOfGenes, minMut, maxMut, reprCost);
+                else
+                    map = new EquatorMap(width, height, predisitination, isCrazy, hellExists, reproductionE, plantE, initialE, NumberOfGenes, minMut, maxMut, reprCost);
+
+                newEngine = new SimulationEngine(map, startAnimalsNum, startPlantsNum, dailyGrown, this);
+            }
+            else {
+                Random random = new Random();
+                int ind = random.nextInt(2 - 0);
+                map = exampleMaps[ind];
+                newEngine = exampleEngines[ind];
+                saveCSV = true;
+
+            }
             Thread newThread = new Thread(newEngine);
             EvolutionWindow newSimulation = new EvolutionWindow(map, newEngine, newThread, saveCSV);
             threads.add(newThread);
