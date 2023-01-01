@@ -39,7 +39,7 @@ public class App extends Application {
         StartScene startscene = new StartScene();
         Button startButton = startscene.getStartButton();
         startButton.setOnAction(event -> {
-            initStartScene(primaryStage);
+            initStartScene();
             scene = new Scene(border, 2000, 1000);
             primaryStage.setScene(scene);
             primaryStage.show();
@@ -49,7 +49,7 @@ public class App extends Application {
         primaryStage.show();
 
     }
-    public void initStartScene(Stage primaryStage) {
+    public void initStartScene() {
         Label title = new Label("Input your own parameters: ");
         title.setStyle("-fx-font-weight: bold");
         title.setFont(new Font(40));
@@ -105,19 +105,19 @@ public class App extends Application {
         listOfTextField.setSpacing(13);
 
         VBox listOfLabel = new VBox();
-        Label widthFieldLabel = new Label("Width: "); widthFieldLabel.setFont(new Font("Verdana", 14));
-        Label heightFieldLabel = new Label("Height: "); heightFieldLabel.setFont(new Font("Verdana", 14));
+        Label widthFieldLabel = new Label("Width (5-20): "); widthFieldLabel.setFont(new Font("Verdana", 14));
+        Label heightFieldLabel = new Label("Height (5-20): "); heightFieldLabel.setFont(new Font("Verdana", 14));
         Label predistinationModeLabel = new Label("Predistination mode?"); predistinationModeLabel.setFont(new Font("Verdana", 14));
         Label toxicDeadModeLabel = new Label("Toxic-dead mode?"); toxicDeadModeLabel.setFont(new Font("Verdana", 14));
         Label isCrazyModeLabel = new Label("Is-crazy mode?"); isCrazyModeLabel.setFont(new Font("Verdana", 14));
         Label hellExistsModeLabel = new Label("hell's portal mode?"); hellExistsModeLabel.setFont(new Font("Verdana", 14));
-        Label reproductionEnergyLabel = new Label("reproduction energy: "); reproductionEnergyLabel.setFont(new Font("Verdana", 14));
-        Label plantEnergyLabel = new Label("plant energy: "); plantEnergyLabel.setFont(new Font("Verdana", 14));
-        Label initialEnergyLabel = new Label("initial animal energy: "); initialEnergyLabel.setFont(new Font("Verdana", 14));
-        Label startAnimalsNumberLabel = new Label("start number of animals: "); startAnimalsNumberLabel.setFont(new Font("Verdana", 14));
-        Label startPlantsNumberLabel = new Label("start number of plants: "); startPlantsNumberLabel.setFont(new Font("Verdana", 14));
-        Label dailyGrownGrassNumberLabel = new Label("number of plants per-day:       "); dailyGrownGrassNumberLabel.setFont(new Font("Verdana", 14));
-        Label numberOfGenesLabel = new Label("Length of genotype: "); numberOfGenesLabel.setFont(new Font("Verdana", 14));
+        Label reproductionEnergyLabel = new Label("reproduction energy (2-5): "); reproductionEnergyLabel.setFont(new Font("Verdana", 14));
+        Label plantEnergyLabel = new Label("plant energy (1-5): "); plantEnergyLabel.setFont(new Font("Verdana", 14));
+        Label initialEnergyLabel = new Label("initial animal energy (10-50): "); initialEnergyLabel.setFont(new Font("Verdana", 14));
+        Label startAnimalsNumberLabel = new Label("start number of animals (1-20): "); startAnimalsNumberLabel.setFont(new Font("Verdana", 14));
+        Label startPlantsNumberLabel = new Label("start number of plants (1-10): "); startPlantsNumberLabel.setFont(new Font("Verdana", 14));
+        Label dailyGrownGrassNumberLabel = new Label("number of plants per-day (1-3):       "); dailyGrownGrassNumberLabel.setFont(new Font("Verdana", 14));
+        Label numberOfGenesLabel = new Label("Length of genotype (5-32): "); numberOfGenesLabel.setFont(new Font("Verdana", 14));
 
 
         confirmButton.setStyle("-fx-background-color: #ff6666");
@@ -159,6 +159,8 @@ public class App extends Application {
             int dailyGrown = Integer.parseInt(dailyGrownGrassNumber.getText());
             int NumberOfGenes = Integer.parseInt(numberOfGenes.getText());
 
+            checkArguments(width, height, startAnimalsNum, startPlantsNum, dailyGrown, initialE, plantE, reproductionE, NumberOfGenes);
+
             AbstractWorldMap map;
 
             if (toxicDead) map = new ToxicMap(width, height, predisitination, isCrazy, hellExists, reproductionE, plantE, initialE, NumberOfGenes);
@@ -177,7 +179,6 @@ public class App extends Application {
                 thread.start();
                 canAgain += 1;
             }
-//            primaryStage.close();
             confirmButton.setDisable(true);
         });
 
@@ -185,13 +186,9 @@ public class App extends Application {
 
     public void styleButtonHover(Button B) {
         B.addEventHandler(MouseEvent.MOUSE_ENTERED,
-                e -> {
-                    B.setEffect(new DropShadow());
-                });
+                e -> B.setEffect(new DropShadow()));
         B.addEventHandler(MouseEvent.MOUSE_EXITED,
-                e -> {
-                    B.setEffect(null);
-                });
+                e -> B.setEffect(null));
     }
 
     public void draw(SimulationEngine engine) throws FileNotFoundException {
@@ -207,15 +204,20 @@ public class App extends Application {
             Thread.sleep(100);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-
-//            throw new RuntimeException(e);
         }
     }
 
-    public int getCanAgain() {
-        return canAgain;
+    public void checkArguments(int width, int height, int animalsNum, int plantsNum, int plantsPerDay, int initE, int plantE, int reprE, int genotypeLeng) {
+        if (0 >= width || width > 20) throw new IllegalArgumentException("Width out of range");
+        if (0 >= height || height > 20) throw new IllegalArgumentException("Height out of range");
+        if (0 >= animalsNum || animalsNum > 20) throw new IllegalArgumentException("Start number of animals out of range");
+        if (0 >= plantsNum || plantsNum > 10) throw new IllegalArgumentException("Start number of plants out of range");
+        if (0 >= plantsPerDay || plantsPerDay > 3) throw new IllegalArgumentException("Plants-per-day number out of range");
+        if (10 >= initE || initE > 50) throw new IllegalArgumentException("Initial energy for animal number out of range");
+        if (1 >= plantE || plantE > 5) throw new IllegalArgumentException("Plant energy number out of range");
+        if (2 >= reprE || reprE > 5) throw new IllegalArgumentException("Reproduction energy number out of range");
+        if (5 >= genotypeLeng || genotypeLeng > 32) throw new IllegalArgumentException("Genotype length number out of range");
     }
-
     public void decrementCanAgain() {
         this.canAgain -= 1;
         if (canAgain == 0) {

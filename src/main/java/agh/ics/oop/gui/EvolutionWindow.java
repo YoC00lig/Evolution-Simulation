@@ -140,13 +140,9 @@ public class EvolutionWindow {
         VBox stats = statisticsReport.getStatistics();
         Button saveButton = buttons.getSaveButton();
         saveButton.addEventHandler(MouseEvent.MOUSE_ENTERED,
-                e -> {
-                    saveButton.setEffect(new DropShadow());
-                });
+                e -> saveButton.setEffect(new DropShadow()));
         saveButton.addEventHandler(MouseEvent.MOUSE_EXITED,
-                e -> {
-                    saveButton.setEffect(null);
-                });
+                e -> saveButton.setEffect(null));
         stats.getChildren().add(saveButton);
         VBox StatsButtons = new VBox(stats, boxWithButtons);
 
