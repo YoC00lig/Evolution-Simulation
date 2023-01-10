@@ -23,7 +23,20 @@ long as possible? Check it yourself.</p>
 </ul>
 
 <h2> Default simulation demo: </h2>
+<p> To get information about the animal you have to click "STOP" button and then click on the animal. </p>
+<p> To continue the simulation, click the "START" button. </p>
 <img src="/readme/demo.gif">
+
+<h2> Symbols: </h2>
+<p> The color of the shadow for each animal determines its energy level. </p>
+<p> Meaning: </p>
+<ul> 
+<li> Green - high energy level </li>
+<li> Yellow and orange - medium energy level</li>
+<li> Red - low energy level </li>
+</ul>
+<p> Pictures meaning: </p>
+<img src="/readme/symbols.png">
 
 <h2> How to start? </h2>
 <p> 1. Enter your preferences or select "Default simulation" </p>
