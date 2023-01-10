@@ -17,25 +17,26 @@ long as possible? Check it yourself.</p>
 
 <h2> Core technology stack: </h2>
 <ul>
-<li> 🔸 Java 17 </li>
-<li> 🔸 Gradle </li>
-<li> 🔸 JavaFX </li>
+<li> Java 17 </li>
+<li> Gradle </li>
+<li> JavaFX </li>
 </ul>
 
 <h2> Default simulation demo: </h2>
 <p> To get information about the animal you have to click "STOP" button and then click on the animal. </p>
 <p> To continue the simulation, click the "START" button. </p>
+<p> To close the simulation, click the "EXIT" button. </p>
 <img src="/readme/demo.gif">
 
 <h2> Symbols: </h2>
 <p> The color of the shadow for each animal determines its energy level. </p>
-<p> Meaning: </p>
+<h4> Shadow color meaning: </h4>
 <ul> 
 <li> Green - high energy level </li>
 <li> Yellow and orange - medium energy level</li>
 <li> Red - low energy level </li>
 </ul>
-<p> Pictures meaning: </p>
+<h4> Pictures meaning: </h4>
 <img src="/readme/symbols.png">
 
 <h2> How to start? </h2>
