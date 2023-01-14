@@ -32,40 +32,42 @@ long as possible? Check it yourself.</p>
 
 <h2> Input parameters: </h2>
 <ul> 
-<li> Save data - saving to CSV file</li>
-<li> Width, height - map dimensions</li>
-<li> Predistination mode:
+  <li> <strong> Save data </strong> - saving to CSV file</li>
+  <li> <strong> Width, height</strong> - map dimensions</li>
+  <br>
+  <li> <strong>Predistination mode: </strong>
 <ul> 
-<li> true - Animal's movements are determined by consecutive numbers in the genotype </li>
-<li> false - In 80% of cases, a animal's movements are determined by the next gene in the genotype. In 20% of cases, a random gene is selected. </li>
+<li> <em>true</em> - Animal's movements are determined by consecutive numbers in the genotype </li>
+  <li> <em>false</em> - In 80% of cases, a animal's movements are determined by the next gene in the genotype. In 20% of cases, a random gene is selected. </li>
 </ul>
 </li>
-<li> Toxic-dead mode:
+  <li> <strong> Toxic-dead mode:</strong>
 <ul> 
-<li> true - Grass grows more often where the fewest animals have died. </li>
-<li> false - Grass grows more often at the equator. </li>
+<li> <em>true</em> - Grass grows more often where the fewest animals have died. </li>
+<li> <em>false</em> - Grass grows more often at the equator. </li>
 </ul>
-<li> Is-crazy mode:
+  <li>  <strong> Is-crazy mode: </strong>
 <ul> 
-<li> true - Mutation reduces/increases the gene by one. </li>
-<li> false - Mutation changes a gene to a randomly selected gene. </li>
-</ul>
-</li>
-</li>
-<li> hell's portal mode:
-<ul> 
-<li> true - When the animal goes beyond the edge of the map, it ends up in a magical portal. There, its energy decreases the same as in the case of reproduction. After that, the animal is moved anywhere on the map.</li>
-<li> false - If the animal goes beyond the northern or southern edge, it changes its direction by 180 degrees. If it goes beyond the east/west edge, it will show up on the opposite side.</li>
+<li> <em>true</em> - Mutation reduces/increases the gene by one. </li>
+<li> <em>false</em> - Mutation changes a gene to a randomly selected gene. </li>
 </ul>
 </li>
-<li> reproduction energy - The energy an animal needs to be able to reproduce. </li>
-<li> plant energy - The energy an animal gains from eating a plant. </li>
-<li> initial animal energy - The energy each animal receives at the start of the simulation. </li>
-<li> start number of animals/plants - Initial number of animals/plants at the start of the simulation. </li>
-<li> number of plants per-day - Determines how many plants grow each day. </li>
-<li> length of genotype - Length of each animal's genotype. </li>
-<li> Minimum/maximum number of mutations - Determines how many genes can be changed as a result of mutation. </li>
-<li> Energy that animal lost in reproduction. </li>
+</li>
+<li> <strong> hell's portal mode: </strong>
+<ul> 
+  <li> <em>true</em> - When the animal goes beyond the edge of the map, it ends up in a magical portal. There, its energy decreases the same as in the case of reproduction. After that, the animal is moved anywhere on the map.</li>
+<li> <em>false</em> - If the animal goes beyond the northern or southern edge, it changes its direction by 180 degrees. If it goes beyond the east/west edge, it will show up on the opposite side.</li>
+</ul>
+</li>
+<br>
+<li> <strong>reproduction energy</strong> - The energy an animal needs to be able to reproduce. </li>
+<li> <strong>plant energy</strong> - The energy an animal gains from eating a plant. </li>
+<li><strong> initial animal energy </strong>- The energy each animal receives at the start of the simulation. </li>
+<li> <strong>start number of animals/plants</strong> - Initial number of animals/plants at the start of the simulation. </li>
+<li> <strong>number of plants per-day </strong>- Determines how many plants grow each day. </li>
+<li> <strong>length of genotype</strong> - Length of each animal's genotype. </li>
+<li> <strong>Minimum/maximum number of mutations</strong> - Determines how many genes can be changed as a result of mutation. </li>
+<li> <strong>Energy that animal lost in reproduction.</strong> </li>
 </ul>
 <img src="/readme/input.gif">
 
@@ -89,6 +91,6 @@ long as possible? Check it yourself.</p>
 
 <h2> End of simulation: </h2>
 <p> You can end the simulation at any time by clicking the "EXIT" button.</p>
-<p> In case all animals die, the simulation will end automatically.. </p>
+<p> In case all animals die, the simulation will end automatically. </p>
 <img src="/readme/end.gif">
 
