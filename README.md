@@ -1,5 +1,5 @@
 <h1> Evolution-simulation project 🌎 🌍 🌏 </h1>
-<p> Darwinian-evolution-simulation project written as part of the "Object-oriented programming" course. </p>
+
 <p> The application enables the user to create own simulation with selected parameters and monitoring statistics related to the number of deaths, average energy level, free fields etc. </p>
 <p> Several simulations can be run simultaneously, so it is possible to keep track and compare results.</p>
 
