@@ -1,9 +1,9 @@
-<h1> Evolution-simulation project</h1>
+<h1> Evolution-simulation project 🌎 🌍 🌏 </h1>
 <p> Darwinian-evolution-simulation project written as part of the "Object-oriented programming" course. </p>
 <p> The application enables the user to create own simulation with selected parameters and monitoring statistics related to the number of deaths, average energy level, free fields etc. </p>
 <p> Several simulations can be run simultaneously, so it is possible to keep track and compare results.</p>
 
-<h2> Idea description: </h2>
+<h2>💡 Idea description: </h2>
 <p> The idea of this project is based on Darwin's theory. Every day the animals move, eat, 
 reproduce and die. Each of them has a certain amount of energy which is lost by performing daily 
 activities and gained by eating grass. They have their own genotype assigned at birth that 
@@ -16,7 +16,7 @@ in preferred fields. The location of these fields depends on the preferences sel
 long as possible? Check it yourself.</p>
 <img src="/readme/start.gif">
 
-<h2> Core technology stack: </h2>
+<h2> 🛠 Core technology stack: </h2>
 <ul>
 <li> Java 17 </li>
 <li> Gradle </li>
@@ -24,13 +24,13 @@ long as possible? Check it yourself.</p>
 </ul>
 
 
-<h2> Default simulation demo: </h2>
+<h2> 🐌 ☘️ Default simulation demo: </h2>
 <p> To get information about the animal you have to click "STOP" button and then click on the animal. </p>
 <p> To continue the simulation, click the "START" button. </p>
 <p> To close the simulation, click the "EXIT" button. </p>
 <img src="/readme/demo.gif">
 
-<h2> Input parameters: </h2>
+<h2> 🔎  Input parameters: </h2>
 <ul> 
   <li> <strong> Save data </strong> - saving to CSV file</li>
   <li> <strong> Width, height</strong> - map dimensions</li>
@@ -71,7 +71,7 @@ long as possible? Check it yourself.</p>
 </ul>
 <img src="/readme/input.gif">
 
-<h2> Symbols: </h2>
+<h2> 🔮 Symbols: </h2>
 <p> The color of the shadow for each animal determines its energy level. </p>
 <h4> Shadow color meaning: </h4>
 <ul> 
@@ -82,14 +82,14 @@ long as possible? Check it yourself.</p>
 <h4> Pictures meaning: </h4>
 <img src="/readme/symbols.png">
 
-<h2> How to start? </h2>
+<h2> 🎮 How to start? </h2>
 <p> 1. Enter your preferences or select "Default simulation" </p>
 <p> 2. Click "Confirm" to add simulation. </p>
 <p> 3. Place the windows in a convenient for you place. </p>
 <p> 4. Click "Play" to start simulations. </p>
 <img src="/readme/simulations-demo.gif">
 
-<h2> End of simulation: </h2>
+<h2> 🏴‍☠️ End of simulation: </h2>
 <p> You can end the simulation at any time by clicking the "EXIT" button.</p>
 <p> In case all animals die, the simulation will end automatically. </p>
 <img src="/readme/end.gif">
