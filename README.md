@@ -71,23 +71,11 @@ long as possible? Check it yourself.</p>
 </ul>
 <img src="/readme/input.gif">
 
-<h2> 🔮 Symbols: </h2>
-<p> The color of the shadow for each animal determines its energy level. </p>
-<h4> Shadow color meaning: </h4>
-<ul> 
-<li> Green - high energy level </li>
-<li> Yellow and orange - medium energy level</li>
-<li> Red - low energy level </li>
-</ul>
-<h4> Pictures meaning: </h4>
-<img src="/readme/symbols.png">
-
 <h2> 🎮 How to start? </h2>
 <p> 1. Enter your preferences or select "Default simulation" </p>
-<p> 2. Click "Confirm" to add simulation. </p>
+<p> 2. Click "Confirm" to add next simulation. </p>
 <p> 3. Place the windows in a convenient for you place. </p>
 <p> 4. Click "Play" to start simulations. </p>
-<img src="/readme/simulations-demo.gif">
 
 <h2> 🏴‍☠️ End of simulation: </h2>
 <p> You can end the simulation at any time by clicking the "EXIT" button.</p>
