@@ -202,8 +202,14 @@ public class App extends Application {
             else {
                 Random random = new Random();
                 int ind = random.nextInt(2);
-                map = exampleMaps[ind];
-                newEngine = exampleEngines[ind];
+                if (ind == 1){
+                    map = new EquatorMap(10, 10, false, false, true, 2, 1, 20, 20, 1, 7, 2);
+                    newEngine = new SimulationEngine(map, 5, 2, 2, this);
+                }
+                else {
+                    map = new ToxicMap(18, 18, true, false, true, 3, 2, 30, 12, 4, 5, 3);
+                    newEngine =  new SimulationEngine(map, 15, 1, 1, this);
+                }
                 saveCSV = true;
                 isdefault = false;
             }
@@ -229,8 +235,8 @@ public class App extends Application {
         border.setCenter(inputList);
         border.setBottom(startButtons);
         BorderPane.setAlignment(title, Pos.CENTER);
-        BorderPane.setMargin(title, new Insets(20,0,50,0));
-        BorderPane.setMargin(startButtons, new Insets(0,0,100,0));
+        BorderPane.setMargin(title, new Insets(20,0,10,0));
+        BorderPane.setMargin(startButtons, new Insets(0,0,220,0));
 
     }
 

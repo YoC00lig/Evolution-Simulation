@@ -62,7 +62,7 @@ public class GameOver {
         box.setSpacing(20);
         BorderPane.setMargin(box, new Insets(40,0,100,0));
         border.setBottom(box);
-        scene = new Scene(border, 2000, 1000);
+        scene = new Scene(border, 1800, 800);
     }
 
 

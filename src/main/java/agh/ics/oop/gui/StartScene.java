@@ -61,7 +61,7 @@ public class StartScene {
         startButton.setAlignment(Pos.CENTER);
         BorderPane.setMargin(startButton, new Insets(40,0,100,0));
         border.setBottom(startButton);
-        scene = new Scene(border, 2000, 1000);
+        scene = new Scene(border, 1800, 800);
     }
 
 

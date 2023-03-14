@@ -4,7 +4,9 @@ import agh.ics.oop.*;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
@@ -51,11 +53,16 @@ public class EvolutionWindow {
         mainbox = new HBox(gridPane, StatsButtons);
         mainbox.setAlignment(Pos.CENTER);
         mainbox.setStyle("-fx-background-color: #eea29a;");
-        scene = new Scene(mainbox, 2000,1000);
+        scene = new Scene(mainbox, 1800,800);
         this.thread = thread;
         scene.setRoot(mainbox);
         window.setScene(scene);
         this.writeToCSV = writeToCSV;
+        window.setOnCloseRequest( e -> {
+            ((Stage) (scene.getWindow())).close();
+            window.close();
+            thread.interrupt();
+        });
         window.show();
     }
 
