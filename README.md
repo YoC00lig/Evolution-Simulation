@@ -21,6 +21,7 @@ long as possible? Check it yourself.</p>
 <li> Java 17 </li>
 <li> Gradle </li>
 <li> JavaFX </li>
+<li> The icons have been sourced from <a href="https://www.flaticon.com">here</a>. </li>
 </ul>
 
 
